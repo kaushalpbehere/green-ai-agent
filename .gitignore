@@ -1,0 +1,118 @@
+# Environment & Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+
+# AI & ML Related (STRICT)
+# Ignore generated CSV/HTML exports but keep folder structure
+output/*.csv              # Generated CSV exports
+output/*.html             # Generated HTML reports
+output/logs/*.log         # Generated log files
+output/logs/pytest.log    # Pytest log file
+emissions.csv             # CodeCarbon emissions output (allow in output/)
+
+ai_cache/
+ollama_cache/
+openai_cache/
+.ollama/
+*.pkl
+*.pickle
+
+# Temporary & Generated Files
+*.tmp
+*.temp
+/tmp/
+*.backup
+*.bak
+.*.swp
+*~
+
+# OS Files
+
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+*.lnk
+
+# Project Specific - STRICT WHITELIST
+.green-ai.yaml         # User-specific config (except template)
+config.local.yaml
+reports/               # Generated reports (keep .gitkeep)
+
+# /data/ - Ignore ALL files (user data, not versioned)
+/data/*
+!/data/.gitkeep
+
+# /docs/ - HARDCODED WHITELIST: Only these 4 strategic docs are committed
+/docs/*
+!/docs/BACKLOG.md
+!/docs/RELEASE_NOTES.md
+!/docs/PRD.md
+!/docs/ROADMAP.md
+!/docs/CONSOLIDATION_REPORT.md
+
+# Archive (intentionally ignored)
+archive/               # Old story files, deprecated docs
+archive/**
+
+# Dependency Lock Files (optional, use if desired)
+# Uncomment to ignore lock files (not recommended for Python)
+# poetry.lock
+# Pipfile.lock
+
+# CI/CD Artifacts
+.github/workflows/artifacts/
+.gitlab-ci-cache/
+jenkins_workspace/
+
+# Build Outputs
+*.exe
+*.dll
+*.so
+*.dylib
+pyinstaller_dist/
+pyinstaller_build/
+
+# Docker
+.dockerignore
+Dockerfile.bak
+
+# Don't ignore
+!.gitkeep
+!README.md
+!requirements.txt

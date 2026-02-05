@@ -1,0 +1,160 @@
+# JavaScript Green Coding Rules
+# Source: GSF, ecoCode
+
+rules:
+  # Critical Violations
+  - id: no_infinite_loops
+    name: No Infinite Loops
+    description: Infinite loops consume unlimited energy and CPU
+    severity: critical
+    languages: [javascript]
+    pattern: |
+      while\s*\(\s*true\s*\)
+    remediation: Add loop termination conditions or use break/return statements
+    source: GSF
+    tags: [performance, energy, cpu]
+
+  - id: no_n2_algorithms
+    name: No O(n²) Algorithms Without Justification
+    description: Nested loops without optimization waste exponential energy
+    severity: critical
+    languages: [javascript]
+    pattern: |
+      for.*for\s*\(
+    remediation: Use efficient algorithms or vectorization
+    source: GSF
+    tags: [performance, energy, algorithm]
+
+  # Major Violations
+  - id: inefficient_loop
+    name: Inefficient Loop Detection
+    description: Non-optimized loops that could be optimized
+    severity: major
+    languages: [javascript]
+    pattern: |
+      for\s*\(\s*let\s+\w+\s*=
+    remediation: Consider modern array methods (map, filter, reduce) or optimization
+    source: ecoCode
+    tags: [performance, energy]
+
+  - id: unnecessary_dom_manipulation
+    name: Unnecessary DOM Manipulation
+    description: Frequent DOM queries and updates waste browser resources
+    severity: major
+    languages: [javascript]
+    pattern: |
+      document\.(querySelector|getElementById)
+    remediation: Cache DOM references or use event delegation
+    source: ecoCode
+    tags: [performance, browser]
+
+  - id: string_concatenation
+    name: Avoid String Concatenation in Loops
+    description: String concatenation creates new objects repeatedly
+    severity: major
+    languages: [javascript]
+    pattern: |
+      \+=\s+["']
+    remediation: Use array join() or template literals
+    source: ecoCode
+    tags: [memory, performance]
+
+  - id: synchronous_io
+    name: Avoid Synchronous I/O
+    description: Synchronous I/O blocks execution and wastes CPU
+    severity: major
+    languages: [javascript]
+    pattern: |
+      readFileSync|XMLHttpRequest
+    remediation: Use async/await or Promises for non-blocking I/O
+    source: GSF
+    tags: [performance, async]
+
+  # Minor Violations
+  - id: unused_variables
+    name: Remove Unused Variables
+    description: Unused variables consume memory
+    severity: minor
+    languages: [javascript]
+    pattern: |
+      ^(let|const|var)\s+\w+\s*=
+    remediation: Remove unused variable declarations
+    source: GSF
+    tags: [code-quality, memory]
+
+  - id: excessive_console_logging
+    name: Excessive Console Logging
+    description: Excessive logging can slow down application
+    severity: minor
+    languages: [javascript]
+    pattern: |
+      console\.(log|debug)
+    remediation: Use appropriate logging levels and disable in production
+    source: ecoCode
+    tags: [performance, debugging]
+
+  - id: magic_numbers
+    name: Avoid Magic Numbers
+    description: Magic numbers reduce code clarity
+    severity: minor
+    languages: [javascript]
+    pattern: |
+      \s[0-9]{3,}\s
+    remediation: Use named constants instead of magic numbers
+    source: SUSCOM
+    tags: [code-quality, maintainability]
+
+  - id: eval_usage
+    name: Avoid Eval
+    description: Using eval() is a security risk and prevents engine optimization
+    severity: critical
+    languages: [javascript]
+    pattern: |
+      eval\(
+    remediation: Rewrite code to avoid dynamic execution
+    source: GSF
+    tags: [security, performance]
+
+  - id: setInterval_animation
+    name: Avoid setInterval for Animations
+    description: setInterval runs even when tab is inactive, wasting battery
+    severity: major
+    languages: [javascript]
+    pattern: |
+      setInterval
+    remediation: Use requestAnimationFrame for visual updates
+    source: GSF
+    tags: [energy, browser]
+
+  - id: momentjs_deprecated
+    name: Avoid Moment.js
+    description: Moment.js is a heavy library; use lightweight alternatives
+    severity: major
+    languages: [javascript]
+    pattern: |
+      from\s+['"]moment['"]|require\(['"]moment['"]\)
+    remediation: Use date-fns, Day.js, or native Date API
+    source: ecoCode
+    tags: [bundle-size, performance]
+
+  - id: document_write
+    name: Avoid document.write
+    description: document.write() blocks page loading and is deprecated
+    severity: critical
+    languages: [javascript]
+    pattern: |
+      document\.write
+    remediation: Use DOM manipulation methods
+    source: GSF
+    tags: [performance, browser]
+
+  - id: alert_usage
+    name: Avoid Alert/Prompt/Confirm
+    description: Synchronous native dialogs block the main thread and UI
+    severity: minor
+    languages: [javascript]
+    pattern: |
+      window\.(alert|prompt|confirm)
+    remediation: Use non-blocking modal UI components
+    source: ecoCode
+    tags: [ux, performance]

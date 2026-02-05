@@ -1,0 +1,10 @@
+codecarbon
+psutil
+tree-sitter
+tree-sitter-python
+tree-sitter-javascript
+requests
+click
+flask
+pytest
+pyyaml

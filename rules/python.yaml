@@ -1,0 +1,193 @@
+# Python Green Coding Rules
+# Source: GSF, ecoCode
+
+rules:
+  # Critical Violations
+  - id: no_infinite_loops
+    name: No Infinite Loops
+    description: Infinite loops consume unlimited energy and CPU
+    severity: critical
+    languages: [python]
+    pattern: |
+      while\s*\(\s*[Tt]rue\s*\)
+    remediation: Add loop termination conditions or use break/return statements
+    source: GSF
+    tags: [performance, energy, cpu]
+
+  - id: no_n2_algorithms
+    name: No O(n²) Algorithms Without Justification
+    description: Nested loops without optimization waste exponential energy
+    severity: critical
+    languages: [python]
+    pattern: |
+      for.*for\s*\(
+    remediation: Use efficient algorithms or vectorization (numpy, list comprehension)
+    source: GSF
+    tags: [performance, energy, algorithm]
+
+  # Major Violations
+  - id: inefficient_loop
+    name: Inefficient Loop Detection
+    description: Non-optimized loops that could be vectorized or optimized
+    severity: major
+    languages: [python]
+    pattern: |
+      for\s+\w+\s+in\s+range\(
+    remediation: Consider list comprehension or use numpy for vectorization
+    source: ecoCode
+    tags: [performance, energy]
+
+  - id: unnecessary_computation
+    name: Unnecessary Computation in Loops
+    description: Redundant calculations inside loops waste energy
+    severity: major
+    languages: [python]
+    pattern: |
+      
+    remediation: Cache or optimize computation placement outside loops
+    source: ecoCode
+    tags: [performance, optimization]
+
+  - id: proper_resource_cleanup
+    name: Ensure Proper Resource Cleanup
+    description: Always close files, connections, and resources to prevent leaks
+    severity: major
+    languages: [python]
+    pattern: |
+      open\s*\(
+    remediation: Use context managers (with statement) for automatic cleanup
+    source: GSF
+    tags: [resource-management, memory]
+
+  - id: string_concatenation_in_loop
+    name: Avoid String Concatenation in Loops
+    description: String concatenation creates new objects repeatedly, wasting memory
+    severity: major
+    languages: [python]
+    pattern: |
+      \+=\s*["']
+    remediation: Use list append and join() instead of string concatenation
+    source: ecoCode
+    tags: [memory, performance]
+
+  # Minor Violations
+  - id: unused_imports
+    name: Remove Unused Imports
+    description: Unused imports consume memory and slow down module loading
+    severity: minor
+    languages: [python]
+    pattern: |
+      ^import\s+\w+
+    remediation: Remove unused imports to reduce memory footprint
+    source: GSF
+    tags: [code-quality, memory]
+
+  - id: excessive_logging
+    name: Excessive Logging
+    description: Excessive logging can waste disk I/O and energy
+    severity: minor
+    languages: [python]
+    pattern: |
+      print\(|logger\.(debug|info)
+    remediation: Use appropriate log levels and reduce verbosity in production
+    source: ecoCode
+    tags: [io, energy]
+
+  - id: magic_numbers
+    name: Avoid Magic Numbers
+    description: Magic numbers reduce code clarity and maintainability
+    severity: minor
+    languages: [python]
+    pattern: |
+      \s[0-9]{3,}\s
+    remediation: Use named constants instead of magic numbers
+    source: SUSCOM
+    tags: [code-quality, maintainability]
+
+  - id: exceptions_in_loop
+    name: Exceptions Inside Loops
+    description: Using try/except inside loops adds significant overhead
+    severity: major
+    languages: [python]
+    pattern: |
+      try:
+    remediation: Move try/except blocks outside the loop
+    source: ecoCode
+    tags: [performance, energy]
+
+  - id: heavy_object_copy
+    name: Heavy Object Copying
+    description: Using deepcopy allows expensive object duplication
+    severity: major
+    languages: [python]
+    pattern: |
+      copy\.deepcopy
+    remediation: Use shallow copy or redesign data flow
+    source: GSF
+    tags: [memory, energy]
+
+  - id: process_spawning
+    name: Excessive Process Spawning
+    description: Spawning new processes is an expensive OS operation
+    severity: critical
+    languages: [python]
+    pattern: |
+      subprocess\.(run|Popen)|os\.system
+    remediation: Use internal API calls or batch processing
+    source: GSF
+    tags: [performance, os]
+
+  - id: inefficient_file_read
+    name: Inefficient File Reading
+    description: Reading entire file into memory with readlines()
+    severity: major
+    languages: [python]
+    pattern: |
+      \.readlines\(\)
+    remediation: Iterate over the file object directly
+    source: ecoCode
+    tags: [memory, io]
+
+  - id: global_variable_mutation
+    name: Global Variable Mutation
+    description: Excessive reliance on global variables hampers optimization
+    severity: minor
+    languages: [python]
+    pattern: |
+      global\s+\w+
+    remediation: Pass variables as arguments to functions
+    source: GSF
+    tags: [code-quality, performance]
+
+  - id: pandas_iterrows
+    name: Inefficient Pandas Iteration
+    description: Using iterrows() is significantly slower than vectorization
+    severity: major
+    languages: [python]
+    pattern: |
+      \.iterrows\(\)
+    remediation: Use vectorization or apply()
+    source: ecoCode
+    tags: [performance, data-science]
+
+  - id: deep_recursion
+    name: Deep Recursion
+    description: Deep recursion consumes significant stack memory and CPU
+    severity: major
+    languages: [python]
+    pattern: |
+      
+    remediation: Refactor to iteration or use tail-call optimization if possible
+    source: GSF
+    tags: [performance, memory]
+
+  - id: inefficient_lookup
+    name: Inefficient Membership Lookup
+    description: Membership tests on lists inside loops are O(n)
+    severity: medium
+    languages: [python]
+    pattern: |
+      
+    remediation: Convert list to set for O(1) membership lookups
+    source: ecoCode
+    tags: [performance, optimization]

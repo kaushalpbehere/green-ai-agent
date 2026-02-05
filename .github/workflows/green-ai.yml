@@ -1,0 +1,125 @@
+name: Green AI Scanner
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    name: Scan Code for Green Practices
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install Green AI
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Run Green AI Scan
+        id: scan
+        run: |
+          green-ai scan . --language python --format json > green-ai-report.json || true
+          echo "scan_completed=true" >> $GITHUB_OUTPUT
+
+      - name: Parse scan results
+        id: parse
+        if: steps.scan.outputs.scan_completed == 'true'
+        run: |
+          python - <<'EOF'
+          import json
+          
+          with open('green-ai-report.json', 'r') as f:
+              report = json.load(f)
+          
+          critical_count = len([i for i in report.get('issues', []) if i.get('severity') == 'critical'])
+          high_count = len([i for i in report.get('issues', []) if i.get('severity') == 'high'])
+          total_issues = len(report.get('issues', []))
+          
+          print(f"Critical violations: {critical_count}")
+          print(f"High violations: {high_count}")
+          print(f"Total issues: {total_issues}")
+          
+          with open('scan_summary.txt', 'w') as f:
+              f.write(f"Critical: {critical_count}\n")
+              f.write(f"High: {high_count}\n")
+              f.write(f"Total: {total_issues}\n")
+          
+          if critical_count > 0:
+              print(f"::error::Found {critical_count} CRITICAL violations")
+              exit(1)
+          EOF
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('green-ai-report.json', 'utf8'));
+            const summary = fs.readFileSync('scan_summary.txt', 'utf8');
+            
+            const criticalCount = summary.match(/Critical: (\d+)/)[1];
+            const highCount = summary.match(/High: (\d+)/)[1];
+            const totalCount = summary.match(/Total: (\d+)/)[1];
+            
+            const violations = report.issues || [];
+            const byFile = {};
+            violations.forEach(v => {
+              if (!byFile[v.file]) byFile[v.file] = [];
+              byFile[v.file].push(v);
+            });
+            
+            let comment = '## Green AI Scan Results 🌿\n\n';
+            comment += `**Summary**: ${totalCount} issues found\n`;
+            comment += `- 🔴 Critical: ${criticalCount}\n`;
+            comment += `- 🟠 High: ${highCount}\n`;
+            comment += `- 🟡 Medium: ${violations.filter(v => v.severity === 'medium').length}\n`;
+            comment += `- 🔵 Low: ${violations.filter(v => v.severity === 'low').length}\n\n`;
+            
+            if (Object.keys(byFile).length > 0) {
+              comment += '### Issues by File\n\n';
+              Object.entries(byFile).slice(0, 10).forEach(([file, issues]) => {
+                comment += `#### ${file}\n`;
+                comment += `${issues.length} issue(s)\n\n`;
+              });
+            }
+            
+            comment += '---\n';
+            comment += '_Scanned with [Green AI](https://github.com/Green-AI-Agent/green-ai)_\n';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: green-ai-report
+          path: green-ai-report.json
+          retention-days: 30
+
+      - name: Check results
+        if: failure()
+        run: |
+          echo "❌ Green AI Scan found critical violations"
+          exit 1
+
+      - name: Success message
+        if: success()
+        run: |
+          echo "✅ Green AI Scan completed successfully"

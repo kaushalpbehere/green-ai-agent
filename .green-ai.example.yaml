@@ -1,0 +1,95 @@
+# Green-AI Configuration File
+# ===========================
+# Copy this to .green-ai.yaml in your project root
+# All fields are optional with sensible defaults
+# Leave blank or remove to use defaults
+
+# Languages to scan
+languages:
+  - python
+  - javascript
+
+# Rule configuration
+rules:
+  # Rules to explicitly enable (optional, most are on by default)
+  enabled:
+    - excessive_nesting_depth
+    - io_in_loop
+    - resource_leak_file
+    - quadratic_algorithm
+    - blocking_io
+  
+  # Rules to disable (optional, useful if some rules are too noisy)
+  disabled:
+    - unused_variable        # Example: disable if too many false positives
+    - large_constant_allocation
+
+# Standards to enforce
+standards:
+  - gsf_principles
+  - ecocode_python
+
+# File patterns to ignore
+ignore_files:
+  - "*.pyc"
+  - "__pycache__"
+  - ".git"
+  - ".venv"
+  - "node_modules"
+  - "dist"
+  - "build"
+  - ".pytest_cache"
+
+# Auto-fix violations (if not specified, defaults to false)
+# When true, green-ai will attempt automatic fixes (requires careful review)
+auto_fix: false
+
+# LLM Provider for smart fixes (optional)
+# Options: "openai", "ollama", or comment out for no LLM
+# llm_provider: openai
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+#
+# LANGUAGES:
+#   Supported: python, javascript
+#   Only files matching these languages will be scanned
+#
+# RULES:
+#   Each rule can be explicitly enabled or disabled
+#   Rules not listed are enabled by default
+#
+#   Available Rules:
+#     - excessive_nesting_depth:         3+ nested levels → O(n³)
+#     - redundant_computation_in_loop:   Repeated calculation in loop
+#     - inefficient_memory_operation:    Inefficient memory usage
+#     - io_in_loop:                      I/O operations in loops (1000x!)
+#     - unused_variable:                 Variables defined but unused
+#     - unused_import:                   Imports not used
+#     - resource_leak_file:              File/resource not closed
+#     - quadratic_algorithm:             O(n²) algorithms
+#     - dead_code_block:                 Unreachable code
+#     - blocking_io:                     Synchronous I/O blocking thread
+#     - high_cyclomatic_complexity:      Complex branching logic
+#     - string_concat_in_loop:           String concatenation in loop
+#     - exception_in_loop:               Exception handling in loops
+#     - inefficient_data_structure:      Wrong data structure used
+#     - large_constant_allocation:       Large data as constants
+#
+# STANDARDS:
+#   Enforce specific standards (GSF, ecoCode, etc.)
+#   Useful for teams wanting to follow established guidelines
+#
+# IGNORE_FILES:
+#   Glob patterns for files to skip during scanning
+#   Useful for test files, build artifacts, dependencies, etc.
+#
+# AUTO_FIX:
+#   If true, green-ai attempts automatic fixes (experimental, use with caution)
+#
+# LLM_PROVIDER:
+#   For advanced AI-powered suggestions and fixes
+#   - openai: Uses OpenAI API (requires OPENAI_API_KEY env var)
+#   - ollama: Uses local Ollama instance (no API key needed)
+#   Leave commented to disable

@@ -1,0 +1,99 @@
+# Green AI Scanner for GitLab CI/CD
+# Add this file to your repository root as .gitlab-ci.yml
+
+stages:
+  - scan
+
+variables:
+  GREEN_AI_VERSION: "0.3.0"
+  REPORT_FILE: "green-ai-report.json"
+
+green-ai-scan:
+  stage: scan
+  image: python:3.9
+  
+  before_script:
+    - pip install --upgrade pip
+    - pip install green-ai-agent
+    
+  script:
+    # Run scan and generate JSON report
+    - green-ai scan . --language python --format json > $REPORT_FILE || true
+    
+    # Parse results and set exit status
+    - |
+      python - <<'PYTHON_SCRIPT'
+      import json
+      import sys
+      
+      with open('green-ai-report.json', 'r') as f:
+          report = json.load(f)
+      
+      critical_count = len([i for i in report.get('issues', []) if i.get('severity') == 'critical'])
+      high_count = len([i for i in report.get('issues', []) if i.get('severity') == 'high'])
+      total_issues = len(report.get('issues', []))
+      
+      print(f"📊 Green AI Scan Results:")
+      print(f"  Critical: {critical_count}")
+      print(f"  High: {high_count}")
+      print(f"  Total: {total_issues}")
+      
+      # Fail on critical violations (set to 'allow_failure: true' below to make it optional)
+      if critical_count > 0:
+          print(f"❌ Found {critical_count} CRITICAL violations")
+          sys.exit(1)
+      else:
+          print("✅ No critical violations found")
+          sys.exit(0)
+      PYTHON_SCRIPT
+  
+  artifacts:
+    reports:
+      dotenv: scan_results.env
+    paths:
+      - $REPORT_FILE
+    expire_in: 30 days
+    
+  after_script:
+    # Generate summary for artifacts
+    - |
+      python - <<'PYTHON_SCRIPT'
+      import json
+      
+      with open('green-ai-report.json', 'r') as f:
+          report = json.load(f)
+      
+      critical = len([i for i in report.get('issues', []) if i.get('severity') == 'critical'])
+      high = len([i for i in report.get('issues', []) if i.get('severity') == 'high'])
+      medium = len([i for i in report.get('issues', []) if i.get('severity') == 'medium'])
+      low = len([i for i in report.get('issues', []) if i.get('severity') == 'low'])
+      
+      with open('scan_results.env', 'w') as f:
+          f.write(f"GREEN_AI_CRITICAL={critical}\n")
+          f.write(f"GREEN_AI_HIGH={high}\n")
+          f.write(f"GREEN_AI_MEDIUM={medium}\n")
+          f.write(f"GREEN_AI_LOW={low}\n")
+      PYTHON_SCRIPT
+  
+  allow_failure: true  # Change to 'false' to fail pipeline on violations
+  
+  only:
+    - merge_requests
+    - main
+    - develop
+    
+  tags:
+    - docker
+
+# Optional: Archive reports for trending analysis
+pages:
+  stage: scan
+  script:
+    - mkdir -p public/reports
+    - cp $REPORT_FILE public/reports/latest.json || true
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+  allow_failure: true

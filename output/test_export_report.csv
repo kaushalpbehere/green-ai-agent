@@ -1,0 +1,104 @@
+﻿file,line,rule_id,severity,message,energy_factor,effort
+src/cli.py,244,excessive_nesting_depth,critical,Nesting depth 3: O(n^3) complexity detected.,100,Medium
+src/core\detectors.py,345,excessive_nesting_depth,critical,Nesting depth 3: O(n^3) complexity detected.,100,Medium
+src/core\detectors.py,363,excessive_nesting_depth,critical,Nesting depth 3: O(n^3) complexity detected.,100,Medium
+src/core\scanner.py,60,io_in_loop,critical,"I/O operation ""open()"" in loop. Each call costs 100-1000x more energy.",1000,Medium
+src/standards\registry.py,179,excessive_nesting_depth,critical,Nesting depth 3: O(n^3) complexity detected.,100,Medium
+src/core\config.py,141,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\config.py,317,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\detectors.py,254,inefficient_data_structure,high,".count() for membership test (O(n)), use set",100,Medium
+src/core\detectors.py,309,inefficient_data_structure,high,".count() for membership test (O(n)), use set",100,Medium
+src/core\export.py,118,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\export.py,677,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\git_operations.py,59,inefficient_data_structure,high,".count() for membership test (O(n)), use set",100,Medium
+src/core\project_manager.py,146,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\project_manager.py,161,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\scanner.py,60,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\scanner.py,176,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/core\scanner.py,230,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/standards\registry.py,153,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/standards\registry.py,241,resource_leak_file,high,"File opened without context manager. Use ""with open()"" to ensure closure.",5,Easy
+src/agents\runtime_monitor\codecarbon_integration.py,43,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/agents\runtime_monitor\data_collector.py,31,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/agents\runtime_monitor\main.py,19,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/agents\runtime_monitor\scaphandre_integration.py,49,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/benchmarks\benchmark.py,39,unused_variable,medium,"Unused variable ""avg_time"". Remove to free memory.",1,Easy
+src/benchmarks\benchmark.py,40,unused_variable,medium,"Unused variable ""avg_emissions"". Remove to free memory.",1,Easy
+src/cli.py,42,high_cyclomatic_complexity,medium,Function has high cyclomatic complexity (38). More code paths = more CPU execution.,5,Medium
+src/core\analyzer.py,187,unused_variable,medium,"Unused variable ""NESTED_LOOP_MULTIPLIER"". Remove to free memory.",1,Easy
+src/core\analyzer.py,188,unused_variable,medium,"Unused variable ""REDUNDANT_COMPUTATION_MULTIPLIER"". Remove to free memory.",1,Easy
+src/core\analyzer.py,189,unused_variable,medium,"Unused variable ""MEMORY_OPERATION_MULTIPLIER"". Remove to free memory.",1,Easy
+src/core\analyzer.py,190,unused_variable,medium,"Unused variable ""IO_OPERATION_OVERHEAD"". Remove to free memory.",1,Easy
+src/core\analyzer.py,193,unused_variable,medium,"Unused variable ""RESOURCE_LEAK_PENALTY"". Remove to free memory.",1,Easy
+src/core\analyzer.py,194,unused_variable,medium,"Unused variable ""ALGORITHM_COMPLEXITY_MULTIPLIER"". Remove to free memory.",1,Easy
+src/core\analyzer.py,197,unused_variable,medium,"Unused variable ""BASELINE_CO2_PER_1000_LINES"". Remove to free memory.",1,Easy
+src/core\analyzer.py,198,unused_variable,medium,"Unused variable ""COMPLEXITY_SCORE_MULTIPLIER"". Remove to free memory.",1,Easy
+src/core\analyzer.py,211,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\config.py,49,unused_variable,medium,"Unused variable ""DEFAULT_CONFIG"". Remove to free memory.",1,Easy
+src/core\config.py,76,unused_variable,medium,"Unused variable ""SCHEMA"". Remove to free memory.",1,Easy
+src/core\config.py,135,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\config.py,205,string_concat_in_loop,medium,String concatenation in loop creates O(n²) memory allocations.,10,Easy
+src/core\config.py,231,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\config.py,285,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\export.py,185,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,27,unused_variable,medium,"Unused variable ""TEMP_BASE_DIR"". Remove to free memory.",1,Easy
+src/core\git_operations.py,68,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,116,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,201,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,290,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,308,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\git_operations.py,337,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\project_manager.py,68,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\project_manager.py,84,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\project_manager.py,132,unused_variable,medium,"Unused variable ""REGISTRY_FILE"". Remove to free memory.",1,Easy
+src/core\project_manager.py,133,unused_variable,medium,"Unused variable ""HISTORY_DIR"". Remove to free memory.",1,Easy
+src/core\project_manager.py,343,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\project_manager.py,364,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\rules.py,31,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\rules.py,333,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\scanner.py,92,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\scanner.py,125,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\scanner.py,135,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\scanner.py,145,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/core\scanner.py,170,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/standards\registry.py,218,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,54,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,99,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,144,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,178,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,205,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,225,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,282,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\charts.py,304,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,68,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,107,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,165,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,185,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,238,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,267,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,288,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,308,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,333,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2130,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2235,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2354,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2359,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2486,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2507,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2529,dead_code_block,medium,Unreachable code after return/raise. Dead code increases memory.,1,Easy
+src/ui\server.py,2576,unused_variable,medium,"Unused variable ""total_emissions"". Remove to free memory.",1,Easy
+src/agents\runtime_monitor\codecarbon_integration.py,9,unused_import,low,"Unused import ""os"". Module load adds startup time and memory.",1,Easy
+src/agents\runtime_monitor\scaphandre_integration.py,9,unused_import,low,"Unused import ""psutil"". Module load adds startup time and memory.",1,Easy
+src/cli.py,14,unused_import,low,"Unused import ""datetime"". Module load adds startup time and memory.",1,Easy
+src/core\config.py,11,unused_import,low,"Unused import ""sys"". Module load adds startup time and memory.",1,Easy
+src/core\detectors.py,9,unused_import,low,"Unused import ""Tuple"". Module load adds startup time and memory.",1,Easy
+src/core\export.py,8,unused_import,low,"Unused import ""os"". Module load adds startup time and memory.",1,Easy
+src/core\export.py,10,unused_import,low,"Unused import ""List"". Module load adds startup time and memory.",1,Easy
+src/core\rules.py,18,unused_import,low,"Unused import ""os"". Module load adds startup time and memory.",1,Easy
+src/core\scanner.py,9,unused_import,low,"Unused import ""ast"". Module load adds startup time and memory.",1,Easy
+src/core\scanner.py,11,unused_import,low,"Unused import ""Dict"". Module load adds startup time and memory.",1,Easy
+src/core\scanner.py,11,unused_import,low,"Unused import ""Any"". Module load adds startup time and memory.",1,Easy
+src/standards\__init__.py,5,unused_import,low,"Unused import ""StandardsRegistry"". Module load adds startup time and memory.",1,Easy
+src/standards\__init__.py,5,unused_import,low,"Unused import ""StandardRule"". Module load adds startup time and memory.",1,Easy
+src/standards\registry.py,11,unused_import,low,"Unused import ""Path"". Module load adds startup time and memory.",1,Easy
+SUMMARY,,,,Total Violations: 102 | Critical: 5 | High: 14 | Medium: 69 | Low: 14 | Avg Effort: easy | CO2: 0.000001989kg,0.000015445kg,varies

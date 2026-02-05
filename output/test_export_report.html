@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green-AI Report - Scan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .timestamp {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .metric {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .metric h3 {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        canvas {
+            max-height: 300px;
+        }
+        
+        .violations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .violations-table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .violations-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .violations-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .violations-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .file-section {
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .violation-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 100px;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .violation-line {
+            font-weight: 600;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .violation-message {
+            color: #555;
+        }
+        
+        .violation-severity {
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .violation-effort {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px 30px;
+            border-top: 1px solid #dee2e6;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .severity-critical { border-left-color: #ef4444; }
+        .severity-high { border-left-color: #f97316; }
+        .severity-medium { border-left-color: #eab308; }
+        .severity-low { border-left-color: #3b82f6; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-critical { background: #fecaca; color: #dc2626; }
+        .badge-high { background: #fed7aa; color: #ea580c; }
+        .badge-medium { background: #fef08a; color: #ca8a04; }
+        .badge-low { background: #bfdbfe; color: #1e40af; }
+        
+        @media (max-width: 768px) {
+            .summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts {
+                grid-template-columns: 1fr;
+            }
+            
+            .violation-item {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Green-AI Report</h1>
+            <p>Project: <strong>Scan</strong></p>
+            <div class="timestamp">Generated on 2026-01-27 14:01:39</div>
+        </header>
+        
+        <div class="summary">
+            <div class="metric">
+                <h3>Total Violations</h3>
+                <div class="value">106</div>
+            </div>
+            <div class="metric">
+                <h3>Critical Issues</h3>
+                <div class="value" style="color: #ef4444;">5</div>
+            </div>
+            <div class="metric">
+                <h3>Affected Files</h3>
+                <div class="value">18</div>
+            </div>
+            <div class="metric">
+                <h3>CO₂ Impact</h3>
+                <div class="value">0.000002kg</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>📊 Violation Analysis</h2>
+                <div class="charts">
+                    <div class="chart-container">
+                        <h3>By Severity</h3>
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>By File</h3>
+                        <canvas id="fileChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>🔍 Detailed Violations</h2>
+                <div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/ui\server.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        21 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 68</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 107</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 165</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 185</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 238</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 267</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 288</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 308</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 333</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 346</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "StringIO". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 361</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 370</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 396</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2199</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2304</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2423</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2428</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2555</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2576</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2598</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 2645</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "total_emissions". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\scanner.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        12 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 9</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "ast". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 11</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "Dict". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 11</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "Any". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-critical">
+                        <div class="violation-line">Line 60</div>
+                        <div class="violation-message">
+                            <strong>io_in_loop</strong><br>
+                            I/O operation "open()" in loop. Each call costs 100-1000x more energy.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-critical">CRITICAL</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 60</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 92</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 125</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 135</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 145</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 170</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 176</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 230</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\analyzer.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        9 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 187</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "NESTED_LOOP_MULTIPLIER". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 188</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "REDUNDANT_COMPUTATION_MULTIPLIER". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 189</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "MEMORY_OPERATION_MULTIPLIER". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 190</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "IO_OPERATION_OVERHEAD". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 193</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "RESOURCE_LEAK_PENALTY". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 194</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "ALGORITHM_COMPLEXITY_MULTIPLIER". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 197</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "BASELINE_CO2_PER_1000_LINES". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 198</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "COMPLEXITY_SCORE_MULTIPLIER". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 211</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\config.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        9 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 11</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "sys". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 49</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "DEFAULT_CONFIG". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 76</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "SCHEMA". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 135</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 141</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 205</div>
+                        <div class="violation-message">
+                            <strong>string_concat_in_loop</strong><br>
+                            String concatenation in loop creates O(n²) memory allocations.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 231</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 285</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 317</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\git_operations.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        8 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 27</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "TEMP_BASE_DIR". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 59</div>
+                        <div class="violation-message">
+                            <strong>inefficient_data_structure</strong><br>
+                            .count() for membership test (O(n)), use set
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 68</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 116</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 201</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 290</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 308</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 337</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\project_manager.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        8 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 68</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 84</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 132</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "REGISTRY_FILE". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 133</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "HISTORY_DIR". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 146</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 161</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 343</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 364</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/ui\charts.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        8 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 54</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 99</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 144</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 178</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 205</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 225</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 282</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 304</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\detectors.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        5 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 9</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "Tuple". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 254</div>
+                        <div class="violation-message">
+                            <strong>inefficient_data_structure</strong><br>
+                            .count() for membership test (O(n)), use set
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 309</div>
+                        <div class="violation-message">
+                            <strong>inefficient_data_structure</strong><br>
+                            .count() for membership test (O(n)), use set
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-critical">
+                        <div class="violation-line">Line 345</div>
+                        <div class="violation-message">
+                            <strong>excessive_nesting_depth</strong><br>
+                            Nesting depth 3: O(n^3) complexity detected.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-critical">CRITICAL</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-critical">
+                        <div class="violation-line">Line 363</div>
+                        <div class="violation-message">
+                            <strong>excessive_nesting_depth</strong><br>
+                            Nesting depth 3: O(n^3) complexity detected.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-critical">CRITICAL</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\export.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        5 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 8</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "os". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 10</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "List". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 118</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 185</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 677</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/standards\registry.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        5 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 11</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "Path". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 153</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-critical">
+                        <div class="violation-line">Line 179</div>
+                        <div class="violation-message">
+                            <strong>excessive_nesting_depth</strong><br>
+                            Nesting depth 3: O(n^3) complexity detected.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-critical">CRITICAL</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 218</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-high">
+                        <div class="violation-line">Line 241</div>
+                        <div class="violation-message">
+                            <strong>resource_leak_file</strong><br>
+                            File opened without context manager. Use "with open()" to ensure closure.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-high">HIGH</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/cli.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        3 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 14</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "datetime". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 42</div>
+                        <div class="violation-message">
+                            <strong>high_cyclomatic_complexity</strong><br>
+                            Function has high cyclomatic complexity (38). More code paths = more CPU execution.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-critical">
+                        <div class="violation-line">Line 244</div>
+                        <div class="violation-message">
+                            <strong>excessive_nesting_depth</strong><br>
+                            Nesting depth 3: O(n^3) complexity detected.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-critical">CRITICAL</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Medium</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/core\rules.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        3 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 18</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "os". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 31</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 333</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/agents\runtime_monitor\codecarbon_integration.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        2 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 9</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "os". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 43</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/agents\runtime_monitor\scaphandre_integration.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        2 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 9</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "psutil". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 49</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/benchmarks\benchmark.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        2 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 39</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "avg_time". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 40</div>
+                        <div class="violation-message">
+                            <strong>unused_variable</strong><br>
+                            Unused variable "avg_emissions". Remove to free memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/standards\__init__.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        2 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 5</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "StandardsRegistry". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                    <div class="violation-item severity-low">
+                        <div class="violation-line">Line 5</div>
+                        <div class="violation-message">
+                            <strong>unused_import</strong><br>
+                            Unused import "StandardRule". Module load adds startup time and memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-low">LOW</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/agents\runtime_monitor\data_collector.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        1 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 31</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="file-section">
+                    <div class="file-name">📄 src/agents\runtime_monitor\main.py</div>
+                    <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        1 violation(s)
+                    </div>
+
+                    <div class="violation-item severity-medium">
+                        <div class="violation-line">Line 19</div>
+                        <div class="violation-message">
+                            <strong>dead_code_block</strong><br>
+                            Unreachable code after return/raise. Dead code increases memory.
+                        </div>
+                        <div class="violation-severity">
+                            <span class="badge badge-medium">MEDIUM</span>
+                        </div>
+                        <div class="violation-effort">
+                            <span style="background: #f0f0f0; padding: 4px 8px; border-radius: 4px;">Easy</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>⚡ Energy Impact</h2>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                    <p><strong>Codebase Emissions:</strong> 0.000002124 kg CO₂</p>
+                    <p><strong>Scanning Process Emissions:</strong> 0.000013461 kg CO₂</p>
+                    <p><strong>Total Emissions:</strong> 0.000015585 kg CO₂</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Green-AI Software Analyzer - Reducing Carbon Footprint of Software Development</p>
+            <p style="margin-top: 10px; opacity: 0.8;">This report was automatically generated. For more information, visit <a href="https://github.com/your-org/green-ai" style="color: #667eea;">Green-AI</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Severity Chart
+        const severityCtx = document.getElementById('severityChart').getContext('2d');
+        new Chart(severityCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Critical', 'High', 'Medium', 'Low', 'Info'],
+                datasets: [{
+                    data: [5, 16, 70, 15, 0],
+                    backgroundColor: ['#ef4444', '#f97316', '#eab308', '#3b82f6', '#8b5cf6'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        // File Chart
+        const fileCtx = document.getElementById('fileChart').getContext('2d');
+        const fileLabels = ['src/cli.py', 'src/agents\\runtime_monitor\\codecarbon_integration.py', 'src/agents\\runtime_monitor\\data_collector.py', 'src/agents\\runtime_monitor\\main.py', 'src/agents\\runtime_monitor\\scaphandre_integration.py', 'src/benchmarks\\benchmark.py', 'src/core\\analyzer.py', 'src/core\\config.py', 'src/core\\detectors.py', 'src/core\\export.py', 'src/core\\git_operations.py', 'src/core\\project_manager.py', 'src/core\\rules.py', 'src/core\\scanner.py', 'src/standards\\registry.py', 'src/standards\\__init__.py', 'src/ui\\charts.py', 'src/ui\\server.py'];
+        const fileCounts = [3, 2, 1, 1, 2, 2, 9, 9, 5, 5, 8, 8, 3, 12, 5, 2, 8, 21];
+        
+        new Chart(fileCtx, {
+            type: 'bar',
+            data: {
+                labels: fileLabels.slice(0, 10),
+                datasets: [{
+                    label: 'Violations',
+                    data: fileCounts.slice(0, 10),
+                    backgroundColor: '#667eea',
+                    borderColor: '#667eea',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

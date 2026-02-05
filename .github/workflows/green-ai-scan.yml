@@ -1,0 +1,46 @@
+name: Green AI Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install .
+          
+      - name: Run Green AI Scan
+        run: |
+          # Create output directory for reports
+          mkdir -p output/reports
+          # Run scan on the current directory
+          python -m src.cli scan . --format json --output output/reports/scan-results.json
+          
+      - name: Verify Scan Results
+        run: |
+          if [ ! -f output/reports/scan-results.json ]; then
+            echo "Scan failed to produce results!"
+            exit 1
+          fi
+          # Optional: Check for high severity issues and fail if found
+          # This can be configured via a threshold in the future
+          
+      - name: Upload Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: green-ai-report
+          path: output/reports/
