@@ -13,29 +13,29 @@
 **Audit Date**: 2026-01-30  
 **Detailed Report**: See `bug_backlog.md` in artifacts
 
-### BUG-001: Type Mismatch - Tests vs Implementation (HIGHEST PRIORITY)
+### BUG-001: Type Mismatch - Tests vs Implementation [DONE]
 - **Impact**: 14 test failures in `test_dashboard_projects.py`
 - **Root Cause**: Tests mock `Project` as dicts, but `server.py` expects `Project` objects
 - **Fix**: Create `ProjectFactory` fixture, update all mocks to use `Project` objects
 - **Effort**: 4h
 - **Assignee**: Developer
 - **Subtasks**:
-  - [ ] BUG-001.1: Create `ProjectFactory` test fixture
-  - [ ] BUG-001.2: Update test mocks in `test_dashboard_projects.py`
-  - [ ] BUG-001.3: Add type hints to `server.py` API functions
-  - [ ] BUG-001.4: Create integration test for Project serialization
-  - [ ] BUG-001.5: Add pytest fixture for realistic test data
+  - [x] BUG-001.1: Create `ProjectFactory` test fixture
+  - [x] BUG-001.2: Update test mocks in `test_dashboard_projects.py`
+  - [x] BUG-001.3: Add type hints to `server.py` API functions
+  - [x] BUG-001.4: Create integration test for Project serialization
+  - [x] BUG-001.5: Add pytest fixture for realistic test data
 
-### BUG-002: Missing `calculate_average_grade` Function
+### BUG-002: Missing `calculate_average_grade` Function [DONE]
 - **Impact**: Import error in tests, broken summary metrics
 - **Root Cause**: Function named `get_average_grade` but tests import `calculate_average_grade`
 - **Fix**: Rename function and move to utility module
 - **Effort**: 2h
 - **Subtasks**:
-  - [ ] BUG-002.1: Rename to `calculate_average_grade`
-  - [ ] BUG-002.2: Move to `src/utils/metrics.py`
-  - [ ] BUG-002.3: Add comprehensive unit tests
-  - [ ] BUG-002.4: Document algorithm in docstring
+  - [x] BUG-002.1: Rename to `calculate_average_grade`
+  - [x] BUG-002.2: Move to `src/utils/metrics.py`
+  - [x] BUG-002.3: Add comprehensive unit tests
+  - [x] BUG-002.4: Document algorithm in docstring
 
 ### BUG-003: Eventlet Deprecation Warning
 - **Impact**: Future compatibility risk, deprecated dependency
@@ -75,6 +75,20 @@
 
 **Total Bug Fix Effort**: 24 hours  
 **Acceptance Criteria**: 0 test failures, no deprecation warnings, 90%+ code coverage
+
+### BUG-006: Test Failures - Rules and Standards
+- **Impact**: Tests failing in `test_rules.py` and `test_standards.py`
+- **Root Cause**: Tests expect `message` field in rules (missing), and `test_standards.py` uses strict default config
+- **Fix**: Update tests to use `description` and dummy config
+- **Effort**: 1h
+- **Assignee**: Jules
+
+### BUG-007: Missing Test Files
+- **Impact**: Tests failing in `test_integration.py` and `test_scanner.py`
+- **Root Cause**: `tests/simple_test.py` is missing
+- **Fix**: Create `tests/simple_test.py` with sample code
+- **Effort**: 0.5h
+- **Assignee**: Jules
 
 ---
 

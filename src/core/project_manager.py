@@ -35,7 +35,8 @@ class Project:
         latest_violations: int = 0,
         total_emissions: float = 0.0,
         is_system: bool = False,
-        violation_details: Optional[Dict[str, int]] = None
+        violation_details: Optional[Dict[str, int]] = None,
+        violations: Optional[List[Dict[str, Any]]] = None
     ):
         """
         Initialize a Project.
@@ -52,6 +53,7 @@ class Project:
             total_emissions: Total CO₂ emissions in kg
             is_system: Whether this is a system project (non-deletable)
             violation_details: Dict with 'high', 'medium', 'low' counts
+            violations: List of detailed violation dictionaries
         """
         self.id = project_id or str(uuid.uuid4())
         self.name = name
@@ -64,6 +66,7 @@ class Project:
         self.total_emissions = total_emissions
         self.is_system = is_system
         self._violation_details = violation_details or {}
+        self.violations = violations or []
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert project to dictionary for JSON storage"""
@@ -77,7 +80,8 @@ class Project:
             "scan_count": self.scan_count,
             "latest_violations": self.latest_violations,
             "total_emissions": self.total_emissions,
-            "is_system": self.is_system
+            "is_system": self.is_system,
+            "violations": self.violations
         }
         if self._violation_details:
             data["violation_details"] = self._violation_details
@@ -97,7 +101,8 @@ class Project:
             latest_violations=data.get('latest_violations', 0),
             total_emissions=data.get('total_emissions', 0.0),
             is_system=data.get('is_system', False),
-            violation_details=data.get('violation_details')
+            violation_details=data.get('violation_details'),
+            violations=data.get('violations')
         )
     
     def get_grade(self) -> str:
@@ -118,17 +123,33 @@ class Project:
         else:
             return "F"
     
-    def update_scan_results(self, violations: int, emissions: float) -> None:
+    def update_scan_results(self, violations: Any, emissions: float) -> None:
         """
         Update project with new scan results.
         
         Args:
-            violations: Number of violations found
+            violations: Number of violations found OR List of violation dicts
             emissions: Total emissions in kg
         """
         self.last_scan = datetime.utcnow().isoformat() + "Z"
         self.scan_count += 1
-        self.latest_violations = violations
+
+        if isinstance(violations, list):
+            self.violations = violations
+            self.latest_violations = len(violations)
+
+            # Update violation details
+            details = {'high': 0, 'medium': 0, 'low': 0, 'critical': 0}
+            for v in violations:
+                severity = v.get('severity', 'low')
+                if severity in details:
+                    details[severity] += 1
+                else:
+                    details['low'] += 1
+            self._violation_details = details
+        else:
+            self.latest_violations = violations
+
         self.total_emissions = round(emissions, 9)
     
     @property
@@ -344,7 +365,7 @@ class ProjectManager:
     def update_project_scan(
         self,
         project_id_or_name: str,
-        violations: int,
+        violations: Any,
         emissions: float
     ) -> None:
         """
@@ -352,7 +373,7 @@ class ProjectManager:
         
         Args:
             project_id_or_name: Project ID or name
-            violations: Number of violations
+            violations: Number of violations OR List of violation dicts
             emissions: Total emissions in kg
             
         Raises:

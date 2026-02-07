@@ -20,7 +20,7 @@ def test_get_rules_python():
     for rule in rules:
         assert 'id' in rule
         assert 'pattern' in rule
-        assert 'message' in rule
+        assert 'description' in rule
         assert 'severity' in rule
 
 def test_get_rules_javascript():

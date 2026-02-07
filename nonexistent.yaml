@@ -9,9 +9,7 @@ standards:
     disable:
     - no_n2_algorithms
     - algorithm_efficiency
-    - proper_resource_cleanup
     - inefficient_loop
     - gpu_utilization
     - no_infinite_loops
-    - unnecessary_computation
     enable: []

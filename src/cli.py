@@ -122,7 +122,7 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
             emissions = results.get('codebase_emissions', 0)
             manager.update_project_scan(
                 project_name,
-                violations=violations_count,
+                violations=results['issues'],
                 emissions=emissions
             )
             click.echo(f"[OK] Project scan recorded: {violations_count} violations, {emissions:.9f} kg CO2")
@@ -440,7 +440,7 @@ def project_scan(project_name, branch):
             # Update project with scan results
             violations_count = len(results['issues'])
             emissions = results.get('codebase_emissions', 0)
-            manager.update_project_scan(project_name, violations=violations_count, emissions=emissions)
+            manager.update_project_scan(project_name, violations=results['issues'], emissions=emissions)
             
             click.echo(f"[OK] Scan complete")
             click.echo(f"  Found {violations_count} violations")
@@ -497,7 +497,7 @@ def project_scan_all():
                 # Update project
                 violations_count = len(results['issues'])
                 emissions = results.get('codebase_emissions', 0)
-                manager.update_project_scan(project.name, violations=violations_count, emissions=emissions)
+                manager.update_project_scan(project.name, violations=results['issues'], emissions=emissions)
                 
                 updated_project = manager.get_project(project.name)
                 grade = updated_project.get_grade()

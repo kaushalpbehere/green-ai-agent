@@ -119,9 +119,8 @@ class TestProjectDetailEndpoint:
             assert data['project']['name'] == 'MyApp Backend'
             assert data['project']['language'] == 'Python'
             assert data['project']['health_grade'] == 'B'
-            # TODO: BUG-005 - Violations list is currently empty in API
-            # assert len(data['project']['violations']) == 2
-            assert len(data['project']['violations']) == 0
+            # BUG-005 FIXED - Violations list is now populated
+            assert len(data['project']['violations']) == 2
             # Note: per_file_emissions is not in Project.to_dict() unless added, assume it's not checked here or added by implementation if needed
             # The test previously checked it, but Project.to_dict doesn't return it.
             # If server.py doesn't add it, this check would fail if it expected it.

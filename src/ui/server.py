@@ -66,7 +66,7 @@ try:
                 results = scanner.scan(root_dir)
                 set_last_scan_results(results)
                 history_manager.add_scan("Green-AI Agent", results)
-                project_manager.update_project_scan("Green-AI Agent", len(results['issues']), results.get('total_emissions', 0))
+                project_manager.update_project_scan("Green-AI Agent", results['issues'], results.get('total_emissions', 0))
                 print("Initial scan completed.")
             except Exception as e:
                 print(f"Initial scan failed: {e}")
@@ -213,7 +213,7 @@ def api_project_detail(project_name) -> Any:
     
     project_dict = project.to_dict()
     project_dict['health_grade'] = project.get_grade()
-    project_dict['violations'] = [] # Need to load from history if needed
+    # violations are now part of project_dict via to_dict()
     
     return jsonify({
         'status': 'ok',
