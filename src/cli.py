@@ -232,7 +232,7 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                     # If we want to support piping like `green-ai scan ... --format json > file.json`,
                     # we need to print the JSON to stdout here if no output path was specified.
 
-                    if not output_path and not export_path:
+                    if not output and not export_path:
                          # Wait, export_path comes from splitting export string.
                          # If user did `--format json`, export='json', export_path=None.
                          # If user did `--format json --output file`, export='json:file', export_path='file'.

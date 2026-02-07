@@ -5,8 +5,426 @@
       "type": "green_violation",
       "severity": "minor",
       "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_new_rules.py",
-      "line": 1,
+      "file": "tests/test_additional_coverage.py",
+      "line": 5,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "exceptions_in_loop",
+      "type": "green_violation",
+      "severity": "major",
+      "message": "Try/Except block inside loop. Exception handling is expensive.",
+      "file": "tests/test_scan_api.py",
+      "line": 24,
+      "remediation": "Move try/except blocks outside the loop",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "energy"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Exceptions Inside Loops",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "exceptions_in_loop",
+      "type": "green_violation",
+      "severity": "major",
+      "message": "Try/Except block inside loop. Exception handling is expensive.",
+      "file": "tests/test_scan_api.py",
+      "line": 34,
+      "remediation": "Move try/except blocks outside the loop",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "energy"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Exceptions Inside Loops",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 54,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 71,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"400\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 86,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"400\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 100,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 113,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 130,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"404\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 140,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 154,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"404\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 163,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 183,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"404\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 196,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 215,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 219,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 223,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 227,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 244,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 254,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"400\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 263,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"500\" usage. Use named constants.",
+      "file": "tests/test_scan_api.py",
+      "line": 263,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_scanner.py",
+      "line": 5,
       "remediation": "Remove unused imports to reduce memory footprint",
       "ai_suggestion": "Review code for optimization opportunities.",
       "effort": "Medium",
@@ -23,28 +441,9 @@
       "id": "unused_imports",
       "type": "green_violation",
       "severity": "minor",
-      "message": "Unused import \"Path\". Module load adds startup time and memory.",
-      "file": "tests/test_project_manager.py",
-      "line": 8,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"datetime\". Module load adds startup time and memory.",
-      "file": "tests/test_project_manager.py",
-      "line": 9,
+      "message": "Unused import \"os\". Module load adds startup time and memory.",
+      "file": "tests/test_scanner.py",
+      "line": 6,
       "remediation": "Remove unused imports to reduce memory footprint",
       "ai_suggestion": "Review code for optimization opportunities.",
       "effort": "Medium",
@@ -62,7 +461,140 @@
       "type": "green_violation",
       "severity": "minor",
       "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_additional_coverage.py",
+      "file": "tests/test_new_rules.py",
+      "line": 1,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "proper_resource_cleanup",
+      "type": "green_violation",
+      "severity": "major",
+      "message": "File opened without context manager. Use \"with open()\" to ensure closure.",
+      "file": "tests/test_emissions_storage.py",
+      "line": 100,
+      "remediation": "Use context managers (with statement) for automatic cleanup",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "resource-management",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Ensure Proper Resource Cleanup",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_emissions_storage.py",
+      "line": 6,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"os\". Module load adds startup time and memory.",
+      "file": "tests/test_emissions_storage.py",
+      "line": 7,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"MagicMock\". Module load adds startup time and memory.",
+      "file": "tests/test_emissions_storage.py",
+      "line": 9,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "excessive_logging",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
+      "file": "tests/sample_runtime_test.py",
+      "line": 4,
+      "remediation": "Use appropriate log levels and reduce verbosity in production",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "io",
+        "energy"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Excessive Logging",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "excessive_logging",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
+      "file": "tests/sample_runtime_test.py",
+      "line": 6,
+      "remediation": "Use appropriate log levels and reduce verbosity in production",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "io",
+        "energy"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Excessive Logging",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_standards.py",
       "line": 5,
       "remediation": "Remove unused imports to reduce memory footprint",
       "ai_suggestion": "Review code for optimization opportunities.",
@@ -74,6 +606,310 @@
       "carbon_impact": 1e-09,
       "energy_factor": 1,
       "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"300\" usage. Use named constants.",
+      "file": "tests/test_git_operations.py",
+      "line": 159,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"Path\". Module load adds startup time and memory.",
+      "file": "tests/test_git_operations.py",
+      "line": 7,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"200\" usage. Use named constants.",
+      "file": "tests/test_integration.py",
+      "line": 35,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"302\" usage. Use named constants.",
+      "file": "tests/test_integration.py",
+      "line": 35,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "magic_numbers",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Magic number \"500\" usage. Use named constants.",
+      "file": "tests/test_integration.py",
+      "line": 35,
+      "remediation": "Use named constants instead of magic numbers",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "maintainability"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid Magic Numbers",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_integration.py",
+      "line": 5,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"subprocess\". Module load adds startup time and memory.",
+      "file": "tests/test_integration.py",
+      "line": 6,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"sys\". Module load adds startup time and memory.",
+      "file": "tests/test_integration.py",
+      "line": 7,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"os\". Module load adds startup time and memory.",
+      "file": "tests/test_integration.py",
+      "line": 8,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "inefficient_lookup",
+      "type": "green_violation",
+      "severity": "medium",
+      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
+      "file": "tests/test_rules.py",
+      "line": 21,
+      "remediation": "Convert list to set for O(1) membership lookups",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "optimization"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Inefficient Membership Lookup",
+      "codebase_emissions": 1.6333920221606643e-08
+    },
+    {
+      "id": "inefficient_lookup",
+      "type": "green_violation",
+      "severity": "medium",
+      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
+      "file": "tests/test_rules.py",
+      "line": 22,
+      "remediation": "Convert list to set for O(1) membership lookups",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "optimization"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Inefficient Membership Lookup",
+      "codebase_emissions": 1.6333920221606643e-08
+    },
+    {
+      "id": "inefficient_lookup",
+      "type": "green_violation",
+      "severity": "medium",
+      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
+      "file": "tests/test_rules.py",
+      "line": 23,
+      "remediation": "Convert list to set for O(1) membership lookups",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "optimization"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Inefficient Membership Lookup",
+      "codebase_emissions": 1.6333920221606643e-08
+    },
+    {
+      "id": "inefficient_lookup",
+      "type": "green_violation",
+      "severity": "medium",
+      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
+      "file": "tests/test_rules.py",
+      "line": 24,
+      "remediation": "Convert list to set for O(1) membership lookups",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "optimization"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Inefficient Membership Lookup",
+      "codebase_emissions": 1.6333920221606643e-08
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_rules.py",
+      "line": 5,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_missing_rules.py",
+      "line": 2,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "string_concatenation_in_loop",
+      "type": "green_violation",
+      "severity": "major",
+      "message": "String concatenation in loop creates O(n\u00b2) memory allocations.",
+      "file": "tests/test_missing_rules.py",
+      "line": 116,
+      "remediation": "Use list append and join() instead of string concatenation",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "memory",
+        "performance"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Avoid String Concatenation in Loops",
       "codebase_emissions": 8.166960110803321e-09
     },
     {
@@ -264,6 +1100,121 @@
       "carbon_impact": 1e-09,
       "energy_factor": 1,
       "name": "Ensure Proper Resource Cleanup",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"Path\". Module load adds startup time and memory.",
+      "file": "tests/test_project_manager.py",
+      "line": 8,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"datetime\". Module load adds startup time and memory.",
+      "file": "tests/test_project_manager.py",
+      "line": 9,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
+      "file": "tests/test_charts.py",
+      "line": 6,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unnecessary_computation",
+      "type": "green_violation",
+      "severity": "major",
+      "message": "Redundant computation \"range()\" in loop. Move outside for O(1) impact.",
+      "file": "tests/simple_test.py",
+      "line": 4,
+      "remediation": "Cache or optimize computation placement outside loops",
+      "ai_suggestion": "Cache results or optimize the range size.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "optimization"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Unnecessary Computation in Loops",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "no_infinite_loops",
+      "type": "green_violation",
+      "severity": "critical",
+      "message": "Infinite loop detected (while True). Ensure break condition exists.",
+      "file": "tests/simple_test.py",
+      "line": 10,
+      "remediation": "Add loop termination conditions or use break/return statements",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "performance",
+        "energy",
+        "cpu"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "No Infinite Loops",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "excessive_logging",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
+      "file": "tests/simple_test.py",
+      "line": 11,
+      "remediation": "Use appropriate log levels and reduce verbosity in production",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "io",
+        "energy"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Excessive Logging",
       "codebase_emissions": 8.166960110803321e-09
     },
     {
@@ -706,6 +1657,44 @@
       "codebase_emissions": 8.166960110803321e-09
     },
     {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"json\". Module load adds startup time and memory.",
+      "file": "tests/test_history.py",
+      "line": 8,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
+      "id": "unused_imports",
+      "type": "green_violation",
+      "severity": "minor",
+      "message": "Unused import \"timedelta\". Module load adds startup time and memory.",
+      "file": "tests/test_history.py",
+      "line": 9,
+      "remediation": "Remove unused imports to reduce memory footprint",
+      "ai_suggestion": "Review code for optimization opportunities.",
+      "effort": "Medium",
+      "tags": [
+        "code-quality",
+        "memory"
+      ],
+      "carbon_impact": 1e-09,
+      "energy_factor": 1,
+      "name": "Remove Unused Imports",
+      "codebase_emissions": 8.166960110803321e-09
+    },
+    {
       "id": "magic_numbers",
       "type": "green_violation",
       "severity": "minor",
@@ -1064,995 +2053,6 @@
       "carbon_impact": 1e-09,
       "energy_factor": 1,
       "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_standards.py",
-      "line": 5,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "proper_resource_cleanup",
-      "type": "green_violation",
-      "severity": "major",
-      "message": "File opened without context manager. Use \"with open()\" to ensure closure.",
-      "file": "tests/test_emissions_storage.py",
-      "line": 100,
-      "remediation": "Use context managers (with statement) for automatic cleanup",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "resource-management",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Ensure Proper Resource Cleanup",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_emissions_storage.py",
-      "line": 6,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"os\". Module load adds startup time and memory.",
-      "file": "tests/test_emissions_storage.py",
-      "line": 7,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"MagicMock\". Module load adds startup time and memory.",
-      "file": "tests/test_emissions_storage.py",
-      "line": 9,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "inefficient_lookup",
-      "type": "green_violation",
-      "severity": "medium",
-      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
-      "file": "tests/test_rules.py",
-      "line": 21,
-      "remediation": "Convert list to set for O(1) membership lookups",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "optimization"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Inefficient Membership Lookup",
-      "codebase_emissions": 1.6333920221606643e-08
-    },
-    {
-      "id": "inefficient_lookup",
-      "type": "green_violation",
-      "severity": "medium",
-      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
-      "file": "tests/test_rules.py",
-      "line": 22,
-      "remediation": "Convert list to set for O(1) membership lookups",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "optimization"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Inefficient Membership Lookup",
-      "codebase_emissions": 1.6333920221606643e-08
-    },
-    {
-      "id": "inefficient_lookup",
-      "type": "green_violation",
-      "severity": "medium",
-      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
-      "file": "tests/test_rules.py",
-      "line": 23,
-      "remediation": "Convert list to set for O(1) membership lookups",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "optimization"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Inefficient Membership Lookup",
-      "codebase_emissions": 1.6333920221606643e-08
-    },
-    {
-      "id": "inefficient_lookup",
-      "type": "green_violation",
-      "severity": "medium",
-      "message": "Membership test on \"rule\" inside loop. If it is a list, consider converting to a set for O(1) lookup.",
-      "file": "tests/test_rules.py",
-      "line": 24,
-      "remediation": "Convert list to set for O(1) membership lookups",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "optimization"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Inefficient Membership Lookup",
-      "codebase_emissions": 1.6333920221606643e-08
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_rules.py",
-      "line": 5,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_charts.py",
-      "line": 6,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"json\". Module load adds startup time and memory.",
-      "file": "tests/test_history.py",
-      "line": 8,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"timedelta\". Module load adds startup time and memory.",
-      "file": "tests/test_history.py",
-      "line": 9,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"300\" usage. Use named constants.",
-      "file": "tests/test_git_operations.py",
-      "line": 159,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"Path\". Module load adds startup time and memory.",
-      "file": "tests/test_git_operations.py",
-      "line": 7,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_integration.py",
-      "line": 35,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"302\" usage. Use named constants.",
-      "file": "tests/test_integration.py",
-      "line": 35,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"500\" usage. Use named constants.",
-      "file": "tests/test_integration.py",
-      "line": 35,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_integration.py",
-      "line": 5,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"subprocess\". Module load adds startup time and memory.",
-      "file": "tests/test_integration.py",
-      "line": 6,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"sys\". Module load adds startup time and memory.",
-      "file": "tests/test_integration.py",
-      "line": 7,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"os\". Module load adds startup time and memory.",
-      "file": "tests/test_integration.py",
-      "line": 8,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_scanner.py",
-      "line": 5,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"os\". Module load adds startup time and memory.",
-      "file": "tests/test_scanner.py",
-      "line": 6,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "excessive_logging",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
-      "file": "tests/sample_runtime_test.py",
-      "line": 4,
-      "remediation": "Use appropriate log levels and reduce verbosity in production",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "io",
-        "energy"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Excessive Logging",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "excessive_logging",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
-      "file": "tests/sample_runtime_test.py",
-      "line": 6,
-      "remediation": "Use appropriate log levels and reduce verbosity in production",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "io",
-        "energy"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Excessive Logging",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unused_imports",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Unused import \"pytest\". Module load adds startup time and memory.",
-      "file": "tests/test_missing_rules.py",
-      "line": 2,
-      "remediation": "Remove unused imports to reduce memory footprint",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "memory"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Remove Unused Imports",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "string_concatenation_in_loop",
-      "type": "green_violation",
-      "severity": "major",
-      "message": "String concatenation in loop creates O(n\u00b2) memory allocations.",
-      "file": "tests/test_missing_rules.py",
-      "line": 116,
-      "remediation": "Use list append and join() instead of string concatenation",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "memory",
-        "performance"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid String Concatenation in Loops",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "exceptions_in_loop",
-      "type": "green_violation",
-      "severity": "major",
-      "message": "Try/Except block inside loop. Exception handling is expensive.",
-      "file": "tests/test_scan_api.py",
-      "line": 24,
-      "remediation": "Move try/except blocks outside the loop",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "energy"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Exceptions Inside Loops",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "exceptions_in_loop",
-      "type": "green_violation",
-      "severity": "major",
-      "message": "Try/Except block inside loop. Exception handling is expensive.",
-      "file": "tests/test_scan_api.py",
-      "line": 34,
-      "remediation": "Move try/except blocks outside the loop",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "energy"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Exceptions Inside Loops",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 54,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 71,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"400\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 86,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"400\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 100,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 113,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 130,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"404\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 140,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 154,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"404\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 163,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 183,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"404\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 196,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 215,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 219,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 223,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 227,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 244,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"200\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 254,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"400\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 263,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "magic_numbers",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Magic number \"500\" usage. Use named constants.",
-      "file": "tests/test_scan_api.py",
-      "line": 263,
-      "remediation": "Use named constants instead of magic numbers",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "code-quality",
-        "maintainability"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Avoid Magic Numbers",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "unnecessary_computation",
-      "type": "green_violation",
-      "severity": "major",
-      "message": "Redundant computation \"range()\" in loop. Move outside for O(1) impact.",
-      "file": "tests/simple_test.py",
-      "line": 4,
-      "remediation": "Cache or optimize computation placement outside loops",
-      "ai_suggestion": "Cache results or optimize the range size.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "optimization"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Unnecessary Computation in Loops",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "no_infinite_loops",
-      "type": "green_violation",
-      "severity": "critical",
-      "message": "Infinite loop detected (while True). Ensure break condition exists.",
-      "file": "tests/simple_test.py",
-      "line": 10,
-      "remediation": "Add loop termination conditions or use break/return statements",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "performance",
-        "energy",
-        "cpu"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "No Infinite Loops",
-      "codebase_emissions": 8.166960110803321e-09
-    },
-    {
-      "id": "excessive_logging",
-      "type": "green_violation",
-      "severity": "minor",
-      "message": "Usage of \"print\" detected. Use logging module or remove in production.",
-      "file": "tests/simple_test.py",
-      "line": 11,
-      "remediation": "Use appropriate log levels and reduce verbosity in production",
-      "ai_suggestion": "Review code for optimization opportunities.",
-      "effort": "Medium",
-      "tags": [
-        "io",
-        "energy"
-      ],
-      "carbon_impact": 1e-09,
-      "energy_factor": 1,
-      "name": "Excessive Logging",
       "codebase_emissions": 8.166960110803321e-09
     },
     {
@@ -6382,32 +6382,32 @@
     "emissions": 0.0,
     "cpu": 0.0,
     "memory": 0.0,
-    "duration_seconds": 1.0954957008361816,
+    "duration_seconds": 0.9815988540649414,
     "tracking_enabled": false
   },
   "codebase_emissions": 2.948272599999999e-06,
   "per_file_emissions": {
-    "tests/test_new_rules.py": 8.1268e-08,
-    "tests/test_project_manager.py": 3.285e-08,
     "tests/test_additional_coverage.py": 1.4728000000000001e-08,
-    "tests/test_export.py": 1.5712999999999998e-07,
-    "tests/test_carbon_patterns.py": 1.4353000000000002e-07,
-    "tests/test_dashboard_projects.py": 5.0142e-08,
-    "tests/conftest.py": 1.9462e-08,
-    "tests/test_standards.py": 1.3679999999999999e-08,
+    "tests/test_scan_api.py": 2.9266000000000002e-08,
+    "tests/test_scanner.py": 1e-08,
+    "tests/test_new_rules.py": 8.1268e-08,
+    "tests/test_runtime_monitor.py": 1e-08,
     "tests/test_emissions_storage.py": 1.3256000000000002e-07,
-    "tests/test_rules.py": 1e-08,
-    "tests/test_charts.py": 3.6848e-08,
-    "tests/test_history.py": 4.4006e-08,
+    "tests/sample_runtime_test.py": 1e-08,
+    "tests/test_standards.py": 1.3679999999999999e-08,
+    "tests/conftest.py": 1.9462e-08,
     "tests/test_git_operations.py": 2.7805999999999998e-08,
     "tests/test_integration.py": 1e-08,
-    "tests/test_scanner.py": 1e-08,
-    "tests/sample_runtime_test.py": 1e-08,
-    "tests/test_runtime_monitor.py": 1e-08,
-    "tests/test_missing_rules.py": 1.3848e-08,
-    "tests/test_scan_api.py": 2.9266000000000002e-08,
-    "tests/simple_test.py": 1e-08,
     "tests/__init__.py": 1e-08,
+    "tests/test_rules.py": 1e-08,
+    "tests/test_missing_rules.py": 1.3848e-08,
+    "tests/test_export.py": 1.5712999999999998e-07,
+    "tests/test_project_manager.py": 3.285e-08,
+    "tests/test_charts.py": 3.6848e-08,
+    "tests/simple_test.py": 1e-08,
+    "tests/test_carbon_patterns.py": 1.4353000000000002e-07,
+    "tests/test_history.py": 4.4006e-08,
+    "tests/test_dashboard_projects.py": 5.0142e-08,
     "tests/test_history_api.py": 1.1666e-08,
     "tests/test_python.py": 1e-08,
     "tests/sample_simple_test.py": 1e-08,
@@ -6447,10 +6447,10 @@
   },
   "runtime_metrics": {},
   "metadata": {
-    "total_files": 95,
+    "total_files": 96,
     "language": "python",
     "path": ".",
-    "exported_at": "2026-02-07T04:29:31.740467Z",
+    "exported_at": "2026-02-07T04:34:20.565060Z",
     "project_name": "Scan"
   }
 }
