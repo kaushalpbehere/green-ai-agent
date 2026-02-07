@@ -1,0 +1,414 @@
+2026-02-07 04:16:56,567 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:56,588 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:56,605 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:56,607 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:56,628 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:56,645 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:56,647 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:56,668 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:56,685 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:56,686 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:16:56,691 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:16:56,693 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:56,714 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:56,732 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:56,799 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:56,824 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:56,842 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:58,507 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:58,537 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:58,559 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:58,560 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:16:58,568 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:16:58,595 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:16:58,614 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:16:58,614 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:17:00,355 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,378 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,395 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,397 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,418 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,437 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,440 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,460 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,477 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,479 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,499 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,517 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,525 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,547 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,564 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,565 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:17:00,565 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,565 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:17:00,572 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,592 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,609 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,610 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:17:00,610 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,610 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:17:00,621 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,642 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,659 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,660 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git@main...
+2026-02-07 04:17:00,660 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,660 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:17:00,682 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,704 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,722 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,723 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:17:00,723 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,723 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:17:00,730 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,750 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,768 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,769 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:17:00,769 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,769 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:17:00,778 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,799 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,816 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,818 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,839 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,859 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,861 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,881 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,899 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,899 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:17:00,903 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:00,923 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:00,941 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:00,941 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/...
+2026-02-07 04:17:00,942 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:17:00,948 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:17:01,287 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:01,309 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:01,327 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:01,328 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:17:01,503 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:01,524 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:01,541 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:01,542 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:01,563 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:01,580 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:17:01,581 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:17:01,603 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:17:01,620 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:22:17,601 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:22:17,630 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:22:17,652 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:22:17,653 - green-ai - INFO - [scanner.py:71] - Starting scan on ....
+2026-02-07 04:22:17,653 - green-ai - INFO - [scanner.py:242] - Discovering files in . (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:22:17,705 - green-ai - INFO - [scanner.py:263] - Found 93 files to scan.
+2026-02-07 04:23:45,902 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:23:45,925 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:23:45,942 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:23:45,942 - green-ai - INFO - [scanner.py:71] - Starting scan on ....
+2026-02-07 04:23:45,942 - green-ai - INFO - [scanner.py:242] - Discovering files in . (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:23:45,974 - green-ai - INFO - [scanner.py:263] - Found 94 files to scan.
+2026-02-07 04:24:10,484 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:10,508 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:10,525 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:10,526 - green-ai - INFO - [scanner.py:71] - Starting scan on ....
+2026-02-07 04:24:10,526 - green-ai - INFO - [scanner.py:242] - Discovering files in . (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:10,557 - green-ai - INFO - [scanner.py:263] - Found 94 files to scan.
+2026-02-07 04:24:33,529 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:33,553 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:33,570 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:33,571 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:33,591 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:33,608 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:33,609 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:33,629 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:33,645 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:33,646 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:33,651 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:24:33,652 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:33,673 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:33,689 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:33,755 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:33,778 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:33,794 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:35,252 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:35,274 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:35,292 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:35,292 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:24:35,297 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:35,319 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:35,335 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:35,336 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:24:36,957 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:36,978 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:36,994 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:36,996 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,016 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,032 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,033 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,053 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,070 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,071 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,091 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,107 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,115 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,135 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,151 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,152 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:24:37,152 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,152 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:24:37,157 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,177 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,194 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,194 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:24:37,194 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,194 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:24:37,203 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,223 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,240 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,240 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git@main...
+2026-02-07 04:24:37,240 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,241 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:24:37,261 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,281 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,298 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,298 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:24:37,298 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,298 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:24:37,305 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,325 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,342 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,342 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:24:37,342 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,342 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:24:37,350 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,371 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,387 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,389 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,409 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,425 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,427 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,447 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,464 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,464 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:24:37,469 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,489 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,505 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,505 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/...
+2026-02-07 04:24:37,506 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:24:37,510 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:24:37,809 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:37,830 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:37,846 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:37,846 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:24:38,014 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:38,035 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:38,051 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:38,052 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:38,072 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:38,088 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:24:38,089 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:24:38,108 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:24:38,125 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:29:30,577 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:29:30,616 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:29:30,642 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:29:30,643 - green-ai - INFO - [scanner.py:71] - Starting scan on ....
+2026-02-07 04:29:30,643 - green-ai - INFO - [scanner.py:242] - Discovering files in . (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:29:30,734 - green-ai - INFO - [scanner.py:263] - Found 95 files to scan.
+2026-02-07 04:30:00,173 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:00,201 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:00,220 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:00,222 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:00,243 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:00,260 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:00,264 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:00,286 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:00,304 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:00,305 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:00,311 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:30:00,313 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:00,334 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:00,351 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:00,431 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:00,455 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:00,472 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:02,227 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:02,253 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:02,271 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:02,272 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:30:02,278 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:02,303 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:02,320 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:02,321 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:30:04,302 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,343 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,380 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,383 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,409 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,428 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,430 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,452 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,470 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,472 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,496 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,515 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,525 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,547 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,565 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,566 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:30:04,566 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,566 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:30:04,574 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,595 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,613 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,614 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:30:04,614 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,614 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:30:04,625 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,647 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,666 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,667 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git@main...
+2026-02-07 04:30:04,667 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,667 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:30:04,699 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,721 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,739 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,739 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:30:04,740 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,740 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:30:04,748 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,770 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,788 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,788 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:30:04,788 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,789 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:30:04,798 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,820 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,838 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,840 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,862 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,883 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,885 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,908 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,927 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,927 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:30:04,931 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:04,952 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:04,970 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:04,971 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/...
+2026-02-07 04:30:04,971 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:30:04,977 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:30:05,315 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:05,338 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:05,356 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:05,356 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:30:05,534 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:05,556 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:05,574 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:05,574 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:05,598 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:05,616 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:30:05,616 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:30:05,637 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:30:05,654 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:19,537 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:19,564 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:19,581 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:19,581 - green-ai - INFO - [scanner.py:71] - Starting scan on ....
+2026-02-07 04:34:19,581 - green-ai - INFO - [scanner.py:242] - Discovering files in . (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:19,641 - green-ai - INFO - [scanner.py:263] - Found 96 files to scan.
+2026-02-07 04:34:53,968 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:53,992 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:54,010 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:54,013 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:54,034 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:54,057 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:54,059 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:54,112 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:54,145 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:54,146 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:54,151 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:34:54,153 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:54,175 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:54,192 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:54,266 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:54,290 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:54,308 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:56,029 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:56,052 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:56,069 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:56,070 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:34:56,076 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:56,098 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:56,125 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:56,126 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:34:58,033 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,065 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,091 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,094 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,120 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,144 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,148 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,176 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,199 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,201 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,228 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,251 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,261 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,289 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,311 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,312 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:34:58,312 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,312 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:34:58,320 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,350 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,374 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,374 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:34:58,375 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,375 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:34:58,388 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,413 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,434 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,434 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git@main...
+2026-02-07 04:34:58,435 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,435 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:34:58,466 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,497 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,519 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,519 - green-ai - INFO - [scanner.py:71] - Starting scan on https://github.com/example/repo.git...
+2026-02-07 04:34:58,519 - green-ai - INFO - [scanner.py:242] - Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,520 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:34:58,528 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,557 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,585 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,586 - green-ai - INFO - [scanner.py:71] - Starting scan on /path/to/code...
+2026-02-07 04:34:58,586 - green-ai - INFO - [scanner.py:242] - Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,586 - green-ai - INFO - [scanner.py:263] - Found 0 files to scan.
+2026-02-07 04:34:58,599 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,628 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,652 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,655 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,681 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,711 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,713 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,739 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,759 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,760 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:34:58,764 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:58,797 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:58,823 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:58,824 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/...
+2026-02-07 04:34:58,824 - green-ai - INFO - [scanner.py:242] - Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
+2026-02-07 04:34:58,831 - green-ai - INFO - [scanner.py:263] - Found 27 files to scan.
+2026-02-07 04:34:59,347 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:59,384 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:59,413 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:59,413 - green-ai - INFO - [scanner.py:71] - Starting scan on tests/simple_test.py...
+2026-02-07 04:34:59,666 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:59,706 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:59,739 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:59,740 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:59,777 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:59,802 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-07 04:34:59,803 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-07 04:34:59,833 - green-ai - INFO - [rules.py:58] - Loaded 17 rules for python
+2026-02-07 04:34:59,858 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript

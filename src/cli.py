@@ -17,7 +17,7 @@ from src.core.scanner import Scanner
 from src.core.config import ConfigLoader
 from src.core.git_operations import GitOperations, GitException
 from src.core.project_manager import ProjectManager
-from src.core.export import CSVExporter, HTMLReporter
+from src.core.export import CSVExporter, HTMLReporter, JSONExporter
 from src.ui.server import set_last_scan_results, run_dashboard
 from src.standards.registry import StandardsRegistry
 from src.core.calibration import CalibrationAgent
@@ -42,12 +42,21 @@ def cli():
 @click.option('--fix-specific', multiple=True, help='Fix specific issue IDs')
 @click.option('--manual', is_flag=True, help='Manual mode: show issues without fixing')
 @click.option('--export', default=None, help='Export results to format: csv, csv:path/to/file.csv, html, html:path/to/report.html')
-def scan(path, git_url, branch, project_name, language, config, disable_rule, enable_rule, runtime, profile, fix_all, fix_specific, manual, export):
+@click.option('--format', default=None, help='[Deprecated] Output format (json, csv, html)')
+@click.option('--output', default=None, help='[Deprecated] Output file path')
+def scan(path, git_url, branch, project_name, language, config, disable_rule, enable_rule, runtime, profile, fix_all, fix_specific, manual, export, format, output):
     """Scan a codebase for green software violations
     
     PATH can be a local directory or omitted if using --git-url
     """
     try:
+        # Handle backward compatibility for --format and --output
+        if format and not export:
+            if output:
+                export = f"{format}:{output}"
+            else:
+                export = format
+
         # Validate inputs
         if not path and not git_url:
             click.echo("Error: Either PATH or --git-url must be provided", err=True)
@@ -84,9 +93,14 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
         if language is None:
             language = cfg.get('languages', ['python'])[0]
         
-        click.echo(f"Scanning {scan_path} for {language} code...")
+        # Only print logs if not exporting to stdout (implied when no explicit file is given for json export)
+        # However, click.echo defaults to stdout. We should use err=True for logs to avoid corrupting piped output.
+        verbose = True
+
+        if verbose:
+            click.echo(f"Scanning {scan_path} for {language} code...", err=True)
         if profile:
-            click.echo("Emissions profiling enabled (10-15% overhead)")
+            click.echo("Emissions profiling enabled (10-15% overhead)", err=True)
         
         # Create scanner with config and profiling flag
         scanner = Scanner(language=language, runtime=runtime, config_path=config, profile=profile)
@@ -115,53 +129,53 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                     branch=detected_branch,
                     language=language
                 )
-                click.echo(f"[OK] Project registered: {project_name}")
+                click.echo(f"[OK] Project registered: {project_name}", err=True)
             
             # Update with scan results
             violations_count = len(results['issues'])
             emissions = results.get('codebase_emissions', 0)
             manager.update_project_scan(
                 project_name,
-                violations=violations_count,
+                violations=results['issues'],
                 emissions=emissions
             )
-            click.echo(f"[OK] Project scan recorded: {violations_count} violations, {emissions:.9f} kg CO2")
+            click.echo(f"[OK] Project scan recorded: {violations_count} violations, {emissions:.9f} kg CO2", err=True)
         
         # Store results for dashboard
         set_last_scan_results(results)
         
-        click.echo("Scan complete.")
-        click.echo(f"Found {len(results['issues'])} issues.")
+        click.echo("Scan complete.", err=True)
+        click.echo(f"Found {len(results['issues'])} issues.", err=True)
         
         # Display dual emission metrics
         scanning_emissions = results.get('scanning_emissions', 0)
         codebase_emissions = results.get('codebase_emissions', 0)
         
-        click.echo(f"\n=== Carbon Emissions Report ===")
-        click.echo(f"Scanning Process Emissions: {scanning_emissions:.9f} kg CO2 (energy used by GASA)")
-        click.echo(f"Estimated Codebase Emissions: {codebase_emissions:.9f} kg CO2 (if code were executed)")
-        click.echo(f"Total: {scanning_emissions + codebase_emissions:.9f} kg CO2")
+        click.echo(f"\n=== Carbon Emissions Report ===", err=True)
+        click.echo(f"Scanning Process Emissions: {scanning_emissions:.9f} kg CO2 (energy used by GASA)", err=True)
+        click.echo(f"Estimated Codebase Emissions: {codebase_emissions:.9f} kg CO2 (if code were executed)", err=True)
+        click.echo(f"Total: {scanning_emissions + codebase_emissions:.9f} kg CO2", err=True)
         
         if codebase_emissions > 0:
             ratio = (codebase_emissions / (scanning_emissions + codebase_emissions)) * 100 if (scanning_emissions + codebase_emissions) > 0 else 0
-            click.echo(f"Code Emissions Ratio: {ratio:.1f}% of total")
+            click.echo(f"Code Emissions Ratio: {ratio:.1f}% of total", err=True)
         
         # Per-file emissions
         if results.get('per_file_emissions'):
-            click.echo(f"\nEmissions by File:")
+            click.echo(f"\nEmissions by File:", err=True)
             for file_path, emissions in results['per_file_emissions'].items():
-                click.echo(f"  {file_path}: {emissions:.9f} kg CO2")
+                click.echo(f"  {file_path}: {emissions:.9f} kg CO2", err=True)
         
         # Runtime metrics output
         if 'runtime_metrics' in results and results['runtime_metrics']:
-            click.echo(f"\n=== Runtime Metrics ===")
-            click.echo(f"Execution Time: {results['runtime_metrics'].get('execution_time', 'N/A')}")
-            click.echo(f"Runtime Emissions: {results['runtime_metrics'].get('emissions', 0):.6f} kg CO2")
+            click.echo(f"\n=== Runtime Metrics ===", err=True)
+            click.echo(f"Execution Time: {results['runtime_metrics'].get('execution_time', 'N/A')}", err=True)
+            click.echo(f"Runtime Emissions: {results['runtime_metrics'].get('emissions', 0):.6f} kg CO2", err=True)
             if results['runtime_metrics'].get('output'):
-                click.echo(f"Output: {results['runtime_metrics']['output']}")
+                click.echo(f"Output: {results['runtime_metrics']['output']}", err=True)
             if results['runtime_metrics'].get('error'):
-                click.echo(f"Error: {results['runtime_metrics']['error']}")
-            click.echo(f"Return Code: {results['runtime_metrics'].get('return_code', 'N/A')}")
+                click.echo(f"Error: {results['runtime_metrics']['error']}", err=True)
+            click.echo(f"Return Code: {results['runtime_metrics'].get('return_code', 'N/A')}", err=True)
         
         # Handle export options
         if export:
@@ -174,94 +188,133 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                     export_path = None
                 
                 # Validate format
-                if export_format not in ['csv', 'html']:
-                    click.echo(f"Error: Invalid export format '{export_format}'. Use 'csv' or 'html'.", err=True)
+                if export_format not in ['csv', 'html', 'json']:
+                    click.echo(f"Error: Invalid export format '{export_format}'. Use 'csv', 'html', or 'json'.", err=True)
                     sys.exit(1)
                 
                 # Generate export
                 if export_format == 'csv':
                     exporter = CSVExporter(export_path)
                     output_file = exporter.export(results, project_name or 'Scan')
-                    click.echo(f"[OK] CSV report exported: {output_file}")
+                    click.echo(f"[OK] CSV report exported: {output_file}", err=True)
                     
                     # Display statistics
                     stats = exporter.get_statistics(results)
-                    click.echo(f"\n=== Export Statistics ===")
-                    click.echo(f"Total Violations: {stats['total_violations']}")
-                    click.echo(f"  Critical: {stats['severity_counts']['critical']}")
-                    click.echo(f"  High: {stats['severity_counts']['high']}")
-                    click.echo(f"  Medium: {stats['severity_counts']['medium']}")
-                    click.echo(f"  Low: {stats['severity_counts']['low']}")
-                    click.echo(f"Affected Files: {stats['affected_files']}")
-                    click.echo(f"CO2 Impact: {stats['codebase_emissions']:.9f} kg")
+                    click.echo(f"\n=== Export Statistics ===", err=True)
+                    click.echo(f"Total Violations: {stats['total_violations']}", err=True)
+                    click.echo(f"  Critical: {stats['severity_counts']['critical']}", err=True)
+                    click.echo(f"  High: {stats['severity_counts']['high']}", err=True)
+                    click.echo(f"  Medium: {stats['severity_counts']['medium']}", err=True)
+                    click.echo(f"  Low: {stats['severity_counts']['low']}", err=True)
+                    click.echo(f"Affected Files: {stats['affected_files']}", err=True)
+                    click.echo(f"CO2 Impact: {stats['codebase_emissions']:.9f} kg", err=True)
                 
                 elif export_format == 'html':
                     reporter = HTMLReporter(export_path)
                     output_file = reporter.export(results, project_name or 'Scan')
-                    click.echo(f"[OK] HTML report exported: {output_file}")
-                    click.echo(f"Open the report in your browser to view detailed analysis and charts.")
+                    click.echo(f"[OK] HTML report exported: {output_file}", err=True)
+                    click.echo(f"Open the report in your browser to view detailed analysis and charts.", err=True)
+
+                elif export_format == 'json':
+                    exporter = JSONExporter(export_path)
+                    output_file = exporter.export(results, project_name or 'Scan')
+                    # Only print success message to stderr so it doesn't pollute stdout when piping
+                    click.echo(f"[OK] JSON report exported: {output_file}", err=True)
+
+                    # If output path is provided explicitly, we are done.
+                    # If NOT provided (and not piping implied by empty path in Exporter),
+                    # the JSONExporter defaults to 'output/green-ai-report.json'.
+                    # But if the user ran with just `--format json` (no output path),
+                    # and expects output to stdout...
+
+                    # Check if output_path was None in CLI args.
+                    # Actually, JSONExporter handles the file writing.
+                    # If we want to support piping like `green-ai scan ... --format json > file.json`,
+                    # we need to print the JSON to stdout here if no output path was specified.
+
+                    if not output and not export_path:
+                         # Wait, export_path comes from splitting export string.
+                         # If user did `--format json`, export='json', export_path=None.
+                         # If user did `--format json --output file`, export='json:file', export_path='file'.
+
+                         # JSONExporter writes to default file if path is None.
+                         # But for piping we need to read it back or just dump results to stdout.
+                         import json
+                         # We'll just print to stdout if export_path was None/Empty
+                         # But wait, JSONExporter(None) writes to default file.
+                         # Let's print to stdout as well if requested?
+                         # The legacy behavior seems to be: if format is json, dump to stdout?
+                         # The CI command is `python -m src.cli scan . --language python --format json > green-ai-report.json`
+                         # So it EXPECTS stdout content.
+
+                         # Let's print the JSON to stdout!
+                         print(json.dumps(results, indent=2))
             
             except Exception as e:
                 click.echo(f"Error during export: {str(e)}", err=True)
                 sys.exit(1)
         
-        # Detailed issue output with better formatting
-        click.echo(f"\n{'='*80}")
-        click.echo(f"DETAILED VIOLATIONS ({len(results['issues'])} found)")
-        click.echo(f"{'='*80}")
+        # Detailed issue output with better formatting (to stderr if exporting json)
+        # If exporting to JSON/CSV/HTML, we might want to suppress detailed output to stdout
+        # But for now, let's just make sure all informational output goes to stderr
         
-        # Sort by severity
-        severity_order = {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}
-        sorted_issues = sorted(results['issues'], key=lambda x: severity_order.get(x.get('severity', 'low'), 99))
-        
-        for i, issue in enumerate(sorted_issues, 1):
-            severity = issue.get('severity', 'unknown')
+        if not export or export_format != 'json':
+            click.echo(f"\n{'='*80}", err=True)
+            click.echo(f"DETAILED VIOLATIONS ({len(results['issues'])} found)", err=True)
+            click.echo(f"{'='*80}", err=True)
             
-            # Simple symbols for better terminal compatibility
-            if severity == 'critical':
-                severity_display = '[!!!] CRITICAL'
-            elif severity == 'high':
-                severity_display = '[!! ] HIGH'
-            elif severity == 'medium':
-                severity_display = '[!  ] MEDIUM'
-            else:
-                severity_display = '[   ] LOW'
+            # Sort by severity
+            severity_order = {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}
+            sorted_issues = sorted(results['issues'], key=lambda x: severity_order.get(x.get('severity', 'low'), 99))
             
-            click.echo(f"\n[{i}] {issue.get('name', issue.get('id', 'unknown'))}")
-            click.echo(f"    Status: {severity_display}")
-            click.echo(f"    Location: {issue.get('file', 'N/A')}:{issue.get('line', '0')}")
-            click.echo(f"    Message: {issue.get('message', 'N/A')}")
-            click.echo(f"    Energy Factor: {issue.get('energy_factor', 'N/A')}x")
-            click.echo(f"    CO2 Impact: {issue.get('codebase_emissions', 0):.9f} kg")
-            click.echo(f"    Effort to Fix: {issue.get('effort', 'Medium')}")
-            click.echo(f"    Remediation: {issue.get('remediation', 'N/A')}")
-            if issue.get('ai_suggestion'):
-                click.echo(f"    AI Suggestion: {issue.get('ai_suggestion')}")
-            click.echo(f"    Tags: {', '.join(issue.get('tags', []))}")
+            for i, issue in enumerate(sorted_issues, 1):
+                severity = issue.get('severity', 'unknown')
+
+                # Simple symbols for better terminal compatibility
+                if severity == 'critical':
+                    severity_display = '[!!!] CRITICAL'
+                elif severity == 'high':
+                    severity_display = '[!! ] HIGH'
+                elif severity == 'medium':
+                    severity_display = '[!  ] MEDIUM'
+                else:
+                    severity_display = '[   ] LOW'
+
+                click.echo(f"\n[{i}] {issue.get('name', issue.get('id', 'unknown'))}", err=True)
+                click.echo(f"    Status: {severity_display}", err=True)
+                click.echo(f"    Location: {issue.get('file', 'N/A')}:{issue.get('line', '0')}", err=True)
+                click.echo(f"    Message: {issue.get('message', 'N/A')}", err=True)
+                click.echo(f"    Energy Factor: {issue.get('energy_factor', 'N/A')}x", err=True)
+                click.echo(f"    CO2 Impact: {issue.get('codebase_emissions', 0):.9f} kg", err=True)
+                click.echo(f"    Effort to Fix: {issue.get('effort', 'Medium')}", err=True)
+                click.echo(f"    Remediation: {issue.get('remediation', 'N/A')}", err=True)
+                if issue.get('ai_suggestion'):
+                    click.echo(f"    AI Suggestion: {issue.get('ai_suggestion')}", err=True)
+                click.echo(f"    Tags: {', '.join(issue.get('tags', []))}", err=True)
     
         # Handle fixing options
         if fix_all:
-            click.echo("\nFixing all issues automatically...")
+            click.echo("\nFixing all issues automatically...", err=True)
             for issue in results['issues']:
-                click.echo(f"  Fixed: {issue.get('id', 'unknown')}")
+                click.echo(f"  Fixed: {issue.get('id', 'unknown')}", err=True)
         elif fix_specific:
-            click.echo(f"\nFixing specific issues: {fix_specific}")
+            click.echo(f"\nFixing specific issues: {fix_specific}", err=True)
             for issue_id in fix_specific:
                 issue = next((i for i in results['issues'] if i.get('id') == issue_id), None)
                 if issue:
-                    click.echo(f"  Fixed: {issue_id}")
+                    click.echo(f"  Fixed: {issue_id}", err=True)
                 else:
-                    click.echo(f"  Issue {issue_id} not found")
+                    click.echo(f"  Issue {issue_id} not found", err=True)
         elif manual:
-            click.echo("\nManual mode: Review issues above and fix manually.")
+            click.echo("\nManual mode: Review issues above and fix manually.", err=True)
         else:
-            click.echo("\nNo fixing option selected. Use --fix-all, --fix-specific, or --manual.")
+            click.echo("\nNo fixing option selected. Use --fix-all, --fix-specific, or --manual.", err=True)
         
         # Cleanup Git repo if cloned
         if cleanup_after and git_url:
-            click.echo(f"\nCleaning up temporary repository...")
+            click.echo(f"\nCleaning up temporary repository...", err=True)
             GitOperations.cleanup_repo(scan_path)
-            click.echo(f"[OK] Cleanup complete")
+            click.echo(f"[OK] Cleanup complete", err=True)
     
     except Exception as e:
         click.echo(f"Error during scan: {e}", err=True)
@@ -440,7 +493,7 @@ def project_scan(project_name, branch):
             # Update project with scan results
             violations_count = len(results['issues'])
             emissions = results.get('codebase_emissions', 0)
-            manager.update_project_scan(project_name, violations=violations_count, emissions=emissions)
+            manager.update_project_scan(project_name, violations=results['issues'], emissions=emissions)
             
             click.echo(f"[OK] Scan complete")
             click.echo(f"  Found {violations_count} violations")
@@ -497,7 +550,7 @@ def project_scan_all():
                 # Update project
                 violations_count = len(results['issues'])
                 emissions = results.get('codebase_emissions', 0)
-                manager.update_project_scan(project.name, violations=violations_count, emissions=emissions)
+                manager.update_project_scan(project.name, violations=results['issues'], emissions=emissions)
                 
                 updated_project = manager.get_project(project.name)
                 grade = updated_project.get_grade()

@@ -6,6 +6,7 @@ Supports CSV and HTML export with comprehensive violation and metrics data.
 
 import csv
 import os
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
@@ -13,6 +14,48 @@ from typing import List, Dict, Any, Optional
 
 # Default output directory for all exports
 OUTPUT_DIR = Path(__file__).parent.parent.parent / 'output'
+
+
+class JSONExporter:
+    """Export scan results to JSON format."""
+
+    def __init__(self, output_path: Optional[str] = None):
+        """
+        Initialize JSON exporter.
+
+        Args:
+            output_path: Path to write JSON file. If None, defaults to 'output/green-ai-report.json'
+        """
+        # Ensure output directory exists
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+        if output_path:
+            self.output_path = output_path
+        else:
+            self.output_path = str(OUTPUT_DIR / 'green-ai-report.json')
+
+    def export(self, results: Dict[str, Any], project_name: str = 'Scan') -> str:
+        """
+        Export scan results to JSON file.
+
+        Args:
+            results: Scan results dictionary from Scanner.scan()
+            project_name: Name of the project being scanned
+
+        Returns:
+            Path to generated JSON file
+        """
+        # Add timestamp and project info if not present
+        if 'metadata' not in results:
+            results['metadata'] = {}
+
+        results['metadata']['exported_at'] = datetime.utcnow().isoformat() + "Z"
+        results['metadata']['project_name'] = project_name
+
+        with open(self.output_path, 'w', encoding='utf-8') as f:
+            json.dump(results, f, indent=2)
+
+        return self.output_path
 
 
 class CSVExporter:

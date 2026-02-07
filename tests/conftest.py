@@ -28,7 +28,8 @@ def project_factory():
         latest_violations=0,
         total_emissions=0.0,
         is_system=False,
-        violation_details=None
+        violation_details=None,
+        violations=None
     ):
         """Create a Project object with specified or default values."""
         return Project(
@@ -42,7 +43,8 @@ def project_factory():
             latest_violations=latest_violations,
             total_emissions=total_emissions,
             is_system=is_system,
-            violation_details=violation_details
+            violation_details=violation_details,
+            violations=violations
         )
     
     return _create_project
@@ -67,7 +69,11 @@ def sample_project_objects(project_factory):
             latest_violations=2,
             total_emissions=0.000006,
             scan_count=5,
-            violation_details={'high': 1, 'medium': 1, 'low': 0}
+            violation_details={'high': 1, 'medium': 1, 'low': 0},
+            violations=[
+                {'id': 'vio1', 'severity': 'high', 'message': 'High violation'},
+                {'id': 'vio2', 'severity': 'medium', 'message': 'Medium violation'}
+            ]
         ),
         project_factory(
             project_id='proj-002',

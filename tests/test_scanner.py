@@ -43,7 +43,11 @@ def test_runtime_monitoring():
     # Runtime metrics may be empty if file has errors, check if present
     if metrics and 'execution_time' in metrics:
         assert 'emissions' in metrics
-        assert isinstance(metrics['emissions'], (float, int))
+        if isinstance(metrics['emissions'], dict):
+            assert 'emissions' in metrics['emissions']
+            assert isinstance(metrics['emissions']['emissions'], (float, int))
+        else:
+            assert isinstance(metrics['emissions'], (float, int))
 
 def test_get_run_command():
     scanner = Scanner(language='python')

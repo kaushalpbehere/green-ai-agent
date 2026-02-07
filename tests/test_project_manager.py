@@ -26,11 +26,13 @@ class TestProject:
     def test_project_to_dict(self):
         """Convert project to dictionary"""
         project = Project("MyApp", "https://github.com/user/myapp.git", language="python")
+        project.violations = [{'id': 'v1'}]
         data = project.to_dict()
         assert data['name'] == "MyApp"
         assert data['repo_url'] == "https://github.com/user/myapp.git"
         assert data['language'] == "python"
         assert 'id' in data
+        assert data['violations'] == [{'id': 'v1'}]
     
     def test_project_from_dict(self):
         """Create project from dictionary"""
@@ -42,13 +44,15 @@ class TestProject:
             'language': 'python',
             'scan_count': 5,
             'latest_violations': 10,
-            'total_emissions': 0.00001
+            'total_emissions': 0.00001,
+            'violations': [{'id': 'v1'}]
         }
         project = Project.from_dict(data)
         assert project.id == 'test-123'
         assert project.name == 'MyApp'
         assert project.branch == 'develop'
         assert project.scan_count == 5
+        assert project.violations == [{'id': 'v1'}]
     
     def test_project_grade_no_violations(self):
         """Grade should be 'A' for no violations"""
@@ -85,16 +89,27 @@ class TestProject:
         project = Project("App", "https://github.com/user/app.git")
         assert project.scan_count == 0
         
+        # Test with int count (backward compatibility)
         project.update_scan_results(5, 0.00001)
         assert project.scan_count == 1
         assert project.latest_violations == 5
         assert project.total_emissions == 0.00001
         assert project.last_scan is not None
         
-        # Update again
-        project.update_scan_results(3, 0.00002)
+        # Test with violations list
+        violations_list = [
+            {'id': 'v1', 'severity': 'high'},
+            {'id': 'v2', 'severity': 'medium'},
+            {'id': 'v3', 'severity': 'low'}
+        ]
+        project.update_scan_results(violations_list, 0.00002)
         assert project.scan_count == 2
         assert project.latest_violations == 3
+        assert len(project.violations) == 3
+        assert project.violations[0]['id'] == 'v1'
+        assert project.high_violations == 1
+        assert project.medium_violations == 1
+        assert project.low_violations == 1
 
 
 class TestProjectManager:
