@@ -17,7 +17,7 @@ from src.core.scanner import Scanner
 from src.core.config import ConfigLoader
 from src.core.git_operations import GitOperations, GitException
 from src.core.project_manager import ProjectManager
-from src.core.export import CSVExporter, HTMLReporter
+from src.core.export import CSVExporter, HTMLReporter, JSONExporter
 from src.ui.server import set_last_scan_results, run_dashboard
 from src.standards.registry import StandardsRegistry
 from src.core.calibration import CalibrationAgent
@@ -42,12 +42,21 @@ def cli():
 @click.option('--fix-specific', multiple=True, help='Fix specific issue IDs')
 @click.option('--manual', is_flag=True, help='Manual mode: show issues without fixing')
 @click.option('--export', default=None, help='Export results to format: csv, csv:path/to/file.csv, html, html:path/to/report.html')
-def scan(path, git_url, branch, project_name, language, config, disable_rule, enable_rule, runtime, profile, fix_all, fix_specific, manual, export):
+@click.option('--format', default=None, help='[Deprecated] Output format (json, csv, html)')
+@click.option('--output', default=None, help='[Deprecated] Output file path')
+def scan(path, git_url, branch, project_name, language, config, disable_rule, enable_rule, runtime, profile, fix_all, fix_specific, manual, export, format, output):
     """Scan a codebase for green software violations
     
     PATH can be a local directory or omitted if using --git-url
     """
     try:
+        # Handle backward compatibility for --format and --output
+        if format and not export:
+            if output:
+                export = f"{format}:{output}"
+            else:
+                export = format
+
         # Validate inputs
         if not path and not git_url:
             click.echo("Error: Either PATH or --git-url must be provided", err=True)
@@ -174,8 +183,8 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                     export_path = None
                 
                 # Validate format
-                if export_format not in ['csv', 'html']:
-                    click.echo(f"Error: Invalid export format '{export_format}'. Use 'csv' or 'html'.", err=True)
+                if export_format not in ['csv', 'html', 'json']:
+                    click.echo(f"Error: Invalid export format '{export_format}'. Use 'csv', 'html', or 'json'.", err=True)
                     sys.exit(1)
                 
                 # Generate export
@@ -200,6 +209,11 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                     output_file = reporter.export(results, project_name or 'Scan')
                     click.echo(f"[OK] HTML report exported: {output_file}")
                     click.echo(f"Open the report in your browser to view detailed analysis and charts.")
+
+                elif export_format == 'json':
+                    exporter = JSONExporter(export_path)
+                    output_file = exporter.export(results, project_name or 'Scan')
+                    click.echo(f"[OK] JSON report exported: {output_file}")
             
             except Exception as e:
                 click.echo(f"Error during export: {str(e)}", err=True)

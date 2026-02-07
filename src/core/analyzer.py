@@ -7,7 +7,7 @@ Uses code complexity metrics (loop depth, recursion, memory usage) to estimate e
 
 import ast
 import re
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple, List, Union
 from dataclasses import dataclass
 from src.core.calibration import CalibrationAgent
 
@@ -309,7 +309,7 @@ class EmissionAnalyzer:
         
         return max(emissions, 0.00000001)  # Minimum threshold
     
-    def analyze_codebase(self, file_contents: Dict[str, str]|List[Tuple[str, str]]) -> Tuple[float, Dict[str, float]]:
+    def analyze_codebase(self, file_contents: Union[Dict[str, str], List[Tuple[str, str]]]) -> Tuple[float, Dict[str, float]]:
         """
         Analyze codebase for emissions.
         
