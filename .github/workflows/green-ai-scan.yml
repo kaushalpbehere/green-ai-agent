@@ -21,18 +21,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install .
           
       - name: Run Green AI Scan
         run: |
           # Create output directory for reports
           mkdir -p output/reports
           # Run scan on the current directory
-          python -m src.cli scan . --format json --output output/reports/scan-results.json
+          python -m src.cli scan . --export json:output/reports/scan-results.json
           
       - name: Verify Scan Results
         run: |
           if [ ! -f output/reports/scan-results.json ]; then
+            # Check if it was saved with a different name (exporter logic might vary)
+            ls -R output/reports/
             echo "Scan failed to produce results!"
             exit 1
           fi

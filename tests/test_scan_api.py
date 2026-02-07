@@ -19,20 +19,20 @@ def client():
 def cleanup():
     """Clean up before and after tests"""
     # Clean up before test
-    for project_name in list(project_manager.projects.keys()):
-        if project_name.startswith('test_'):
+    for project in list(project_manager.projects.values()):
+        if project.name.startswith('test_'):
             try:
-                project_manager.remove_project(project_name)
+                project_manager.remove_project(project.name)
             except:
                 pass
     
     yield
     
     # Clean up after test
-    for project_name in list(project_manager.projects.keys()):
-        if project_name.startswith('test_'):
+    for project in list(project_manager.projects.values()):
+        if project.name.startswith('test_'):
             try:
-                project_manager.remove_project(project_name)
+                project_manager.remove_project(project.name)
             except:
                 pass
 
@@ -121,8 +121,8 @@ class TestProjectDeletion:
     def test_delete_existing_project(self, client, cleanup):
         """Test deleting an existing project"""
         # First create a project
-        project_manager.add_project('test_delete_project', 'python', 
-                                   'https://github.com/example/repo.git', 'auto')
+        # Fixed args: name, repo_url, branch, language
+        project_manager.add_project('test_delete_project', 'https://github.com/example/repo.git', 'main', 'python')
         
         # Then delete it
         response = client.delete('/api/projects/test_delete_project')
@@ -136,8 +136,8 @@ class TestProjectDeletion:
         """Test deleting a project that doesn't exist"""
         response = client.delete('/api/projects/nonexistent_project')
         
-        # Should still return 200 (graceful deletion)
-        assert response.status_code == 200
+        # Should return 404
+        assert response.status_code == 404
 
 
 class TestProjectRescan:
@@ -146,8 +146,7 @@ class TestProjectRescan:
     def test_rescan_existing_project(self, client, cleanup):
         """Test rescanning an existing project"""
         # Create a project first
-        project_manager.add_project('test_rescan_project', 'python',
-                                   'https://github.com/example/repo.git', 'auto')
+        project_manager.add_project('test_rescan_project', 'https://github.com/example/repo.git', 'main', 'python')
         
         # Rescan it
         response = client.post('/api/projects/test_rescan_project/rescan')
@@ -172,12 +171,11 @@ class TestProjectClear:
     def test_clear_existing_project(self, client, cleanup):
         """Test clearing violations from a project"""
         # Create a project with violations
-        project_manager.add_project('test_clear_project', 'python',
-                                   'https://github.com/example/repo.git', 'auto')
+        project_manager.add_project('test_clear_project', 'https://github.com/example/repo.git', 'main', 'python')
         project = project_manager.get_project('test_clear_project')
-        project['violations'] = [{'severity': 'critical', 'message': 'Test violation'}]
-        project['scanning_emissions'] = 0.0001
-        project['codebase_emissions'] = 0.0002
+        # Use object attributes, not dict access
+        project.latest_violations = 5
+        project.total_emissions = 0.0003
         
         # Clear it
         response = client.post('/api/projects/test_clear_project/clear')
@@ -188,9 +186,8 @@ class TestProjectClear:
         
         # Verify violations are cleared
         project = project_manager.get_project('test_clear_project')
-        assert project['violations'] == []
-        assert project['scanning_emissions'] == 0
-        assert project['codebase_emissions'] == 0
+        assert project.latest_violations == 0
+        assert project.total_emissions == 0.0
     
     def test_clear_nonexistent_project(self, client):
         """Test clearing a project that doesn't exist"""
@@ -249,8 +246,7 @@ class TestAPIErrorHandling:
     def test_delete_with_url_encoding(self, client, cleanup):
         """Test delete with URL-encoded project name"""
         # Create project with special name
-        project_manager.add_project('test project with spaces', 'python',
-                                   'https://github.com/example/repo.git', 'auto')
+        project_manager.add_project('test project with spaces', 'https://github.com/example/repo.git', 'main', 'python')
         
         # Delete with URL encoding
         response = client.delete('/api/projects/test%20project%20with%20spaces')
