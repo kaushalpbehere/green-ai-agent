@@ -8,3 +8,5 @@ click
 flask
 pytest
 pyyaml
+eventlet
+flask-socketio

@@ -10,6 +10,7 @@ from flask_socketio import SocketIO, emit
 import json
 import sys
 import os
+from typing import Any
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -20,6 +21,7 @@ from src.core.project_manager import ProjectManager
 from src.core.history import HistoryManager
 from src.core.scanner import Scanner
 from src.core.remediation import RemediationAgent
+from src.utils.metrics import calculate_projects_grade, calculate_average_grade
 import threading
 
 app = Flask(__name__)
@@ -80,25 +82,6 @@ def set_last_scan_results(results):
     last_scan_results = results
     last_charts = generate_all_charts(results)
 
-def calculate_average_grade(projects):
-    """Calculate average grade from projects"""
-    if not projects:
-        return "N/A"
-    
-    grades = {
-        'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1
-    }
-    
-    total_score = sum(grades.get(p.get_grade(), 0) for p in projects)
-    avg_score = total_score / len(projects)
-    
-    # Convert back to grade
-    for grade, score in sorted(grades.items(), key=lambda x: x[1], reverse=True):
-        if avg_score >= score:
-            return grade
-    
-    return "F"
-
 @app.route('/')
 def dashboard():
     if last_scan_results:
@@ -108,7 +91,7 @@ def dashboard():
         # Show enhanced landing page with stats
         projects = project_manager.list_projects()
         total_violations = sum(p.latest_violations for p in projects)
-        avg_grade = calculate_average_grade(projects) if projects else "N/A"
+        avg_grade = calculate_projects_grade(projects) if projects else "N/A"
         recent_projects = sorted(projects, key=lambda p: p.last_scan or "", reverse=True)[:5]
         
         return render_template_string(LANDING_PAGE_HTML, 
@@ -119,34 +102,34 @@ def dashboard():
                                      project_count=len(projects))
         
 @app.route('/api/charts')
-def api_charts():
+def api_charts() -> Any:
     """Return all chart data as JSON"""
     return json.dumps(last_charts) if last_charts else json.dumps({})
 
 @app.route('/api/results')
-def api_results():
+def api_results() -> Any:
     return json.dumps(last_scan_results) if last_scan_results else json.dumps({})
 
 # Standards API Endpoints
 @app.route('/api/standards')
-def api_standards_list():
+def api_standards_list() -> Any:
     """List all available standards"""
     return jsonify(standards_registry.list_standards())
 
 @app.route('/api/standards/<standard_name>/enable', methods=['POST'])
-def api_enable_standard(standard_name):
+def api_enable_standard(standard_name) -> Any:
     """Enable a standard"""
     standards_registry.enable_standard(standard_name)
     return jsonify({'status': 'ok', 'message': f'Standard {standard_name} enabled'})
 
 @app.route('/api/standards/<standard_name>/disable', methods=['POST'])
-def api_disable_standard(standard_name):
+def api_disable_standard(standard_name) -> Any:
     """Disable a standard"""
     standards_registry.disable_standard(standard_name)
     return jsonify({'status': 'ok', 'message': f'Standard {standard_name} disabled'})
 
 @app.route('/api/standards/<standard_name>/rules')
-def api_standard_rules(standard_name):
+def api_standard_rules(standard_name) -> Any:
     """Get rules for a specific standard"""
     if standard_name in standards_registry.standards:
         rules = standards_registry.standards[standard_name]
@@ -158,19 +141,19 @@ def api_standard_rules(standard_name):
     return jsonify({'error': 'Standard not found'}), 404
 
 @app.route('/api/rules/<rule_id>/disable', methods=['POST'])
-def api_disable_rule(rule_id):
+def api_disable_rule(rule_id) -> Any:
     """Disable a specific rule"""
     standards_registry.disable_rule(rule_id)
     return jsonify({'status': 'ok', 'message': f'Rule {rule_id} disabled'})
 
 @app.route('/api/rules/<rule_id>/enable', methods=['POST'])
-def api_enable_rule(rule_id):
+def api_enable_rule(rule_id) -> Any:
     """Enable a specific rule"""
     standards_registry.enable_rule(rule_id)
     return jsonify({'status': 'ok', 'message': f'Rule {rule_id} enabled'})
 
 @app.route('/api/standards/export/<format>')
-def api_export_rules(format):
+def api_export_rules(format) -> Any:
     """Export rules in specified format"""
     if format == 'json':
         return standards_registry.export_rules_json()
@@ -182,7 +165,7 @@ def api_export_rules(format):
 
 # Projects API Endpoints
 @app.route('/api/projects')
-def api_projects_list():
+def api_projects_list() -> Any:
     """List all projects with their metrics"""
     projects = project_manager.list_projects()
     
@@ -215,13 +198,13 @@ def api_projects_list():
         'summary': {
             'total_violations': sum(p['violation_count'] for p in projects_data),
             'total_high_violations': sum(p['high_violations'] for p in projects_data), 
-            'average_grade': calculate_average_grade(projects),
+            'average_grade': calculate_projects_grade(projects),
             'combined_emissions': sum(p['total_emissions'] for p in projects_data),
         }
     })
 
 @app.route('/api/projects/<project_name>')
-def api_project_detail(project_name):
+def api_project_detail(project_name) -> Any:
     """Get detailed view of a single project"""
     project = project_manager.get_project(project_name)
     
@@ -238,7 +221,7 @@ def api_project_detail(project_name):
     })
 
 @app.route('/api/projects/comparison')
-def api_projects_comparison():
+def api_projects_comparison() -> Any:
     """Get comparison data for multiple projects"""
     # Get project names from query params
     project_names = request.args.getlist('projects')
@@ -279,7 +262,7 @@ def api_projects_comparison():
 
 # Scan Management Endpoints
 @app.route('/api/scan', methods=['POST'])
-def api_scan():
+def api_scan() -> Any:
     """Execute a new scan on project"""
     data = request.get_json()
     
@@ -345,7 +328,7 @@ def api_scan():
 
 
 @app.route('/api/projects/<project_name>', methods=['DELETE'])
-def api_delete_project(project_name):
+def api_delete_project(project_name) -> Any:
     """Delete a project"""
     try:
         project = project_manager.get_project(project_name)
@@ -365,7 +348,7 @@ def api_delete_project(project_name):
 
 
 @app.route('/api/projects/<project_name>/rescan', methods=['POST'])
-def api_rescan_project(project_name):
+def api_rescan_project(project_name) -> Any:
     """Rescan an existing project"""
     try:
         project = project_manager.get_project(project_name)
@@ -388,7 +371,7 @@ def api_rescan_project(project_name):
 
 
 @app.route('/api/projects/<project_name>/clear', methods=['POST'])
-def api_clear_project(project_name):
+def api_clear_project(project_name) -> Any:
     """Clear violations and rescan project"""
     try:
         project = project_manager.get_project(project_name)
@@ -411,7 +394,7 @@ def api_clear_project(project_name):
 
 
 @app.route('/api/export/csv', methods=['GET'])
-def api_export_csv():
+def api_export_csv() -> Any:
     """Export scan results to CSV"""
     try:
         from src.core.export import CSVExporter
@@ -452,7 +435,7 @@ def api_export_csv():
 
 
 @app.route('/api/export/html', methods=['GET'])
-def api_export_html():
+def api_export_html() -> Any:
     """Export scan results to HTML report"""
     try:
         from src.core.export import HTMLReporter
@@ -488,7 +471,7 @@ def api_export_html():
 
 
 @app.route('/api/history', methods=['GET'])
-def api_get_history():
+def api_get_history() -> Any:
     """Get historical scan data for a project"""
     try:
         project_name = request.args.get('project')
@@ -509,7 +492,7 @@ def api_get_history():
 
 
 @app.route('/api/trending', methods=['GET'])
-def api_get_trending():
+def api_get_trending() -> Any:
     """Get trending analysis for a project"""
     try:
         project_name = request.args.get('project')
@@ -531,7 +514,7 @@ def api_get_trending():
 
 
 @app.route('/api/compare', methods=['GET'])
-def api_compare_scans():
+def api_compare_scans() -> Any:
     """Compare two scans in project history"""
     try:
         project_name = request.args.get('project')
@@ -565,7 +548,7 @@ def api_compare_scans():
 
 
 @app.route('/api/remediation/preview', methods=['GET'])
-def api_remediation_preview():
+def api_remediation_preview() -> Any:
     """Get a preview of the suggested remediation diff"""
     project_name = request.args.get('project')
     file_path = request.args.get('file')
@@ -592,29 +575,6 @@ def api_remediation_preview():
         return jsonify({'error': str(e)}), 500
 
 
-def calculate_average_grade(grades):
-    """Calculate average grade from list of letter grades"""
-    if not grades:
-        return 'N/A'
-    
-    grade_values = {'A': 5, 'B': 4, 'C': 3, 'D': 2, 'F': 1}
-    grade_points = [grade_values.get(g, 0) for g in grades if g in grade_values]
-    
-    if not grade_points:
-        return 'N/A'
-    
-    avg = sum(grade_points) / len(grade_points)
-    
-    if avg >= 4.5:
-        return 'A'
-    elif avg >= 3.5:
-        return 'B'
-    elif avg >= 2.5:
-        return 'C'
-    elif avg >= 1.5:
-        return 'D'
-    else:
-        return 'F'
 
 
 
