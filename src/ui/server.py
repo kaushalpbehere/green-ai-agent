@@ -54,12 +54,12 @@ try:
             language="python",
             is_system=True
         )
-        print(f"Initialized default project at {root_dir}")
+        print(f"Initialized default project at {root_dir}", file=sys.stderr)
         
     # Trigger initial scan in background if last_scan is None
     default_project = project_manager.get_project("Green-AI Agent")
     if default_project and not default_project.last_scan:
-        print("Triggering initial background scan for Green-AI Agent...")
+        print("Triggering initial background scan for Green-AI Agent...", file=sys.stderr)
         def initial_scan():
             try:
                 scanner = Scanner(language="python")
@@ -67,15 +67,15 @@ try:
                 set_last_scan_results(results)
                 history_manager.add_scan("Green-AI Agent", results)
                 project_manager.update_project_scan("Green-AI Agent", results['issues'], results.get('total_emissions', 0))
-                print("Initial scan completed.")
+                print("Initial scan completed.", file=sys.stderr)
             except Exception as e:
-                print(f"Initial scan failed: {e}")
+                print(f"Initial scan failed: {e}", file=sys.stderr)
         
         scan_thread = threading.Thread(target=initial_scan)
         scan_thread.daemon = True
         scan_thread.start()
 except Exception as e:
-    print(f"Warning: Could not initialize default project: {e}")
+    print(f"Warning: Could not initialize default project: {e}", file=sys.stderr)
 
 def set_last_scan_results(results):
     global last_scan_results, last_charts
