@@ -8,7 +8,7 @@ Detects energy inefficiencies and estimates carbon impact.
 import os
 import ast
 import sys
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from src.core.rules import RuleRepository
 from src.core.fixer import AISuggester
 from src.core.analyzer import EmissionAnalyzer
@@ -19,6 +19,104 @@ from src.core.calibration import CalibrationAgent
 from src.utils.logger import logger
 import concurrent.futures
 from multiprocessing import cpu_count
+
+def scan_file_worker(file_path: str, language: str, config: Dict, rules: List[Dict]) -> Dict[str, Any]:
+    """
+    Worker function to scan and analyze a single file.
+    Running in a separate process.
+    """
+    # Initialize analyzer
+    analyzer = EmissionAnalyzer()
+    ai_suggester = AISuggester()
+
+    issues = []
+    emissions = 0.0
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Explicitly check for syntax errors
+        if language == 'python':
+            ast.parse(content)
+
+        # Scan for violations
+        violations = detect_violations(content, file_path, language=language)
+
+        # Convert violations to full issue format
+        for violation in violations:
+            # Find rule in provided rules list
+            rule = next((r for r in rules if r['id'] == violation['id']), None)
+
+            if rule:
+                rule_id = rule.get('id', violation.get('id', 'unknown'))
+
+                # Check if rule is enabled in config
+                # Re-implement is_rule_enabled logic here since we don't have ConfigLoader instance
+                enabled_rules = config.get('rules', {}).get('enabled', [])
+                disabled_rules = config.get('rules', {}).get('disabled', [])
+
+                is_enabled = True
+                if rule_id in disabled_rules:
+                    is_enabled = False
+                elif rule_id in enabled_rules:
+                    is_enabled = True
+
+                if is_enabled:
+                    issue = {
+                        'id': rule_id,
+                        'type': 'green_violation',
+                        'severity': rule.get('severity', 'medium'),
+                        'message': violation.get('message', 'N/A'),
+                        'file': file_path,
+                        'line': violation.get('line', 0),
+                        'remediation': rule.get('remediation', 'N/A'),
+                        'ai_suggestion': ai_suggester.suggest_fix({'id': rule_id}),
+                        'effort': rule.get('effort', 'Medium'),
+                        'tags': rule.get('tags', []),
+                        'carbon_impact': rule.get('carbon_impact', 0.000000001),
+                        'energy_factor': rule.get('energy_factor', 1),
+                        'name': rule.get('name', rule_id)
+                    }
+                    issues.append(issue)
+
+        # Handle parse errors captured by detect_violations (if any custom handling needed)
+        # But detect_violations returns dicts, some might be errors?
+        # detect_violations returns violations list. Errors are usually raised.
+
+        # Analyze emissions
+        metrics = analyzer.analyze_file(file_path, content)
+        emissions = analyzer.estimate_emissions(metrics)
+
+    except SyntaxError:
+        issues.append({
+            'id': 'syntax_error',
+            'type': 'error',
+            'severity': 'blocker',
+            'message': f'Syntax error in {language} code',
+            'file': file_path,
+            'line': 0,
+            'remediation': 'Fix the syntax error to proceed with scanning.',
+            'effort': 'Low',
+            'tags': ['syntax', 'error']
+        })
+    except Exception as e:
+        issues.append({
+            'id': 'parse_error',
+            'type': 'error',
+            'severity': 'medium',
+            'message': f'Failed to scan file: {str(e)}',
+            'file': file_path,
+            'line': 0,
+            'remediation': 'Check file content and format.',
+            'effort': 'Low',
+            'tags': ['error']
+        })
+
+    return {
+        'issues': issues,
+        'emissions': emissions
+    }
 
 class Scanner:
     def __init__(self, language: Optional[str] = None, runtime: bool = False, config_path: Optional[str] = None, profile: bool = False):
@@ -94,8 +192,21 @@ class Scanner:
             progress_callback("Scanning files...", 10)
             
         processed_count = 0
-        with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
-            future_to_file = {executor.submit(self._scan_and_analyze_file, f): f for f in files if self._is_supported_file(f)}
+
+        # Get rules for the language
+        language_rules = self.rule_repo.get_rules(self.language)
+
+        # Use ProcessPoolExecutor for CPU-bound tasks
+        with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+            future_to_file = {
+                executor.submit(
+                    scan_file_worker,
+                    f,
+                    self.language,
+                    self.config,
+                    language_rules
+                ): f for f in files if self._is_supported_file(f)
+            }
             
             for future in concurrent.futures.as_completed(future_to_file):
                 file_path = future_to_file[future]
@@ -145,31 +256,6 @@ class Scanner:
             progress_callback("Scan complete", 100)
             
         return results
-
-    def _scan_and_analyze_file(self, file_path: str) -> Dict[str, Any]:
-        """ Helper method for worker processes to scan and analyze a single file. """
-        # Re-initialize analyzer for each worker process (if needed, or pass it in)
-        # Note: EmissionAnalyzer must be process-safe or re-instantiated
-        from src.core.analyzer import EmissionAnalyzer
-        analyzer = EmissionAnalyzer()
-        
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # Scan for violations
-            file_issues = self._scan_file(file_path, content)
-            
-            # Analyze emissions
-            metrics = analyzer.analyze_file(file_path, content)
-            emissions = analyzer.estimate_emissions(metrics)
-            
-            return {
-                'issues': file_issues,
-                'emissions': emissions
-            }
-        except Exception as e:
-            raise e
     
     def _run_with_monitoring(self, path):
         """Safely execute code and monitor basic runtime metrics."""
@@ -277,161 +363,3 @@ class Scanner:
         elif self.language == 'javascript':
             return file_path.endswith('.js')
         return False
-    
-    def _scan_file(self, file_path, content=None):
-        issues = []
-        try:
-            if content is None:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-            
-            if self.language == 'python':
-                issues.extend(self._scan_python(content, file_path))
-            elif self.language == 'javascript':
-                issues.extend(self._scan_javascript(content, file_path))
-                
-        except Exception as e:
-            issues.append({
-                'id': 'scan_error',
-                'type': 'error',
-                'message': f"Failed to scan file: {str(e)}",
-                'file': file_path,
-                'line': 0,
-                'severity': 'low',
-                'remediation': 'Check file format and encoding.',
-                'effort': 'Low',
-                'tags': ['error']
-            })
-        
-        # Filter issues based on configuration
-        issues = self._filter_issues_by_config(issues)
-        return issues
-    
-    def _filter_issues_by_config(self, issues: list) -> list:
-        """
-        Filter issues based on configuration (enabled/disabled rules).
-        
-        Args:
-            issues: List of detected issues
-            
-        Returns:
-            Filtered list of issues
-        """
-        filtered = []
-        for issue in issues:
-            rule_id = issue.get('id')
-            
-            # Keep non-violation issues (errors, etc.)
-            if issue.get('type') != 'green_violation':
-                filtered.append(issue)
-                continue
-            
-            # Check if rule is enabled in config
-            if self.config_loader.is_rule_enabled(rule_id):
-                filtered.append(issue)
-        
-        return filtered
-    
-    def _scan_python(self, content, file_path):
-        """Scan Python file for green software violations."""
-        issues = []
-        
-        try:
-            # Use enhanced detection system
-            violations = detect_violations(content, file_path, language='python')
-            
-            # Get rules repository for detailed information
-            rule_repo = self.rule_repo
-            
-            # Convert violations to full issue format
-            for violation in violations:
-                rule = rule_repo.get_rule('python', violation['id'])
-                
-                if rule:
-                    rule_id = rule.get('id', violation.get('id', 'unknown'))
-                    issue = {
-                        'id': rule_id,
-                        'type': 'green_violation',
-                        'severity': rule.get('severity', 'medium'),
-                        'message': violation.get('message', 'N/A'),
-                        'file': file_path,
-                        'line': violation.get('line', 0),
-                        'remediation': rule.get('remediation', 'N/A'),
-                        'ai_suggestion': self.ai_suggester.suggest_fix({'id': rule_id}),
-                        'effort': rule.get('effort', 'Medium'),
-                        'tags': rule.get('tags', []),
-                        'carbon_impact': rule.get('carbon_impact', 0.000000001),
-                        'energy_factor': rule.get('energy_factor', 1),
-                        'name': rule.get('name', rule_id)
-                    }
-                    issues.append(issue)
-            
-        except SyntaxError:
-            issues.append({
-                'id': 'syntax_error',
-                'type': 'error',
-                'severity': 'blocker',
-                'message': 'Syntax error in Python code',
-                'file': file_path,
-                'line': 0,
-                'remediation': 'Fix the syntax error to proceed with scanning.',
-                'effort': 'Low',
-                'tags': ['syntax', 'error']
-            })
-        except Exception as e:
-            issues.append({
-                'id': 'parse_error',
-                'type': 'error',
-                'severity': 'medium',
-                'message': f'Failed to parse Python file: {str(e)}',
-                'file': file_path,
-                'line': 0,
-                'remediation': 'Check file content and format.',
-                'effort': 'Low',
-                'tags': ['error']
-            })
-        
-        return issues
-    
-    def _scan_javascript(self, content, file_path):
-        """Scan JavaScript file for green software violations."""
-        issues = []
-        
-        try:
-            violations = detect_violations(content, file_path, language='javascript')
-            rule_repo = self.rule_repo
-            
-            for violation in violations:
-                rule = rule_repo.get_rule('javascript', violation['id'])
-                
-                if rule:
-                    rule_id = rule.get('id', violation.get('id', 'unknown'))
-                    issue = {
-                        'id': rule_id,
-                        'type': 'green_violation',
-                        'severity': rule.get('severity', 'medium'),
-                        'message': violation.get('message', 'N/A'),
-                        'file': file_path,
-                        'line': violation.get('line', 0),
-                        'remediation': rule.get('remediation', 'N/A'),
-                        'ai_suggestion': self.ai_suggester.suggest_fix({'id': rule_id}),
-                        'effort': rule.get('effort', 'Medium'),
-                        'tags': rule.get('tags', []),
-                        'carbon_impact': rule.get('carbon_impact', 0.000000001),
-                        'energy_factor': rule.get('energy_factor', 1),
-                        'name': rule.get('name', rule_id)
-                    }
-                    issues.append(issue)
-        
-        except Exception as e:
-            issues.append({
-                'id': 'parse_error',
-                'type': 'error',
-                'severity': 'medium',
-                'message': f'Failed to parse JavaScript file: {str(e)}',
-                'file': file_path,
-                'line': 0,
-                'remediation': 'Check file content and format.',
-                'effort': 'Low',
-                'tags': ['error']
-            })
