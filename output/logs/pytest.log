@@ -8,23 +8,35 @@ INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:242 Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 29 files to scan.
+INFO     green-ai:scanner.py:331 Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 30 files to scan.
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:scanner.py:170 Starting scan on /tmp/tmp_4fu7o9k...
+INFO     green-ai:scanner.py:331 Discovering files in /tmp/tmp_4fu7o9k (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 10 files to scan.
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on temp_repro_rules.py...
-INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/pytest-of-jules/pytest-6/test_clone_repository_success0/repo
-INFO     src.core.git_operations:git_operations.py:109 Successfully cloned repository to /tmp/pytest-of-jules/pytest-6/test_clone_repository_success0/repo
-INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_e20a5770
-INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_a6630784
-INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_45385927
+INFO     green-ai:scanner.py:170 Starting scan on /tmp/tmpoinecd77...
+INFO     green-ai:scanner.py:331 Discovering files in /tmp/tmpoinecd77 (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 1 files to scan.
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 17 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 17 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:scanner.py:170 Starting scan on temp_repro_rules.py...
+INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/pytest-of-jules/pytest-2/test_clone_repository_success0/repo
+INFO     src.core.git_operations:git_operations.py:109 Successfully cloned repository to /tmp/pytest-of-jules/pytest-2/test_clone_repository_success0/repo
+INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_00e76d28
+INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_810e812f
+INFO     src.core.git_operations:git_operations.py:98 Cloning repository: https://github.com/user/repo.git to /tmp/green-ai-repos/repo_fd6b2556
 INFO     src.core.git_operations:git_operations.py:190 Checking out branch 'feature/new' in /path/to/repo
 INFO     src.core.git_operations:git_operations.py:204 Successfully checked out branch 'feature/new'
 INFO     src.core.git_operations:git_operations.py:190 Checking out branch 'nonexistent' in /path/to/repo
@@ -33,52 +45,52 @@ INFO     src.core.git_operations:git_operations.py:225 Successfully removed repo
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on tests/simple_test.py...
+INFO     green-ai:scanner.py:170 Starting scan on tests/simple_test.py...
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on tests/simple_test.py...
+INFO     green-ai:scanner.py:170 Starting scan on tests/simple_test.py...
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: cd33efe8-cbcd-4842-9ac3-46037567aa6b)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: 99d9ff02-5c72-4e7c-aab9-b62a6940df2c)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: e32e1744-599b-4074-9d54-3ab4381a239b)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: 3b57653d-c7ae-4a83-8c81-e8a711bc9be4)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: 4d7ac385-9772-47f8-9ca2-f74c684c542b)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: 22670f15-6d23-4185-83a1-0e1eab179ffb)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: b88932fe-68da-4936-85d6-d1ee576e8591)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: cbee6965-4d0a-4ee7-8f4e-f680b849ddcb)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'Zebra' (ID: bd06b9e4-a669-4ab8-8035-69ac9d3ec772)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'Zebra' (ID: 141cd1f3-8652-4e70-ab4f-da630aad1b10)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'Apple' (ID: f0cbd8ef-4852-4669-93c0-6bb0005e20ba)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'Apple' (ID: fc2d87c8-8806-4fbf-8c18-04df3687e034)
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'Mango' (ID: 58059bab-8ccf-4776-9152-830c29983649)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'Mango' (ID: 78c4a35c-36ae-468a-acb9-c7d508337ad1)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: 3a794141-ec38-4767-98c9-de24c58ddf43)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: fcc7348b-c062-499e-8fd9-7726f67b7303)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 62410c99-4970-4ff3-9a6a-003a45b80719)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 1e183b99-95aa-49a1-8858-406b521f4c6d)
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App3' (ID: 66665638-d139-4869-a2f3-4a057f34f5fc)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App3' (ID: 9fc31a40-7f62-40ea-9c10-1d00702458d6)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: 2803982f-df90-4521-ad9a-20fdd1791f9c)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: a84dd7b4-911a-47f0-bd66-8b2e80a657e5)
 INFO     src.core.project_manager:project_manager.py:225 Saved 0 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'MyApp'
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: f6aadf8a-21d4-450f-bf4b-f843304f9a39)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'MyApp' (ID: f0d53825-8431-4f00-b00a-12fb00e60cba)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
 INFO     src.core.project_manager:project_manager.py:389 Updated project 'MyApp': 5 violations, 0.000010000 kg CO₂
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: 87c78c5a-0960-415b-b790-29a6154e7a8e)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: 64c5ccc0-ee30-48ce-bf10-1224edca6c0a)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 95538943-db11-44d2-8f91-52245e0f4b9a)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 504d6470-9b06-4826-8ee3-7383bf681cdf)
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: 26c15445-65f7-4127-8c7d-2ca36323814f)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: e5f62cbd-608d-4d27-8ceb-8652f787721d)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: f0f12fa1-915d-4cfc-8fa0-dce78bfa384e)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 771980fc-5de0-4c70-b4ff-97c19b1bdb82)
 INFO     src.core.project_manager:project_manager.py:213 Loaded 2 projects from registry
 INFO     src.core.project_manager:project_manager.py:225 Saved 1 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: d04bd303-ae93-45ec-b3ec-0faaf6bc82e0)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App1' (ID: da9f8794-7066-4211-b21f-ecd8dada14a1)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: 6db29da8-b996-4bdc-abf5-a5b02cea6cec)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'App2' (ID: d73f1e97-7b5d-4fb9-b492-74ac4a9fa98e)
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
@@ -92,67 +104,67 @@ INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_git_project' (ID: 73b81ab1-bcf0-4648-80ef-e2b23295103d)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_git_project' (ID: 1ae3702d-46a6-462c-b220-1ed46fec2c47)
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on https://github.com/example/repo.git...
-INFO     green-ai:scanner.py:242 Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 0 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on https://github.com/example/repo.git...
+INFO     green-ai:scanner.py:331 Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 0 files to scan.
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_git_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_local_project' (ID: 462f0086-cce6-444e-8d4b-24e323284921)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_local_project' (ID: 9e0ac28c-8c19-44bb-9395-9db9ac2bceb7)
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on /path/to/code...
-INFO     green-ai:scanner.py:242 Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 0 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on /path/to/code...
+INFO     green-ai:scanner.py:331 Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 0 files to scan.
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_local_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_branch_project' (ID: fabac445-7d56-41d6-9fe1-2fbe66c2dd27)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_branch_project' (ID: 0f405d72-e9f7-483c-9b9c-5ed7c1f932ee)
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on https://github.com/example/repo.git@main...
-INFO     green-ai:scanner.py:242 Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 0 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on https://github.com/example/repo.git@main...
+INFO     green-ai:scanner.py:331 Discovering files in https://github.com/example/repo.git@main (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 0 files to scan.
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_branch_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_delete_project' (ID: f64f7b81-5ae4-4e04-9b4a-1987a59de29c)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_delete_project' (ID: ae35c187-e6c8-4cea-b7b1-4f005e05ffc9)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_delete_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_rescan_project' (ID: f9a202b4-dd66-4b52-8eba-2cb2447a8a8c)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_rescan_project' (ID: 62abcca8-9205-44b4-9c5e-46d98434b671)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_rescan_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_clear_project' (ID: cea87c4c-1880-4e3e-b930-7dc03a1b89eb)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_clear_project' (ID: 00987740-01e9-4f94-94f9-5298586ce16a)
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_clear_project'
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test_lifecycle_project' (ID: fa956800-b376-4d10-9ecf-04a999f6dcdd)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test_lifecycle_project' (ID: d043a668-546e-4362-a9de-441c144b1b6e)
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on https://github.com/example/repo.git...
-INFO     green-ai:scanner.py:242 Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 0 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on https://github.com/example/repo.git...
+INFO     green-ai:scanner.py:331 Discovering files in https://github.com/example/repo.git (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 0 files to scan.
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test_lifecycle_project'
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on /path/to/code...
-INFO     green-ai:scanner.py:242 Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 0 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on /path/to/code...
+INFO     green-ai:scanner.py:331 Discovering files in /path/to/code (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 0 files to scan.
 INFO     src.core.project_manager:project_manager.py:225 Saved 3 projects to registry
-INFO     src.core.project_manager:project_manager.py:294 Added project 'test project with spaces' (ID: fad87fcc-5989-4710-a7de-168cd4b39931)
+INFO     src.core.project_manager:project_manager.py:294 Added project 'test project with spaces' (ID: 0c26b219-9abb-45a5-af34-9d00c7112625)
 INFO     src.core.project_manager:project_manager.py:225 Saved 2 projects to registry
 INFO     src.core.project_manager:project_manager.py:338 Removed project 'test project with spaces'
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
@@ -164,17 +176,17 @@ INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on tests/simple_test.py...
+INFO     green-ai:scanner.py:170 Starting scan on tests/simple_test.py...
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on tests/...
-INFO     green-ai:scanner.py:242 Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules)
-INFO     green-ai:scanner.py:263 Found 29 files to scan.
+INFO     green-ai:scanner.py:170 Starting scan on tests/...
+INFO     green-ai:scanner.py:331 Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:352 Found 30 files to scan.
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
-INFO     green-ai:scanner.py:71 Starting scan on tests/simple_test.py...
+INFO     green-ai:scanner.py:170 Starting scan on tests/simple_test.py...
 INFO     green-ai:rules.py:49 Loading rules from /app/rules
 INFO     green-ai:rules.py:58 Loaded 17 rules for python
 INFO     green-ai:rules.py:58 Loaded 14 rules for javascript

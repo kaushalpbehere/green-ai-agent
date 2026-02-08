@@ -1,0 +1,23 @@
+# Green-AI Configuration
+languages:
+  - python
+  - javascript
+
+rules:
+  enabled: []
+  disabled:
+    - no_n2_algorithms  # AST traversal and CLI logic naturally involve nesting
+    - process_spawning  # Benchmarking and runtime monitoring require process spawning
+    - no_infinite_loops # Tests often use while True for verifying detection
+
+standards: []
+
+ignore_files:
+  - '*.pyc'
+  - '__pycache__'
+  - '.git'
+  - '.venv'
+  - 'node_modules'
+  - 'output'
+  - 'tests/test_carbon_patterns.py'
+  - 'tests/conftest.py'

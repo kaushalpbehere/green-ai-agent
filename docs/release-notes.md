@@ -9,6 +9,13 @@
 ### Fixed
 - **Scanner Performance**: Optimized file discovery to respect configuration ignore patterns (skipping `.venv`, `node_modules`, etc.).
 - **Self-Scan Bottleneck**: Reduced self-scan execution time by ~85%.
+- **Type Mismatch Fix**: Updated `Project` object usage in `server.py` and tests to fix 14 failures (BUG-001).
+- **Missing Metric Function**: Renamed and moved `calculate_average_grade` to `src/utils/metrics.py` (BUG-002).
+- **Project Data Model**: Added `violations` field to `Project` class for detailed tracking (BUG-005).
+- **Test Configuration**: Updated `test_rules.py` and `test_standards.py` to use correct fields and dummy config (BUG-006).
+- **Missing Test Files**: Added `tests/simple_test.py` for integration testing (BUG-007).
+- **Code Cleanliness**: Removed deprecated `ast.NameConstant` usage.
+- **New Rules**: Added `deep_recursion` and `inefficient_lookup` detection rules.
 
 ---
 

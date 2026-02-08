@@ -18,7 +18,6 @@ from src.core.config import ConfigLoader
 from src.core.git_operations import GitOperations, GitException
 from src.core.project_manager import ProjectManager
 from src.core.export import CSVExporter, HTMLReporter, JSONExporter
-from src.ui.server import set_last_scan_results, run_dashboard
 from src.standards.registry import StandardsRegistry
 from src.core.calibration import CalibrationAgent
 
@@ -141,8 +140,8 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
             )
             click.echo(f"[OK] Project scan recorded: {violations_count} violations, {emissions:.9f} kg CO2", err=True)
         
-        # Store results for dashboard
-        set_last_scan_results(results)
+        # Store results for dashboard (only effective if server is imported/running in same process, which it isn't here)
+        # set_last_scan_results(results)
         
         click.echo("Scan complete.", err=True)
         click.echo(f"Found {len(results['issues'])} issues.", err=True)
@@ -606,6 +605,9 @@ def project_export():
 @cli.command('dashboard')
 def dashboard():
     """Launch the web dashboard"""
+    # Import server here to avoid eventlet monkey patching during other commands
+    from src.ui.server import run_dashboard
+
     import logging
     from pathlib import Path
     

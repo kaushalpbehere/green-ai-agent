@@ -7,7 +7,7 @@ Supports CSV and HTML export with comprehensive violation and metrics data.
 import csv
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
@@ -49,7 +49,7 @@ class JSONExporter:
         if 'metadata' not in results:
             results['metadata'] = {}
 
-        results['metadata']['exported_at'] = datetime.utcnow().isoformat() + "Z"
+        results['metadata']['exported_at'] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         results['metadata']['project_name'] = project_name
 
         with open(self.output_path, 'w', encoding='utf-8') as f:
@@ -576,7 +576,7 @@ class HTMLReporter:
         <header>
             <h1>Green-AI Report</h1>
             <p>Project: <strong>{project_name}</strong></p>
-            <div class="timestamp">Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</div>
+            <div class="timestamp">Generated on {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC</div>
         </header>
         
         <div class="summary">

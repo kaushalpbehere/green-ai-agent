@@ -40,42 +40,43 @@ def broadcast_progress(message, percentage):
     """Broadcast scan progress to all connected clients."""
     socketio.emit('scan_progress', {'message': message, 'percentage': percentage})
 
-# Ensure default project exists on startup and trigger initial scan if needed
-try:
-    default_project = project_manager.get_project("Green-AI Agent")
-    # Force use the local path for the default project
-    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
-    if not default_project:
-        project_manager.add_project(
-            name="Green-AI Agent",
-            repo_url=root_dir,
-            branch="main",
-            language="python",
-            is_system=True
-        )
-        print(f"Initialized default project at {root_dir}", file=sys.stderr)
-        
-    # Trigger initial scan in background if last_scan is None
-    default_project = project_manager.get_project("Green-AI Agent")
-    if default_project and not default_project.last_scan:
-        print("Triggering initial background scan for Green-AI Agent...", file=sys.stderr)
-        def initial_scan():
-            try:
-                scanner = Scanner(language="python")
-                results = scanner.scan(root_dir)
-                set_last_scan_results(results)
-                history_manager.add_scan("Green-AI Agent", results)
-                project_manager.update_project_scan("Green-AI Agent", results['issues'], results.get('total_emissions', 0))
-                print("Initial scan completed.", file=sys.stderr)
-            except Exception as e:
-                print(f"Initial scan failed: {e}", file=sys.stderr)
-        
-        scan_thread = threading.Thread(target=initial_scan)
-        scan_thread.daemon = True
-        scan_thread.start()
-except Exception as e:
-    print(f"Warning: Could not initialize default project: {e}", file=sys.stderr)
+def initialize_app():
+    """Initialize default project and trigger scan if needed."""
+    try:
+        default_project = project_manager.get_project("Green-AI Agent")
+        # Force use the local path for the default project
+        root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+        if not default_project:
+            project_manager.add_project(
+                name="Green-AI Agent",
+                repo_url=root_dir,
+                branch="main",
+                language="python",
+                is_system=True
+            )
+            print(f"Initialized default project at {root_dir}", file=sys.stderr)
+
+        # Trigger initial scan in background if last_scan is None
+        default_project = project_manager.get_project("Green-AI Agent")
+        if default_project and not default_project.last_scan:
+            print("Triggering initial background scan for Green-AI Agent...", file=sys.stderr)
+            def initial_scan():
+                try:
+                    scanner = Scanner(language="python")
+                    results = scanner.scan(root_dir)
+                    set_last_scan_results(results)
+                    history_manager.add_scan("Green-AI Agent", results)
+                    project_manager.update_project_scan("Green-AI Agent", results['issues'], results.get('total_emissions', 0))
+                    print("Initial scan completed.", file=sys.stderr)
+                except Exception as e:
+                    print(f"Initial scan failed: {e}", file=sys.stderr)
+
+            scan_thread = threading.Thread(target=initial_scan)
+            scan_thread.daemon = True
+            scan_thread.start()
+    except Exception as e:
+        print(f"Warning: Could not initialize default project: {e}", file=sys.stderr)
 
 def set_last_scan_results(results):
     global last_scan_results, last_charts
@@ -612,6 +613,9 @@ def generate_insights(results):
     return insights
 
 def run_dashboard():
+    # Initialize application state
+    initialize_app()
+
     import logging
     from pathlib import Path
     
