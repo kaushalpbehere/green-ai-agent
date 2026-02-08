@@ -1,16 +1,16 @@
 # BACKLOG.md
 ## Green-AI: Active Sprint Backlog
 
-**Status**: 🔴 CRITICAL BUGS DETECTED | **Next Milestone**: v0.5.1-BUGFIX  
-**Current Version**: v0.5.0-beta (19 Test Failures)  
+**Status**: 🟢 PASSING (Pending Audits) | **Next Milestone**: v0.5.1-BUGFIX
+**Current Version**: v0.5.0-beta (All Tests Passing)
 **Next Phase**: Bug Fixes → Phase 2 Sprint 2  
 
 ---
 
 ## 🐛 P0 - CRITICAL BUGS (FIX BEFORE ANY FEATURES)
 
-**Status**: 🔴 19/257 Tests Failing (7.4% failure rate)  
-**Audit Date**: 2026-01-30  
+**Status**: 🟢 0/257 Tests Failing
+**Audit Date**: 2026-02-08
 **Detailed Report**: See `bug_backlog.md` in artifacts
 
 ### BUG-001: Type Mismatch - Tests vs Implementation [DONE]
@@ -61,34 +61,45 @@
   - [ ] BUG-004.4: Implement adapter pattern
   - [ ] BUG-004.5: Add JSON schema validation
 
-### BUG-005: Missing Violation Metadata in Project Class
+### BUG-005: Missing Violation Metadata in Project Class [DONE]
 - **Impact**: Cannot calculate violation counts from Project objects
 - **Root Cause**: `Project` only stores count, not detailed violations
 - **Fix**: Add `violations: List[Violation]` field
 - **Effort**: 4h
 - **Subtasks**:
-  - [ ] BUG-005.1: Add violations field to Project
-  - [ ] BUG-005.2: Create Violation dataclass
-  - [ ] BUG-005.3: Update scan logic
-  - [ ] BUG-005.4: Add property methods for counts
-  - [ ] BUG-005.5: Data migration script
+  - [x] BUG-005.1: Add violations field to Project
+  - [x] BUG-005.2: Create Violation dataclass
+  - [x] BUG-005.3: Update scan logic
+  - [x] BUG-005.4: Add property methods for counts
+  - [x] BUG-005.5: Data migration script
 
-**Total Bug Fix Effort**: 24 hours  
-**Acceptance Criteria**: 0 test failures, no deprecation warnings, 90%+ code coverage
-
-### BUG-006: Test Failures - Rules and Standards
+### BUG-006: Test Failures - Rules and Standards [DONE]
 - **Impact**: Tests failing in `test_rules.py` and `test_standards.py`
 - **Root Cause**: Tests expect `message` field in rules (missing), and `test_standards.py` uses strict default config
 - **Fix**: Update tests to use `description` and dummy config
 - **Effort**: 1h
 - **Assignee**: Jules
 
-### BUG-007: Missing Test Files
+### BUG-007: Missing Test Files [DONE]
 - **Impact**: Tests failing in `test_integration.py` and `test_scanner.py`
 - **Root Cause**: `tests/simple_test.py` is missing
 - **Fix**: Create `tests/simple_test.py` with sample code
 - **Effort**: 0.5h
 - **Assignee**: Jules
+
+---
+
+## 🔧 [JULES] TECHNICAL DEBT & BLOAT REMOVAL
+
+1. **Fix `datetime.utcnow()` deprecation**
+   - Goal: Replace `datetime.utcnow()` with `datetime.now(datetime.UTC)` in `src/core/project_manager.py`.
+   - Priority: High (Bloat/Warnings)
+   - Status: Pending
+
+2. **Fix `ast.NameConstant` deprecation**
+   - Goal: Remove `ast.NameConstant` (deprecated) and use `ast.Constant` in `src/core/detectors.py`.
+   - Priority: High (Bloat/Warnings)
+   - Status: Pending
 
 ---
 
@@ -104,12 +115,15 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
 2.1 **[ENGINE] AST Integration for JavaScript**
    - Goal: Replace regex-based detectors with Tree-Sitter for higher precision.
    - Effort: 12h
+   - Tag: [JULES]
 2.2 **[PERF] Multiprocessing Scanner**
    - Goal: Parallelize file analysis to handle large codebases.
    - Effort: 8h
+   - Tag: [JULES]
 2.3 **[RULES] Comprehensive Rule Gap Fill**
    - Goal: Implement 5+ missing rules: Deep Recursion, Inefficient Dict lookups, Regex in loops.
    - Effort: 6h
+   - Tag: [JULES]
 
 ### SPRINT 3: REAL-TIME DASHBOARD & METRICS (High Priority)
 3.1 **[UI] Real-time Progress Bar**
@@ -134,9 +148,9 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **JS AST Engine**: Begin migration from regex to parser-based detection.
-2. **Scanner Concurrency**: Implement `ProcessPoolExecutor` in `Scanner.scan`.
-3. **New Detection Rules**: Add `deep_recursion` and `inefficient_lookup` for Python.
+1. **[JULES] New Detection Rules**: Add `deep_recursion` and `inefficient_lookup` for Python.
+2. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
+3. **[JULES] Scanner Concurrency**: Implement `ProcessPoolExecutor` in `Scanner.scan`.
 
 ---
 

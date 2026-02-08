@@ -95,7 +95,8 @@ class TestProject:
         assert project.latest_violations == 5
         assert project.total_emissions == 0.00001
         assert project.last_scan is not None
-        
+        assert project.last_scan.endswith("Z")
+
         # Test with violations list
         violations_list = [
             {'id': 'v1', 'severity': 'high'},
@@ -257,3 +258,4 @@ class TestProjectManager:
         assert data['metadata']['total_projects'] == 2
         assert len(data['projects']) == 2
         assert data['projects'][0]['name'] in ['App1', 'App2']
+        assert data['metadata']['exported'].endswith("Z")
