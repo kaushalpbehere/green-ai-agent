@@ -18,6 +18,7 @@ from src.core.tracking import create_tracker
 from src.core.calibration import CalibrationAgent
 from src.utils.logger import logger
 import concurrent.futures
+import multiprocessing
 from multiprocessing import cpu_count
 
 def scan_file_worker(file_path: str, language: str, config: Dict, rules: List[Dict]) -> Dict[str, Any]:
@@ -197,7 +198,9 @@ class Scanner:
         language_rules = self.rule_repo.get_rules(self.language)
 
         # Use ProcessPoolExecutor for CPU-bound tasks
-        with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+        # Use 'spawn' context to avoid issues with eventlet monkey patching (fork vs threads)
+        mp_context = multiprocessing.get_context('spawn')
+        with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers, mp_context=mp_context) as executor:
             future_to_file = {
                 executor.submit(
                     scan_file_worker,

@@ -1,0 +1,20 @@
+# Green-AI Configuration
+languages:
+  - python
+  - javascript
+
+rules:
+  enabled: []
+  disabled: []
+
+standards: []
+
+ignore_files:
+  - '*.pyc'
+  - '__pycache__'
+  - '.git'
+  - '.venv'
+  - 'node_modules'
+  - 'output'
+  - 'tests/test_carbon_patterns.py'  # Ignore test file with intentional violations
+  - 'tests/conftest.py' # Ignore test data
