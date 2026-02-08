@@ -5,7 +5,10 @@ languages:
 
 rules:
   enabled: []
-  disabled: []
+  disabled:
+    - no_n2_algorithms  # AST traversal and CLI logic naturally involve nesting
+    - process_spawning  # Benchmarking and runtime monitoring require process spawning
+    - no_infinite_loops # Tests often use while True for verifying detection
 
 standards: []
 
@@ -16,5 +19,5 @@ ignore_files:
   - '.venv'
   - 'node_modules'
   - 'output'
-  - 'tests/test_carbon_patterns.py'  # Ignore test file with intentional violations
-  - 'tests/conftest.py' # Ignore test data
+  - 'tests/test_carbon_patterns.py'
+  - 'tests/conftest.py'

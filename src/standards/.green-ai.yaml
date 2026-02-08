@@ -7,11 +7,11 @@ standards:
   - gsf
   rules:
     disable:
+    - no_n2_algorithms
     - algorithm_efficiency
     - proper_resource_cleanup
-    - unnecessary_computation
     - inefficient_loop
+    - unnecessary_computation
     - no_infinite_loops
     - gpu_utilization
-    - no_n2_algorithms
     enable: []
