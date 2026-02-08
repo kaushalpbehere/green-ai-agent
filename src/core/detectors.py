@@ -27,6 +27,7 @@ class PythonViolationDetector(ast.NodeVisitor):
         self.unused_variables = {}
         self.used_variables = set()
         self.imports = {}
+        self.var_types = {}
         
     def detect_all(self) -> List[Dict]:
         """Run all detectors and return violations."""
@@ -91,8 +92,6 @@ class PythonViolationDetector(ast.NodeVisitor):
         is_infinite = False
         test = node.test
         if isinstance(test, ast.Constant) and test.value is True:
-            is_infinite = True
-        elif isinstance(test, ast.NameConstant) and test.value is True:
             is_infinite = True
         elif isinstance(test, ast.Name) and test.id == 'True':
             is_infinite = True
@@ -186,11 +185,16 @@ class PythonViolationDetector(ast.NodeVisitor):
                         # If the right side is a Name, it might be a list
                         # This is a heuristic - in real tool we'd track types
                         if isinstance(child.comparators[0], ast.Name):
+                            var_name = child.comparators[0].id
+                            # If we know it's efficient, skip violation
+                            if self.var_types.get(var_name) == 'efficient':
+                                continue
+
                             self.violations.append({
                                 'id': 'inefficient_lookup',
                                 'line': child.lineno,
                                 'severity': 'medium',
-                                'message': f'Membership test on "{child.comparators[0].id}" inside loop. If it is a list, consider converting to a set for O(1) lookup.',
+                                'message': f'Membership test on "{var_name}" inside loop. If it is a list, consider converting to a set for O(1) lookup.',
                                 'pattern_match': 'list_lookup_loop'
                             })
     
@@ -386,6 +390,11 @@ class PythonViolationDetector(ast.NodeVisitor):
         for target in node.targets:
             if isinstance(target, ast.Name):
                 self.unused_variables[target.id] = node.lineno
+                # Try to infer type
+                if isinstance(node.value, ast.List) or (isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id == 'list'):
+                    self.var_types[target.id] = 'list'
+                elif isinstance(node.value, (ast.Set, ast.Dict)) or (isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id in ['set', 'dict']):
+                    self.var_types[target.id] = 'efficient'
         self.generic_visit(node)
     
     def visit_Name(self, node: ast.Name) -> None:

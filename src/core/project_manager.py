@@ -9,7 +9,7 @@ import json
 import uuid
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 import logging
 
 logger = logging.getLogger(__name__)
@@ -131,7 +131,7 @@ class Project:
             violations: Number of violations found OR List of violation dicts
             emissions: Total emissions in kg
         """
-        self.last_scan = datetime.utcnow().isoformat() + "Z"
+        self.last_scan = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         self.scan_count += 1
 
         if isinstance(violations, list):
@@ -441,7 +441,7 @@ class ProjectManager:
         """
         data = {
             'metadata': {
-                'exported': datetime.utcnow().isoformat() + "Z",
+                'exported': datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                 'total_projects': len(self.projects)
             },
             'projects': [p.to_dict() for p in self.projects.values()]
