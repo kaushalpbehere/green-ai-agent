@@ -39,8 +39,14 @@ jobs:
           python - <<'EOF'
           import json
           
-          with open('green-ai-report.json', 'r') as f:
-              report = json.load(f)
+          try:
+              with open('green-ai-report.json', 'r') as f:
+                  report = json.load(f)
+          except json.JSONDecodeError as e:
+              print(f"::error::Failed to parse JSON report: {e}")
+              with open('green-ai-report.json', 'r') as f:
+                  print(f.read())
+              exit(1)
           
           critical_count = len([i for i in report.get('issues', []) if i.get('severity') == 'critical'])
           high_count = len([i for i in report.get('issues', []) if i.get('severity') == 'high'])
@@ -65,45 +71,64 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const fs = require('fs');
-            const report = JSON.parse(fs.readFileSync('green-ai-report.json', 'utf8'));
-            const summary = fs.readFileSync('scan_summary.txt', 'utf8');
-            
-            const criticalCount = summary.match(/Critical: (\d+)/)[1];
-            const highCount = summary.match(/High: (\d+)/)[1];
-            const totalCount = summary.match(/Total: (\d+)/)[1];
-            
-            const violations = report.issues || [];
-            const byFile = {};
-            violations.forEach(v => {
-              if (!byFile[v.file]) byFile[v.file] = [];
-              byFile[v.file].push(v);
-            });
-            
-            let comment = '## Green AI Scan Results 🌿\n\n';
-            comment += `**Summary**: ${totalCount} issues found\n`;
-            comment += `- 🔴 Critical: ${criticalCount}\n`;
-            comment += `- 🟠 High: ${highCount}\n`;
-            comment += `- 🟡 Medium: ${violations.filter(v => v.severity === 'medium').length}\n`;
-            comment += `- 🔵 Low: ${violations.filter(v => v.severity === 'low').length}\n\n`;
-            
-            if (Object.keys(byFile).length > 0) {
-              comment += '### Issues by File\n\n';
-              Object.entries(byFile).slice(0, 10).forEach(([file, issues]) => {
-                comment += `#### ${file}\n`;
-                comment += `${issues.length} issue(s)\n\n`;
+            try {
+              const fs = require('fs');
+              if (!fs.existsSync('green-ai-report.json') || !fs.existsSync('scan_summary.txt')) {
+                console.log('Report files not found, skipping PR comment');
+                return;
+              }
+
+              const reportContent = fs.readFileSync('green-ai-report.json', 'utf8');
+              const report = JSON.parse(reportContent);
+              const summary = fs.readFileSync('scan_summary.txt', 'utf8');
+
+              const criticalMatch = summary.match(/Critical: (\d+)/);
+              const highMatch = summary.match(/High: (\d+)/);
+              const totalMatch = summary.match(/Total: (\d+)/);
+
+              if (!criticalMatch || !highMatch || !totalMatch) {
+                console.log('Could not parse summary file');
+                return;
+              }
+
+              const criticalCount = criticalMatch[1];
+              const highCount = highMatch[1];
+              const totalCount = totalMatch[1];
+
+              const violations = report.issues || [];
+              const byFile = {};
+              violations.forEach(v => {
+                if (!byFile[v.file]) byFile[v.file] = [];
+                byFile[v.file].push(v);
               });
+
+              let comment = '## Green AI Scan Results 🌿\n\n';
+              comment += `**Summary**: ${totalCount} issues found\n`;
+              comment += `- 🔴 Critical: ${criticalCount}\n`;
+              comment += `- 🟠 High: ${highCount}\n`;
+              comment += `- 🟡 Medium: ${violations.filter(v => v.severity === 'medium').length}\n`;
+              comment += `- 🔵 Low: ${violations.filter(v => v.severity === 'low').length}\n\n`;
+
+              if (Object.keys(byFile).length > 0) {
+                comment += '### Issues by File\n\n';
+                Object.entries(byFile).slice(0, 10).forEach(([file, issues]) => {
+                  comment += `#### ${file}\n`;
+                  comment += `${issues.length} issue(s)\n\n`;
+                });
+              }
+
+              comment += '---\n';
+              comment += '_Scanned with [Green AI](https://github.com/Green-AI-Agent/green-ai)_\n';
+
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } catch (error) {
+              console.log('Error creating PR comment:', error);
             }
-            
-            comment += '---\n';
-            comment += '_Scanned with [Green AI](https://github.com/Green-AI-Agent/green-ai)_\n';
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: comment
-            });
 
       - name: Upload report artifact
         if: always()
