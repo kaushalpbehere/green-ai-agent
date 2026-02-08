@@ -46,7 +46,7 @@ def setup_logger(name: str, log_file: Optional[str] = None, level=logging.INFO):
         logger.addHandler(file_handler)
 
     # 6. Console Handler (for non-dashboard context or errors)
-    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler = logging.StreamHandler(sys.stderr)
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 

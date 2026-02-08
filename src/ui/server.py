@@ -310,7 +310,7 @@ def api_scan() -> Any:
             socketio.emit('scan_finished', {'project_name': project_name})
             
         except Exception as e:
-            print(f"Background scan error: {e}")
+            print(f"Background scan error: {e}", file=sys.stderr)
             broadcast_progress(f"Error: {str(e)}", 0)
             socketio.emit('scan_error', {'error': str(e)})
 

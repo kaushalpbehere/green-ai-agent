@@ -5,6 +5,7 @@ Manages loading, enabling, disabling, and syncing green coding standards from mu
 
 import os
 import json
+import sys
 import yaml
 from dataclasses import dataclass, asdict
 from typing import Dict, List, Set, Optional
@@ -168,7 +169,7 @@ class StandardsRegistry:
             self.enabled_custom_rules = set(rules_config.get('enable', []))
         
         except Exception as e:
-            print(f"Warning: Could not load standards config: {e}")
+            print(f"Warning: Could not load standards config: {e}", file=sys.stderr)
     
     def get_enabled_rules(self, language: str) -> List[StandardRule]:
         """Get all enabled rules for a specific language"""
@@ -241,7 +242,7 @@ class StandardsRegistry:
             with open(self.config_path, 'w') as f:
                 yaml.dump(config, f, default_flow_style=False)
         except Exception as e:
-            print(f"Warning: Could not save standards config: {e}")
+            print(f"Warning: Could not save standards config: {e}", file=sys.stderr)
     
     def sync_standards(self) -> Dict[str, bool]:
         """
