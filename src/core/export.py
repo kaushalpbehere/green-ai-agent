@@ -330,6 +330,10 @@ class HTMLReporter:
         codebase_emissions = results.get('codebase_emissions', 0)
         scanning_emissions = results.get('scanning_emissions', 0)
         
+        # Pre-calculate JSON strings for charts to avoid backslashes in f-strings
+        file_labels_json = json.dumps(list(by_file.keys())).replace('<', '\\u003c').replace('>', '\\u003e')
+        file_counts_json = json.dumps([len(issues) for issues in by_file.values()])
+
         # Build HTML content
         html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -706,8 +710,8 @@ class HTMLReporter:
         
         // File Chart
         const fileCtx = document.getElementById('fileChart').getContext('2d');
-        const fileLabels = {json.dumps(list(by_file.keys())).replace('<', '\\u003c').replace('>', '\\u003e')};
-        const fileCounts = {json.dumps([len(issues) for issues in by_file.values()])};
+        const fileLabels = {file_labels_json};
+        const fileCounts = {file_counts_json};
         
         new Chart(fileCtx, {{
             type: 'bar',
