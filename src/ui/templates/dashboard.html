@@ -1459,6 +1459,19 @@
     </div> <!-- End comparison tab -->
 
     <script>
+        // Security: Escape HTML to prevent XSS
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            };
+            return String(str).replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
         // Tab switching functionality
         function switchTab(tabName) {
             // Hide all tabs
@@ -1504,26 +1517,38 @@
                 return;
             }
 
-            grid.innerHTML = projects.map(project => `
-                <div class="project-card" onclick="viewProjectDetail('${project.name}')">
+            grid.innerHTML = projects.map(project => {
+                const safeName = escapeHTML(project.name);
+                const safeId = escapeHTML(project.id);
+                const safeLanguage = escapeHTML(project.language);
+                const safeGrade = escapeHTML(project.health_grade);
+                const safeLastScan = escapeHTML(project.last_scan_time || 'Never');
+                const safeUrl = escapeHTML(project.url || 'Local project');
+                const safeCreatedDate = escapeHTML(project.created_date || 'N/A');
+
+                // Securely pass strings to onclick by using JSON.stringify and escaping for HTML attribute
+                const onclickName = escapeHTML(JSON.stringify(project.name));
+
+                return `
+                <div class="project-card" onclick='viewProjectDetail(${onclickName})'>
                     <div class="project-card-header">
                         <div>
-                            <div class="project-name">${project.name}</div>
-                            <div style="margin-top: 5px; color: #6b7280; font-size: 12px;">ID: ${project.id}</div>
+                            <div class="project-name">${safeName}</div>
+                            <div style="margin-top: 5px; color: #6b7280; font-size: 12px;">ID: ${safeId}</div>
                         </div>
-                        <div class="project-language">${project.language}</div>
+                        <div class="project-language">${safeLanguage}</div>
                     </div>
                     
                     <div class="project-meta">
                         <div class="meta-item">
                             <div class="meta-label">Grade</div>
-                            <div class="grade-badge grade-${project.health_grade.toLowerCase()}">
-                                ${project.health_grade}
+                            <div class="grade-badge grade-${safeGrade.toLowerCase()}">
+                                ${safeGrade}
                             </div>
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">Last Scan</div>
-                            <div class="meta-value">${project.last_scan_time || 'Never'}</div>
+                            <div class="meta-value">${safeLastScan}</div>
                         </div>
                     </div>
                     
@@ -1545,11 +1570,12 @@
                     </div>
                     
                     <div style="padding-top: 12px; border-top: 1px solid var(--border-light); font-size: 11px; color: #6b7280; margin-top: 12px;">
-                        Created: ${project.created_date || 'N/A'}<br>
-                        URL: ${project.url || 'Local project'}
+                        Created: ${safeCreatedDate}<br>
+                        URL: ${safeUrl}
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // Filter and sort projects
@@ -1643,11 +1669,11 @@
 
             let html = '';
             metrics.forEach(metric => {
-                let row = '<div class="comparison-row"><div class="comparison-header">' + metric.label + '</div>';
+                let row = '<div class="comparison-row"><div class="comparison-header">' + escapeHTML(metric.label) + '</div>';
                 projects.forEach(project => {
                     const value = project[metric.key];
                     const displayValue = metric.format ? metric.format(value) : value;
-                    row += '<div class="comparison-value">' + displayValue + '</div>';
+                    row += '<div class="comparison-value">' + escapeHTML(displayValue) + '</div>';
                 });
                 row += '</div>';
                 html += row;
@@ -1658,11 +1684,11 @@
 
         // Show errors
         function showProjectsError(message) {
-            document.getElementById('projects-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc2626; padding: 40px 20px;">' + message + '</p>';
+            document.getElementById('projects-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #dc2626; padding: 40px 20px;">' + escapeHTML(message) + '</p>';
         }
 
         function showComparisonError(message) {
-            document.getElementById('comparison-grid').innerHTML = '<p style="text-align: center; color: #dc2626; padding: 40px 20px;">' + message + '</p>';
+            document.getElementById('comparison-grid').innerHTML = '<p style="text-align: center; color: #dc2626; padding: 40px 20px;">' + escapeHTML(message) + '</p>';
         }
 
         function viewProjectDetail(projectName) {
@@ -1797,25 +1823,38 @@
 
                 if (data.status === 'ok' && data.projects.length > 0) {
                     const modalList = document.getElementById('projects-list-modal');
-                    modalList.innerHTML = data.projects.map(project => `
+                    modalList.innerHTML = data.projects.map(project => {
+                        const safeName = escapeHTML(project.name);
+                        const safeUrl = escapeHTML(project.url);
+                        const safeGrade = escapeHTML(project.health_grade);
+                        const safeLastScan = escapeHTML(project.last_scan_time || 'Never scanned');
+                        const safeLanguage = escapeHTML(project.language);
+
+                        // Securely pass strings to onclick by using JSON.stringify and escaping for HTML attribute
+                        const onclickArgs = [project.name, project.url, project.health_grade, project.last_scan_time]
+                            .map(arg => escapeHTML(JSON.stringify(arg || '')))
+                            .join(', ');
+
+                        return `
                         <div style="padding: 12px; background: var(--bg-light); border-radius: 6px; margin-bottom: 8px; cursor: pointer; transition: all 0.3s;" 
                              onmouseover="this.style.background='var(--border-light)'" 
                              onmouseout="this.style.background='var(--bg-light)'"
-                             onclick="selectProject('${project.name}', '${project.url}', '${project.health_grade}', '${project.last_scan_time}')">
+                             onclick='selectProject(${onclickArgs})'>
                             <div style="font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
-                                <span>${project.name}</span>
-                                <span style="font-size: 20px; font-weight: 700; color: #10b981;">${project.health_grade}</span>
+                                <span>${safeName}</span>
+                                <span style="font-size: 20px; font-weight: 700; color: #10b981;">${safeGrade}</span>
                             </div>
                             <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
-                                ${project.language} • ${project.violation_count} violations • ${project.last_scan_time || 'Never scanned'}
+                                ${safeLanguage} • ${project.violation_count} violations • ${safeLastScan}
                             </div>
                         </div>
-                    `).join('');
+                        `;
+                    }).join('');
                 } else {
                     document.getElementById('projects-list-modal').innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px 20px;">No projects found. Create one with the New Scan button.</p>';
                 }
             } catch (error) {
-                document.getElementById('projects-list-modal').innerHTML = '<p style="text-align: center; color: #dc2626; padding: 40px 20px;">Error loading projects: ' + error.message + '</p>';
+                document.getElementById('projects-list-modal').innerHTML = '<p style="text-align: center; color: #dc2626; padding: 40px 20px;">Error loading projects: ' + escapeHTML(error.message) + '</p>';
             }
         }
 
