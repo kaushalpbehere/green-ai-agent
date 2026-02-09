@@ -1,5 +1,13 @@
 # Release Notes
 
+## [v0.6.0] - 2026-02-09
+### Added
+- **New Detection Rules**: Added 5 new Python rules: `eager_logging_formatting`, `mutable_default_argument`, `any_all_list_comprehension`, `bare_except`, `unnecessary_generator_list`.
+- **Performance**: Implemented multiprocessing scanner for faster file analysis.
+
+### Fixed
+- **Deprecations**: Replaced deprecated `datetime.utcnow()` with `datetime.now(datetime.UTC)`.
+
 ## [v0.5.0-beta] - 2026-01-29
 ### Added
 - **Dynamic YAML Rule System**: Rules are now loaded from YAML files, enabling easier updates without code changes.

@@ -191,3 +191,58 @@ rules:
     remediation: Convert list to set for O(1) membership lookups
     source: ecoCode
     tags: [performance, optimization]
+
+  - id: eager_logging_formatting
+    name: Eager Logging Formatting
+    description: Using f-strings in logging calls evaluates the string even if not logged.
+    severity: minor
+    languages: [python]
+    pattern: |
+      logger.info(f"...")
+    remediation: 'Use lazy formatting (e.g., logger.info("val: %s", val))'
+    source: ecoCode
+    tags: [performance, energy]
+
+  - id: mutable_default_argument
+    name: Mutable Default Argument
+    description: Mutable default arguments are shared across function calls.
+    severity: major
+    languages: [python]
+    pattern: |
+      def foo(x=[]):
+    remediation: Use None as default and initialize inside function.
+    source: python-guide
+    tags: [code-quality, bug-risk]
+
+  - id: any_all_list_comprehension
+    name: Any/All List Comprehension
+    description: Using list comprehension with any() or all() builds the full list.
+    severity: major
+    languages: [python]
+    pattern: |
+      any([...])
+    remediation: Use generator expression (remove brackets) for lazy evaluation.
+    source: ecoCode
+    tags: [performance, memory, energy]
+
+  - id: bare_except
+    name: Bare Except
+    description: Bare except clauses catch all exceptions including system exits.
+    severity: major
+    languages: [python]
+    pattern: |
+      except:
+    remediation: 'Catch specific exceptions (e.g., except Exception: or except ValueError:)'
+    source: python-guide
+    tags: [code-quality, bug-risk]
+
+  - id: unnecessary_generator_list
+    name: Unnecessary List in Generator
+    description: Using list comprehension inside sum/max/min consumes more memory.
+    severity: minor
+    languages: [python]
+    pattern: |
+      sum([...])
+    remediation: Use generator expression by removing brackets.
+    source: ecoCode
+    tags: [memory, performance]

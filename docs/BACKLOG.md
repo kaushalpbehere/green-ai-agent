@@ -44,7 +44,7 @@
 1. **Fix `datetime.utcnow()` deprecation**
    - Goal: Replace `datetime.utcnow()` with `datetime.now(datetime.UTC)` in `src/core/project_manager.py` and `src/core/export.py`.
    - Priority: High (Bloat/Warnings)
-   - Status: [IN PROGRESS]
+   - Status: [DONE]
 
 2. **Fix `ast.NameConstant` deprecation**
    - Goal: Remove `ast.NameConstant` (deprecated) and use `ast.Constant` in `src/core/detectors.py`.
@@ -69,11 +69,11 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
 2.2 **[PERF] Multiprocessing Scanner**
    - Goal: Parallelize file analysis to handle large codebases.
    - Effort: 8h
-   - Tag: [JULES]
+   - Tag: [DONE]
 2.3 **[RULES] Comprehensive Rule Gap Fill**
    - Goal: Implement 5+ missing rules: Deep Recursion, Inefficient Dict lookups, Regex in loops.
    - Effort: 6h
-   - Tag: [JULES]
+   - Tag: [IN PROGRESS]
 
 ### SPRINT 3: REAL-TIME DASHBOARD & METRICS (High Priority)
 3.1 **[UI] Real-time Progress Bar**
@@ -100,7 +100,8 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
 
 1. **[JULES] New Detection Rules**: Add `deep_recursion` and `inefficient_lookup` for Python. [DONE]
 2. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
-3. **[JULES] Scanner Concurrency**: Implement `ProcessPoolExecutor` in `Scanner.scan`. [IN PROGRESS]
+3. **[JULES] Scanner Concurrency**: Implement `ProcessPoolExecutor` in `Scanner.scan`. [DONE]
+4. **[JULES] Additional Rules**: Implement 5 new python rules. [IN PROGRESS]
 
 ---
 
