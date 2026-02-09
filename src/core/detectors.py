@@ -308,6 +308,47 @@ class PythonViolationDetector(ast.NodeVisitor):
                 'pattern_match': 'iterrows'
             })
 
+        # Rule: Any/All List Comprehension
+        if isinstance(node.func, ast.Name) and node.func.id in ['any', 'all']:
+            if node.args and isinstance(node.args[0], ast.ListComp):
+                 self.violations.append({
+                    'id': 'any_all_list_comprehension',
+                    'line': node.lineno,
+                    'severity': 'major',
+                    'message': f'Using list comprehension with {node.func.id}(). Use generator expression for lazy evaluation.',
+                    'pattern_match': 'any_all_list_comp'
+                })
+
+        # Rule: Unnecessary List in Generator (sum/max/min)
+        if isinstance(node.func, ast.Name) and node.func.id in ['sum', 'max', 'min']:
+             if node.args and isinstance(node.args[0], ast.ListComp):
+                 self.violations.append({
+                    'id': 'unnecessary_generator_list',
+                    'line': node.lineno,
+                    'severity': 'minor',
+                    'message': f'Using list comprehension with {node.func.id}(). Use generator expression to save memory.',
+                    'pattern_match': 'generator_list_comp'
+                })
+
+        # Rule: Eager Logging Formatting
+        if isinstance(node.func, ast.Attribute) and node.func.attr in ['debug', 'info', 'warning', 'error', 'critical']:
+            is_logger = False
+            # Check for logger.info or logging.info
+            if isinstance(node.func.value, ast.Name) and node.func.value.id in ['logger', 'logging']:
+                is_logger = True
+            # Check for self.logger.info or similar attributes ending in logger
+            elif isinstance(node.func.value, ast.Attribute) and (node.func.value.attr == 'logger' or node.func.value.attr.endswith('_logger')):
+                is_logger = True
+
+            if is_logger and node.args and isinstance(node.args[0], ast.JoinedStr):
+                self.violations.append({
+                    'id': 'eager_logging_formatting',
+                    'line': node.lineno,
+                    'severity': 'minor',
+                    'message': 'Using f-string in logging. Use lazy formatting (e.g. logger.info("%s", val)) to avoid unnecessary string interpolation.',
+                    'pattern_match': 'eager_logging'
+                })
+
         self.generic_visit(node)
     
     def visit_Global(self, node: ast.Global) -> None:
@@ -333,6 +374,18 @@ class PythonViolationDetector(ast.NodeVisitor):
             })
         self.generic_visit(node)
     
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
+        """Detect bare except clauses."""
+        if node.type is None:
+            self.violations.append({
+                'id': 'bare_except',
+                'line': node.lineno,
+                'severity': 'major',
+                'message': 'Bare except clause detected. Catch specific exceptions.',
+                'pattern_match': 'bare_except'
+            })
+        self.generic_visit(node)
+
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         """Detect high complexity functions and deep recursion."""
         prev_function = self.current_function
@@ -359,6 +412,19 @@ class PythonViolationDetector(ast.NodeVisitor):
                 'message': f'Recursive function "{node.name}" detected. Deep recursion consumes significant stack memory and CPU.',
                 'pattern_match': 'recursive_function'
             })
+
+        # Rule: Mutable Default Arguments
+        defaults = node.args.defaults + node.args.kw_defaults
+        if defaults:
+            for default in defaults:
+                if default and isinstance(default, (ast.List, ast.Dict, ast.Set)):
+                     self.violations.append({
+                        'id': 'mutable_default_argument',
+                        'line': node.lineno,
+                        'severity': 'major',
+                        'message': 'Mutable default argument detected. Use None and initialize inside function.',
+                        'pattern_match': 'mutable_default'
+                    })
 
         self.generic_visit(node)
         self.current_function = prev_function

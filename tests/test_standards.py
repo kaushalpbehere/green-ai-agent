@@ -35,24 +35,27 @@ class TestStandardsRegistry:
         registry.enable_standard('gsf')
         assert 'gsf' in registry.enabled_standards
     
-    def test_get_enabled_rules_python(self):
+    def test_get_enabled_rules_python(self, tmp_path):
         # Use dummy config to ensure default rules are enabled
-        registry = StandardsRegistry(config_path="nonexistent.yaml")
+        config_path = tmp_path / "config.yaml"
+        registry = StandardsRegistry(config_path=str(config_path))
         rules = registry.get_enabled_rules('python')
         assert len(rules) > 0
         # All rules should support python
         for rule in rules:
             assert 'python' in [l.lower() for l in rule.languages]
     
-    def test_get_enabled_rules_javascript(self):
+    def test_get_enabled_rules_javascript(self, tmp_path):
         # Use dummy config to ensure default rules are enabled
-        registry = StandardsRegistry(config_path="nonexistent.yaml")
+        config_path = tmp_path / "config.yaml"
+        registry = StandardsRegistry(config_path=str(config_path))
         rules = registry.get_enabled_rules('javascript')
         assert len(rules) > 0
     
-    def test_disable_rule(self):
+    def test_disable_rule(self, tmp_path):
         # Use dummy config to ensure default rules are enabled
-        registry = StandardsRegistry(config_path="nonexistent.yaml")
+        config_path = tmp_path / "config.yaml"
+        registry = StandardsRegistry(config_path=str(config_path))
         # Get rules for a specific language to test filtering
         python_rules_before = registry.get_enabled_rules('python')
         initial_count = len(python_rules_before)
