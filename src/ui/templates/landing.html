@@ -536,9 +536,9 @@
                 <div class="stat-subtitle">🔒 System Project</div>
                 {% endif %}
                 <div style="display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap;">
-                    <button class="btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;" onclick="rescanProject('{{ project.name }}')">🔄 Rescan</button>
-                    <button class="btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;" onclick="viewProject('{{ project.name }}')">👁️ View</button>
-                    <button style="flex: 1; padding: 8px 12px; font-size: 12px; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-weight: 600;" onclick="deleteProject('{{ project.name }}')">🗑️ Delete</button>
+                    <button class="btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;" onclick="rescanProject({{ project.name | tojson | e }})">🔄 Rescan</button>
+                    <button class="btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12px;" onclick="viewProject({{ project.name | tojson | e }})">👁️ View</button>
+                    <button style="flex: 1; padding: 8px 12px; font-size: 12px; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-weight: 600;" onclick="deleteProject({{ project.name | tojson | e }})">🗑️ Delete</button>
                 </div>
             </div>
             {% endfor %}

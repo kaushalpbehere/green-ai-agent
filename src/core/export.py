@@ -7,6 +7,7 @@ Supports CSV and HTML export with comprehensive violation and metrics data.
 import csv
 import os
 import json
+import html
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Any, Optional
@@ -303,6 +304,9 @@ class HTMLReporter:
         """
         issues = results.get('issues', [])
         
+        # Security: Escape project name for HTML
+        safe_project_name = html.escape(project_name)
+
         # Calculate statistics
         severity_counts = {
             'critical': sum(1 for i in issues if i.get('severity', '').lower() == 'critical'),
@@ -332,7 +336,7 @@ class HTMLReporter:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green-AI Report - {project_name}</title>
+    <title>Green-AI Report - {safe_project_name}</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {{
@@ -575,7 +579,7 @@ class HTMLReporter:
     <div class="container">
         <header>
             <h1>Green-AI Report</h1>
-            <p>Project: <strong>{project_name}</strong></p>
+            <p>Project: <strong>{safe_project_name}</strong></p>
             <div class="timestamp">Generated on {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')} UTC</div>
         </header>
         
@@ -620,9 +624,10 @@ class HTMLReporter:
         
         # Add file sections with violations
         for file_path, file_issues in sorted_files:
+            safe_file_path = html.escape(file_path)
             html_content += f"""
                 <div class="file-section">
-                    <div class="file-name">📄 {file_path}</div>
+                    <div class="file-name">📄 {safe_file_path}</div>
                     <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
                         {len(file_issues)} violation(s)
                     </div>
@@ -630,13 +635,16 @@ class HTMLReporter:
             
             for issue in sorted(file_issues, key=lambda x: x.get('line', 0)):
                 severity = issue.get('severity', 'info').lower()
-                effort = CSVExporter._get_effort(issue)
+                effort = html.escape(CSVExporter._get_effort(issue))
+                safe_rule_id = html.escape(issue.get('id', 'unknown'))
+                safe_message = html.escape(issue.get('message', 'No message'))
+                safe_line = html.escape(str(issue.get('line', '?')))
                 html_content += f"""
                     <div class="violation-item severity-{severity}">
-                        <div class="violation-line">Line {issue.get('line', '?')}</div>
+                        <div class="violation-line">Line {safe_line}</div>
                         <div class="violation-message">
-                            <strong>{issue.get('id', 'unknown')}</strong><br>
-                            {issue.get('message', 'No message')}
+                            <strong>{safe_rule_id}</strong><br>
+                            {safe_message}
                         </div>
                         <div class="violation-severity">
                             <span class="badge badge-{severity}">{severity.upper()}</span>
@@ -698,8 +706,8 @@ class HTMLReporter:
         
         // File Chart
         const fileCtx = document.getElementById('fileChart').getContext('2d');
-        const fileLabels = {list(by_file.keys())};
-        const fileCounts = {[len(issues) for issues in by_file.values()]};
+        const fileLabels = {json.dumps(list(by_file.keys())).replace('<', '\\u003c').replace('>', '\\u003e')};
+        const fileCounts = {json.dumps([len(issues) for issues in by_file.values()])};
         
         new Chart(fileCtx, {{
             type: 'bar',
