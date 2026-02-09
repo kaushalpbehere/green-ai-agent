@@ -2,7 +2,7 @@
 
 ## [v0.6.0] - 2026-02-09
 ### Added
-- **New Detection Rules**: Added 5 new Python rules: `eager_logging_formatting`, `mutable_default_argument`, `any_all_list_comprehension`, `bare_except`, `unnecessary_generator_list`.
+- **New Detection Rules**: Added 7 new Python rules: `eager_logging_formatting`, `mutable_default_argument`, `any_all_list_comprehension`, `bare_except`, `unnecessary_generator_list`, `string_concatenation_in_loop`, `inefficient_dictionary_iteration`.
 - **Performance**: Implemented multiprocessing scanner for faster file analysis.
 
 ### Fixed

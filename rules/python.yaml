@@ -246,3 +246,14 @@ rules:
     remediation: Use generator expression by removing brackets.
     source: ecoCode
     tags: [memory, performance]
+
+  - id: inefficient_dictionary_iteration
+    name: Inefficient Dictionary Iteration
+    description: Iterating over .keys() is redundant.
+    severity: minor
+    languages: [python]
+    pattern: |
+      \.keys\(\)
+    remediation: Iterate over the dictionary directly or use .items() if values are needed.
+    source: ecoCode
+    tags: [performance, code-quality]
