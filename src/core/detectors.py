@@ -71,6 +71,16 @@ class PythonViolationDetector(ast.NodeVisitor):
                         'message': 'Using range(len(sequence)) is inefficient. Use enumerate() or zip().',
                         'pattern_match': 'range_len'
                     })
+
+        # Rule: Inefficient Dictionary Iteration (.keys())
+        if isinstance(node.iter, ast.Call) and isinstance(node.iter.func, ast.Attribute) and node.iter.func.attr == 'keys':
+            self.violations.append({
+                'id': 'inefficient_dictionary_iteration',
+                'line': node.lineno,
+                'severity': 'minor',
+                'message': 'Iterating over .keys() is redundant. Iterate over the dictionary directly.',
+                'pattern_match': 'dict_keys_iter'
+            })
         
         # Rule: Inefficient Lookup (item in list in loop)
         self._check_inefficient_lookups(node)
@@ -200,10 +210,31 @@ class PythonViolationDetector(ast.NodeVisitor):
     
     def visit_BinOp(self, node: ast.BinOp) -> None:
         """Detect string concatenation in loops."""
-        # Check for += with strings in loops
+        # Simplified handling moved to visit_Assign for proper accumulation detection
+        self.generic_visit(node)
+
+    def visit_AugAssign(self, node: ast.AugAssign) -> None:
+        """Detect string concatenation with += in loops."""
         if self.in_loop and isinstance(node.op, ast.Add):
-            # This is simplified; real detection would be more sophisticated
-            pass
+            is_string_op = False
+            # Check target (LHS)
+            if isinstance(node.target, ast.Name) and self.var_types.get(node.target.id) == 'str':
+                is_string_op = True
+
+            # Check value (RHS)
+            if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                is_string_op = True
+            elif isinstance(node.value, ast.Name) and self.var_types.get(node.value.id) == 'str':
+                is_string_op = True
+
+            if is_string_op:
+                 self.violations.append({
+                    'id': 'string_concatenation_in_loop',
+                    'line': node.lineno,
+                    'severity': 'medium',
+                    'message': 'String concatenation in loop creates O(n²) memory allocations. Use list.append() and "".join().',
+                    'pattern_match': 'string_concat_loop'
+                })
         self.generic_visit(node)
     
     def visit_Call(self, node: ast.Call) -> None:
@@ -390,6 +421,10 @@ class PythonViolationDetector(ast.NodeVisitor):
         """Detect high complexity functions and deep recursion."""
         prev_function = self.current_function
         self.current_function = node.name
+
+        # Scope handling for variable types
+        prev_var_types = self.var_types.copy()
+        self.var_types = {}
         
         # Calculate cyclomatic complexity
         complexity = self._calculate_cyclomatic_complexity(node)
@@ -427,6 +462,7 @@ class PythonViolationDetector(ast.NodeVisitor):
                     })
 
         self.generic_visit(node)
+        self.var_types = prev_var_types # Restore scope
         self.current_function = prev_function
 
     def _is_recursive(self, node: ast.FunctionDef) -> bool:
@@ -453,6 +489,30 @@ class PythonViolationDetector(ast.NodeVisitor):
     
     def visit_Assign(self, node: ast.Assign) -> None:
         """Track variable assignments."""
+        # Check for string accumulation in loop: s = s + ...
+        if self.in_loop and isinstance(node.value, ast.BinOp) and isinstance(node.value.op, ast.Add):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    var_name = target.id
+                    # Check if variable is a string (and accumulating)
+                    if self.var_types.get(var_name) == 'str':
+                         # Check if variable is on RHS (recursively)
+                         is_rhs = False
+                         for child in ast.walk(node.value):
+                             if isinstance(child, ast.Name) and child.id == var_name:
+                                 is_rhs = True
+                                 break
+
+                         if is_rhs:
+                             self.violations.append({
+                                'id': 'string_concatenation_in_loop',
+                                'line': node.lineno,
+                                'severity': 'medium',
+                                'message': 'String concatenation in loop creates O(n²) memory allocations. Use list.append() and "".join().',
+                                'pattern_match': 'string_concat_loop'
+                            })
+                             break
+
         for target in node.targets:
             if isinstance(target, ast.Name):
                 self.unused_variables[target.id] = node.lineno
@@ -461,6 +521,8 @@ class PythonViolationDetector(ast.NodeVisitor):
                     self.var_types[target.id] = 'list'
                 elif isinstance(node.value, (ast.Set, ast.Dict)) or (isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id in ['set', 'dict']):
                     self.var_types[target.id] = 'efficient'
+                elif isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                    self.var_types[target.id] = 'str'
         self.generic_visit(node)
     
     def visit_Name(self, node: ast.Name) -> None:
@@ -539,7 +601,7 @@ class PatternBasedDetector:
     def detect_all(self) -> List[Dict]:
         """Run all pattern-based detectors."""
         self._detect_redundant_computation()
-        self._detect_string_concatenation()
+        # self._detect_string_concatenation() # Handled by AST
         self._detect_dead_code()
         self._detect_inefficient_data_structures()
         

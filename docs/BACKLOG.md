@@ -1,8 +1,8 @@
 # BACKLOG.md
 ## Green-AI: Active Sprint Backlog
 
-**Status**: 🟢 PASSING (Pending Audits) | **Next Milestone**: v0.5.1-BUGFIX
-**Current Version**: v0.5.0-beta (All Tests Passing)
+**Status**: 🟢 PASSING (Pending Audits) | **Next Milestone**: v0.6.1-RULES
+**Current Version**: v0.6.0 (All Tests Passing)
 **Next Phase**: Bug Fixes → Phase 2 Sprint 2  
 
 ---
@@ -39,23 +39,9 @@
 
 ---
 
-## 🔧 [JULES] TECHNICAL DEBT & BLOAT REMOVAL
-
-1. **Fix `datetime.utcnow()` deprecation**
-   - Goal: Replace `datetime.utcnow()` with `datetime.now(datetime.UTC)` in `src/core/project_manager.py` and `src/core/export.py`.
-   - Priority: High (Bloat/Warnings)
-   - Status: [DONE]
-
-2. **Fix `ast.NameConstant` deprecation**
-   - Goal: Remove `ast.NameConstant` (deprecated) and use `ast.Constant` in `src/core/detectors.py`.
-   - Priority: High (Bloat/Warnings)
-   - Status: [DONE]
-
----
-
 ## 📋 Overview
 
-This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sprint 1 work has been moved to [release-notes.md](release-notes.md).
+This file tracks **PENDING engineering tasks**. Completed work has been moved to [release-notes.md](release-notes.md).
 
 ---
 
@@ -66,14 +52,10 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
    - Goal: Replace regex-based detectors with Tree-Sitter for higher precision.
    - Effort: 12h
    - Tag: [JULES]
-2.2 **[PERF] Multiprocessing Scanner**
-   - Goal: Parallelize file analysis to handle large codebases.
-   - Effort: 8h
-   - Tag: [DONE]
 2.3 **[RULES] Comprehensive Rule Gap Fill**
-   - Goal: Implement 5+ missing rules: Deep Recursion, Inefficient Dict lookups, Regex in loops.
+   - Goal: Implement missing rules: Inefficient Dict lookups, Regex in loops, String Concatenation.
    - Effort: 6h
-   - Tag: [IN PROGRESS]
+   - Tag: [JULES]
 
 ### SPRINT 3: REAL-TIME DASHBOARD & METRICS (High Priority)
 3.1 **[UI] Real-time Progress Bar**
@@ -98,14 +80,15 @@ This file tracks **PENDING engineering tasks**. Completed Phase 1 and Phase 2 Sp
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **[JULES] New Detection Rules**: Add `deep_recursion` and `inefficient_lookup` for Python. [DONE]
-2. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
-3. **[JULES] Scanner Concurrency**: Implement `ProcessPoolExecutor` in `Scanner.scan`. [DONE]
-4. **[JULES] Additional Rules**: Implement 5 new python rules. [IN PROGRESS]
+1. **[JULES] Inefficient Dictionary Iteration**: Detect `for k in d.keys()` and suggest alternatives. [DONE]
+2. **[JULES] String Concatenation in Loop**: Implement AST-based detection for `s += "a"` and `s = s + "a"`. [DONE]
+3. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
+4. **[JULES] Additional Rules**: Implement 5 new python rules. [DONE]
 
 ---
 
 ## 📅 VERSION HISTORY
-- v0.5.0-beta: Carbon Efficiency & Dynamic Rules (Current)
-- v0.4.0: Multi-Project & UI Dashboard (Completed)
-- v0.3.0: Config System (Completed)
+- v0.6.0: Performance & New Rules (Current)
+- v0.5.0-beta: Carbon Efficiency & Dynamic Rules
+- v0.4.0: Multi-Project & UI Dashboard
+- v0.3.0: Config System
