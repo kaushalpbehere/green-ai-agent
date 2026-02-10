@@ -52,7 +52,7 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
    - Goal: Replace regex-based detectors with Tree-Sitter for higher precision.
    - Effort: 12h
    - Tag: [JULES]
-2.3 **[RULES] Comprehensive Rule Gap Fill**
+2.3 **[RULES] Comprehensive Rule Gap Fill** [DONE]
    - Goal: Implement missing rules: Inefficient Dict lookups, Regex in loops, String Concatenation.
    - Effort: 6h
    - Tag: [JULES]
@@ -80,10 +80,7 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **[JULES] Inefficient Dictionary Iteration**: Detect `for k in d.keys()` and suggest alternatives. [DONE]
-2. **[JULES] String Concatenation in Loop**: Implement AST-based detection for `s += "a"` and `s = s + "a"`. [DONE]
-3. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
-4. **[JULES] Additional Rules**: Implement 5 new python rules. [DONE]
+1. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
 
 ---
 

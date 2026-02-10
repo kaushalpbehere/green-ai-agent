@@ -1,6 +1,6 @@
 codecarbon
 psutil
-tree-sitter
+tree-sitter>=0.24.0
 tree-sitter-python
 tree-sitter-javascript
 requests
