@@ -8,6 +8,13 @@ import ast
 import re
 from typing import List, Dict, Tuple
 
+try:
+    import tree_sitter_javascript as tsjs
+    from tree_sitter import Language, Parser, Query, QueryCursor
+    HAS_TREE_SITTER = True
+except ImportError:
+    HAS_TREE_SITTER = False
+
 
 class PythonViolationDetector(ast.NodeVisitor):
     """AST visitor to detect green software violations in Python code."""
@@ -686,6 +693,153 @@ class PatternBasedDetector:
         pass
 
 
+class JavaScriptASTDetector:
+    """AST-based detector for JavaScript using Tree-Sitter."""
+
+    def __init__(self, content: str, file_path: str):
+        self.content = content
+        self.file_path = file_path
+        self.violations = []
+
+        if HAS_TREE_SITTER:
+            try:
+                # Tree-sitter setup
+                self.language = Language(tsjs.language())
+                self.parser = Parser(self.language)
+                self.tree = self.parser.parse(bytes(self.content, "utf8"))
+            except Exception as e:
+                # Fallback or log error
+                # In a real app we'd use logger, but here avoiding circular imports or extra setup
+                self.tree = None
+        else:
+             self.tree = None
+
+    def detect_all(self) -> List[Dict]:
+        """Run AST-based detection."""
+        if not self.tree:
+            return []
+
+        self._detect_excessive_logging()
+        self._detect_eval_usage()
+        self._detect_magic_numbers()
+        self._detect_infinite_loops()
+        self._detect_string_concatenation_in_loop()
+
+        return self.violations
+
+    def _detect_excessive_logging(self) -> None:
+        query_str = """
+        (call_expression
+          function: (member_expression
+            object: (identifier) @obj
+            property: (property_identifier) @prop)
+          (#eq? @obj "console")
+          (#match? @prop "^(log|debug)$")
+        ) @call
+        """
+        self._run_query(query_str, 'excessive_console_logging', 'minor', 'Console logging detected. Remove in production.', 'console_log')
+
+    def _detect_eval_usage(self) -> None:
+        query_str = """
+        (call_expression
+          function: (identifier) @func
+          (#eq? @func "eval")
+        ) @call
+        """
+        self._run_query(query_str, 'eval_usage', 'critical', 'Eval is a security risk and slow.', 'eval_usage')
+
+    def _detect_magic_numbers(self) -> None:
+        query_str = """(number) @num"""
+        try:
+            query = Query(self.language, query_str)
+            cursor = QueryCursor(query)
+            matches = cursor.matches(self.tree.root_node)
+
+            for match in matches:
+                for capture in match[1]['num']:
+                    text = capture.text.decode('utf8')
+                    try:
+                        val = float(text)
+                        if val > 100 and val not in [1000, 1024, 3600]:
+                             self.violations.append({
+                                'id': 'magic_numbers',
+                                'line': capture.start_point[0] + 1,
+                                'severity': 'minor',
+                                'message': f'Magic number "{text}" usage. Use named constants.',
+                                'pattern_match': 'magic_number_js'
+                            })
+                    except ValueError:
+                        pass
+        except Exception:
+            pass
+
+    def _detect_infinite_loops(self) -> None:
+        query_str = """
+        (while_statement
+            condition: (parenthesized_expression
+                (true)
+            )
+        ) @loop
+        """
+        self._run_query(query_str, 'no_infinite_loops', 'critical', 'Infinite loop detected (while(true)).', 'infinite_while_js')
+
+    def _detect_string_concatenation_in_loop(self) -> None:
+        query_str = """
+        (augmented_assignment_expression
+            operator: "+="
+            right: [(string) (template_string)]
+        ) @assign
+        """
+        try:
+            query = Query(self.language, query_str)
+            cursor = QueryCursor(query)
+            matches = cursor.matches(self.tree.root_node)
+
+            for match in matches:
+                for capture in match[1]['assign']:
+                    if self._is_inside_loop(capture):
+                         self.violations.append({
+                            'id': 'string_concatenation',
+                            'line': capture.start_point[0] + 1,
+                            'severity': 'major',
+                            'message': 'String concatenation in loop creates new objects repeatedly.',
+                            'pattern_match': 'string_concat_js'
+                        })
+        except Exception:
+            pass
+
+    def _run_query(self, query_str, rule_id, severity, message, pattern_match):
+        try:
+            query = Query(self.language, query_str)
+            cursor = QueryCursor(query)
+            matches = cursor.matches(self.tree.root_node)
+
+            seen_lines = set()
+            for match in matches:
+                for _, nodes in match[1].items():
+                    for node in nodes:
+                        line = node.start_point[0] + 1
+                        if line not in seen_lines:
+                            self.violations.append({
+                                'id': rule_id,
+                                'line': line,
+                                'severity': severity,
+                                'message': message,
+                                'pattern_match': pattern_match
+                            })
+                            seen_lines.add(line)
+        except Exception:
+            pass
+
+    def _is_inside_loop(self, node):
+        parent = node.parent
+        while parent:
+            if parent.type in ['for_statement', 'while_statement', 'do_statement', 'for_in_statement', 'for_of_statement']:
+                return True
+            parent = parent.parent
+        return False
+
+
 class JavaScriptViolationDetector:
     """Pattern-based detector for JavaScript violations."""
     
@@ -702,14 +856,17 @@ class JavaScriptViolationDetector:
         self._detect_inefficient_browser_apis()
         self._detect_nested_loops()
         self._detect_dom_manipulation_in_loop()
-        self._detect_infinite_loops()
         self._detect_inefficient_loops()
         self._detect_sync_io()
-        self._detect_excessive_logging()
-        self._detect_magic_numbers()
-        self._detect_string_concatenation()
         self._detect_dom_manipulation()
         
+        # Skip regex detectors replaced by AST if available
+        if not HAS_TREE_SITTER:
+            self._detect_infinite_loops()
+            self._detect_excessive_logging()
+            self._detect_magic_numbers()
+            self._detect_string_concatenation()
+
         return self.violations
 
     def _detect_unused_variables(self) -> None:
@@ -751,10 +908,12 @@ class JavaScriptViolationDetector:
     def _detect_deprecated_apis(self) -> None:
         """Detect deprecated or heavy libraries/APIs."""
         patterns = [
-            (r'eval\(', 'eval_usage', 'critical', 'Eval is a security risk and slow.'),
             (r'document\.write', 'document_write', 'critical', 'document.write blocks rendering.'),
             (r'from\s+[\'"]moment[\'"]|require\([\'"]moment[\'"]\)', 'momentjs_deprecated', 'major', 'Moment.js is heavy. Use Day.js or Date.'),
         ]
+
+        if not HAS_TREE_SITTER:
+             patterns.insert(0, (r'eval\(', 'eval_usage', 'critical', 'Eval is a security risk and slow.'))
 
         for line_num, line in enumerate(self.lines, 1):
             for pattern, rule_id, severity, msg in patterns:
@@ -972,7 +1131,12 @@ def detect_violations(content: str, file_path: str, language: str = 'python') ->
         violations.extend(pattern_detector.detect_all())
     
     elif language == 'javascript':
-        js_detector = JavaScriptViolationDetector(content, file_path)
-        violations.extend(js_detector.detect_all())
+        # AST-based detection
+        js_ast = JavaScriptASTDetector(content, file_path)
+        violations.extend(js_ast.detect_all())
+
+        # Pattern-based detection
+        js_pattern = JavaScriptViolationDetector(content, file_path)
+        violations.extend(js_pattern.detect_all())
     
     return violations

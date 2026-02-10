@@ -82,7 +82,7 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 
 1. **[JULES] Inefficient Dictionary Iteration**: Detect `for k in d.keys()` and suggest alternatives. [DONE]
 2. **[JULES] String Concatenation in Loop**: Implement AST-based detection for `s += "a"` and `s = s + "a"`. [DONE]
-3. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
+3. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection. [DONE]
 4. **[JULES] Additional Rules**: Implement 5 new python rules. [DONE]
 
 ---
