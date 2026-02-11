@@ -1,5 +1,9 @@
 # Release Notes
 
+## [v0.6.1] - 2026-02-11
+### Added
+- **JavaScript AST Engine**: Replaced legacy regex-based detectors with robust Tree-sitter AST analysis for JavaScript, covering loops, DOM manipulation, and deprecated APIs.
+
 ## [v0.6.0] - 2026-02-09
 ### Added
 - **New Detection Rules**: Added 7 new Python rules: `eager_logging_formatting`, `mutable_default_argument`, `any_all_list_comprehension`, `bare_except`, `unnecessary_generator_list`, `string_concatenation_in_loop`, `inefficient_dictionary_iteration`.

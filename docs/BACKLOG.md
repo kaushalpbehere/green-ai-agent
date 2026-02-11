@@ -48,7 +48,7 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 ## 📦 PHASE 2: Carbon Efficiency, Rules, Quality & Scale 
 
 ### SPRINT 2: ADVANCED RULES & PERFORMANCE (High Priority)
-2.1 **[ENGINE] AST Integration for JavaScript**
+2.1 **[ENGINE] AST Integration for JavaScript** [DONE]
    - Goal: Replace regex-based detectors with Tree-Sitter for higher precision.
    - Effort: 12h
    - Tag: [JULES]

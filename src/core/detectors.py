@@ -39,6 +39,12 @@ class JavaScriptASTDetector:
         self._detect_excessive_logging()
         self._detect_eval()
         self._detect_magic_numbers()
+        self._detect_deprecated_apis()
+        self._detect_inefficient_browser_apis()
+        self._detect_sync_io()
+        self._detect_loops()
+        self._detect_dom_manipulation()
+        self._detect_string_concatenation()
 
         return self.violations
 
@@ -95,6 +101,278 @@ class JavaScriptASTDetector:
                         pass
         except Exception as e:
             logger.error(f"Query error (magic_numbers): {e}")
+
+    def _detect_deprecated_apis(self) -> None:
+        """Detect deprecated or heavy libraries/APIs."""
+        # 1. document.write
+        query_doc_write = """
+        (call_expression
+          function: (member_expression
+            object: (identifier) @obj
+            property: (property_identifier) @prop)
+          (#eq? @obj "document")
+          (#eq? @prop "write"))
+        """
+        self._run_query(query_doc_write, 'document_write', 'critical',
+                        'document.write blocks rendering.', 'document_write')
+
+        # 2. moment.js (require or import)
+        # require('moment')
+        query_require_moment = """
+        (call_expression
+          function: (identifier) @func
+          arguments: (arguments (string (string_fragment) @arg))
+          (#eq? @func "require")
+          (#match? @arg "moment"))
+        """
+        self._run_query(query_require_moment, 'momentjs_deprecated', 'major',
+                        'Moment.js is heavy. Use Day.js or Date.', 'momentjs_deprecated')
+
+        # import ... from 'moment'
+        query_import_moment = """
+        (import_statement
+            source: (string (string_fragment) @source)
+            (#match? @source "moment"))
+        """
+        self._run_query(query_import_moment, 'momentjs_deprecated', 'major',
+                        'Moment.js is heavy. Use Day.js or Date.', 'momentjs_deprecated')
+
+    def _detect_inefficient_browser_apis(self) -> None:
+        """Detect inefficient browser APIs."""
+        # setInterval
+        query_set_interval = """
+        (call_expression
+          function: (identifier) @func
+          (#eq? @func "setInterval"))
+        """
+        self._run_query(query_set_interval, 'setInterval_animation', 'major',
+                        'Use requestAnimationFrame instead of setInterval.', 'setInterval_animation')
+
+        # window.alert/prompt/confirm
+        # Can be called as alert() or window.alert()
+        # Case 1: alert()
+        query_alert_global = """
+        (call_expression
+          function: (identifier) @func
+          (#match? @func "^(alert|prompt|confirm)$"))
+        """
+        self._run_query(query_alert_global, 'alert_usage', 'minor',
+                        'Native dialogs block the main thread.', 'alert_usage')
+
+        # Case 2: window.alert()
+        query_alert_window = """
+        (call_expression
+          function: (member_expression
+            object: (identifier) @obj
+            property: (property_identifier) @prop)
+          (#eq? @obj "window")
+          (#match? @prop "^(alert|prompt|confirm)$"))
+        """
+        self._run_query(query_alert_window, 'alert_usage', 'minor',
+                        'Native dialogs block the main thread.', 'alert_usage')
+
+    def _detect_sync_io(self) -> None:
+        """Detect synchronous I/O."""
+        # readFileSync
+        query_read_file_sync = """
+        (call_expression
+          function: (member_expression
+            property: (property_identifier) @prop)
+          (#match? @prop "readFileSync"))
+        """
+        self._run_query(query_read_file_sync, 'synchronous_io', 'major',
+                        'Synchronous I/O blocks the main thread. Use async APIs.', 'sync_io_js')
+
+        # XMLHttpRequest
+        query_xhr = """
+        (new_expression
+            constructor: (identifier) @cons
+            (#eq? @cons "XMLHttpRequest"))
+        """
+        self._run_query(query_xhr, 'synchronous_io', 'major',
+                        'Synchronous I/O blocks the main thread. Use fetch().', 'sync_io_js')
+
+    def _detect_loops(self) -> None:
+        """Detect loop related violations (infinite, nested, inefficient)."""
+        # 1. Infinite loops: while(true)
+        query_infinite = """
+        (while_statement
+          condition: (parenthesized_expression (true))) @infinite
+        """
+        self._run_query(query_infinite, 'no_infinite_loops', 'critical',
+                        'Infinite loop detected (while(true)).', 'infinite_while_js')
+
+        # 2. Inefficient C-style loops
+        query_c_loop = """
+        (for_statement) @loop
+        """
+        self._run_query(query_c_loop, 'inefficient_loop', 'major',
+                        'C-style for loop detected. Consider using .map(), .filter(), or .reduce() for better optimization.', 'c_style_for')
+
+        # 3. Nested loops (Depth check)
+        # We need to traverse the tree or query for loops inside loops
+        # Simple query for direct nesting:
+        query_nested = """
+        (for_statement body: (statement_block (for_statement))) @nested
+        """
+        # Note: This only catches depth 2. For deeper nesting we might need a more general traversal or multiple queries.
+        # But let's start with depth 2 which is the main concern.
+
+        # Actually, let's try to be more generic.
+        # Find all loops, then check their ancestors.
+        loop_types = ['for_statement', 'while_statement', 'do_statement', 'for_in_statement']
+        # Helper to check depth
+
+        try:
+             # Find all loops
+             query_loops = """
+             (for_statement) @loop
+             (while_statement) @loop
+             (do_statement) @loop
+             (for_in_statement) @loop
+             (for_of_statement) @loop
+             """
+             query = Query(self.language, query_loops)
+             cursor = QueryCursor(query)
+             matches = cursor.matches(self.tree.root_node)
+
+             # Include for_of_statement
+             extended_loop_types = loop_types + ['for_of_statement']
+
+             for _, captures in matches:
+                 for _, nodes in captures.items():
+                     for node in nodes:
+                         depth = 0
+                         parent = node.parent
+                         while parent:
+                             if parent.type in extended_loop_types:
+                                 depth += 1
+                             parent = parent.parent
+
+                         if depth >= 1: # 1 parent loop means depth 2
+                             total_depth = depth + 1
+                             severity = 'critical' if total_depth >= 3 else 'major'
+                             # We need to manually add violation because _run_query deduplicates by line and doesn't support dynamic message
+                             line = node.start_point[0] + 1
+                             # Check if we already reported this line (maybe not needed as we iterate nodes)
+
+                             self.violations.append({
+                                'id': 'no_n2_algorithms',
+                                'line': line,
+                                'severity': severity,
+                                'message': f'Nesting depth {total_depth}: Potential O(n^{total_depth}) complexity detected.',
+                                'pattern_match': 'nested_loop_js'
+                            })
+        except Exception as e:
+            logger.error(f"Error in nested loop detection: {e}")
+
+    def _detect_dom_manipulation(self) -> None:
+        """Detect DOM manipulation."""
+        # Direct DOM query
+        query_dom = """
+        (call_expression
+           function: (member_expression
+             object: (identifier) @obj
+             property: (property_identifier) @prop)
+           (#eq? @obj "document")
+           (#match? @prop "^(querySelector|getElementById)$"))
+        """
+        self._run_query(query_dom, 'unnecessary_dom_manipulation', 'major',
+                        'Direct DOM query/manipulation. Cache references.', 'dom_query')
+
+        # DOM in loop
+        # Find DOM methods inside loops
+        dom_methods = ["appendChild", "innerHTML", "textContent", "setAttribute", "classList", "write"]
+        dom_methods_regex = "^(" + "|".join(dom_methods) + ")$"
+
+        query_dom_loop = f"""
+        (call_expression
+           function: (member_expression
+             property: (property_identifier) @prop)
+           (#match? @prop "{dom_methods_regex}"))
+
+        (assignment_expression
+           left: (member_expression
+             property: (property_identifier) @prop)
+           (#match? @prop "{dom_methods_regex}"))
+        """
+
+        try:
+            query = Query(self.language, query_dom_loop)
+            cursor = QueryCursor(query)
+            matches = cursor.matches(self.tree.root_node)
+
+            loop_types = ['for_statement', 'while_statement', 'do_statement', 'for_in_statement', 'for_of_statement']
+
+            for _, captures in matches:
+                # We only care about the @prop capture
+                nodes = captures.get('prop', [])
+                for node in nodes:
+                    # Check if inside loop
+                    parent = node.parent
+                    in_loop = False
+                    while parent:
+                        if parent.type in loop_types:
+                            in_loop = True
+                            break
+                        parent = parent.parent
+
+                    if in_loop:
+                         # Extract method name for message
+                         method_name = node.text.decode('utf8')
+
+                         self.violations.append({
+                            'id': 'unnecessary_dom_manipulation',
+                            'line': node.start_point[0] + 1,
+                            'severity': 'critical',
+                            'message': f'DOM manipulation "{method_name}" inside loop. Causes reflows/repaints. Batch updates.',
+                            'pattern_match': 'dom_in_loop'
+                        })
+        except Exception as e:
+            logger.error(f"Error in DOM loop detection: {e}")
+
+    def _detect_string_concatenation(self) -> None:
+        """Detect string concatenation in loops."""
+        # += with string
+        # We can't easily check type, but we can check if it looks like a string literal or we can be conservative.
+        # The regex version just checked for += and quote.
+        # Let's check for += and string literal on RHS.
+
+        query_concat = """
+        (augmented_assignment_expression
+          operator: ("+=")
+          right: [(string) (template_string)]) @concat
+        """
+
+        try:
+            query = Query(self.language, query_concat)
+            cursor = QueryCursor(query)
+            matches = cursor.matches(self.tree.root_node)
+
+            loop_types = ['for_statement', 'while_statement', 'do_statement', 'for_in_statement', 'for_of_statement']
+
+            for _, captures in matches:
+                for _, nodes in captures.items():
+                    for node in nodes:
+                        # Check if inside loop
+                        parent = node.parent
+                        in_loop = False
+                        while parent:
+                            if parent.type in loop_types:
+                                in_loop = True
+                                break
+                            parent = parent.parent
+
+                        if in_loop:
+                             self.violations.append({
+                                'id': 'string_concatenation',
+                                'line': node.start_point[0] + 1,
+                                'severity': 'major',
+                                'message': 'String concatenation in loop creates new objects repeatedly.',
+                                'pattern_match': 'string_concat_js'
+                            })
+        except Exception as e:
+            logger.error(f"Error in string concat detection: {e}")
 
     def _run_query(self, query_scm: str, rule_id: str, severity: str, message: str, pattern_match: str) -> None:
         """Helper to run tree-sitter queries."""
@@ -816,17 +1094,7 @@ class JavaScriptViolationDetector:
     def detect_all(self) -> List[Dict]:
         """Run all JavaScript detectors."""
         self._detect_unused_variables()
-        self._detect_deprecated_apis()
-        self._detect_inefficient_browser_apis()
-        self._detect_nested_loops()
-        self._detect_dom_manipulation_in_loop()
-        self._detect_infinite_loops()
-        self._detect_inefficient_loops()
-        self._detect_sync_io()
-        # self._detect_excessive_logging() # Handled by AST
-        # self._detect_magic_numbers() # Handled by AST
-        self._detect_string_concatenation()
-        self._detect_dom_manipulation()
+        # Other rules migrated to AST-based detector
         
         return self.violations
 
@@ -866,181 +1134,6 @@ class JavaScriptViolationDetector:
                     'pattern_match': 'unused_var_js'
                 })
 
-    def _detect_deprecated_apis(self) -> None:
-        """Detect deprecated or heavy libraries/APIs."""
-        patterns = [
-            # eval is handled by AST
-            (r'document\.write', 'document_write', 'critical', 'document.write blocks rendering.'),
-            (r'from\s+[\'"]moment[\'"]|require\([\'"]moment[\'"]\)', 'momentjs_deprecated', 'major', 'Moment.js is heavy. Use Day.js or Date.'),
-        ]
-
-        for line_num, line in enumerate(self.lines, 1):
-            for pattern, rule_id, severity, msg in patterns:
-                if re.search(pattern, line):
-                    self.violations.append({
-                        'id': rule_id,
-                        'line': line_num,
-                        'severity': severity,
-                        'message': msg,
-                        'pattern_match': rule_id
-                    })
-
-    def _detect_inefficient_browser_apis(self) -> None:
-        """Detect inefficient browser APIs."""
-        patterns = [
-            (r'setInterval', 'setInterval_animation', 'major', 'Use requestAnimationFrame instead of setInterval.'),
-            (r'window\.(alert|prompt|confirm)', 'alert_usage', 'minor', 'Native dialogs block the main thread.'),
-        ]
-        
-        for line_num, line in enumerate(self.lines, 1):
-            for pattern, rule_id, severity, msg in patterns:
-                if re.search(pattern, line):
-                     self.violations.append({
-                        'id': rule_id,
-                        'line': line_num,
-                        'severity': severity,
-                        'message': msg,
-                        'pattern_match': rule_id
-                    })
-        
-    
-    def _detect_nested_loops(self) -> None:
-        """Detect nested loops in JavaScript with scope tracking."""
-        # Using a simplified scope-based tracking
-        scopes = [] # Stack of scopes (type, start_line)
-        
-        for line_num, line in enumerate(self.lines, 1):
-            # Very basic brace-based scope tracking
-            open_braces = line.count('{')
-            close_braces = line.count('}')
-            
-            # Heuristic for loop start
-            if re.search(r'\b(for|while|forEach|map)\b', line):
-                for _ in range(open_braces):
-                    scopes.append(('loop', line_num))
-                
-                # Check nesting
-                loop_depth = sum(1 for s in scopes if s[0] == 'loop')
-                if loop_depth >= 2:
-                    severity = 'critical' if loop_depth >= 3 else 'major'
-                    self.violations.append({
-                        'id': 'no_n2_algorithms',
-                        'line': line_num,
-                        'severity': severity,
-                        'message': f'Nesting depth {loop_depth}: Potential O(n^{loop_depth}) complexity detected.',
-                        'pattern_match': 'nested_loop_js'
-                    })
-            else:
-                for _ in range(open_braces):
-                    scopes.append(('block', line_num))
-            
-            for _ in range(close_braces):
-                if scopes:
-                    scopes.pop()
-
-    def _detect_dom_manipulation_in_loop(self) -> None:
-        """Detect DOM manipulation inside loop scopes."""
-        dom_methods = ['appendChild', 'innerHTML', 'textContent', 'setAttribute', 'classList.add', 'document.write']
-        scopes = []
-        
-        for line_num, line in enumerate(self.lines, 1):
-            open_braces = line.count('{')
-            close_braces = line.count('}')
-            
-            if re.search(r'\b(for|while|forEach|map)\b', line):
-                for _ in range(open_braces):
-                    scopes.append(('loop', line_num))
-            else:
-                for _ in range(open_braces):
-                    scopes.append(('block', line_num))
-            
-            # Check if we are in a loop scope
-            if any(s[0] == 'loop' for s in scopes):
-                for method in dom_methods:
-                    if method in line:
-                        self.violations.append({
-                            'id': 'unnecessary_dom_manipulation',
-                            'line': line_num,
-                            'severity': 'critical',
-                            'message': f'DOM manipulation "{method}" inside loop. Causes reflows/repaints. Batch updates.',
-                            'pattern_match': 'dom_in_loop'
-                        })
-                        break
-            
-            for _ in range(close_braces):
-                if scopes:
-                    scopes.pop()
-
-    def _detect_infinite_loops(self) -> None:
-        """Detect infinite loops."""
-        pattern = r'while\s*\(\s*true\s*\)'
-        for line_num, line in enumerate(self.lines, 1):
-            if re.search(pattern, line, re.IGNORECASE):
-                self.violations.append({
-                    'id': 'no_infinite_loops',
-                    'line': line_num,
-                    'severity': 'critical',
-                    'message': 'Infinite loop detected (while(true)).',
-                    'pattern_match': 'infinite_while_js'
-                })
-
-    def _detect_inefficient_loops(self) -> None:
-        """Detect inefficient C-style loops."""
-        pattern = r'for\s*\(\s*(let|var)\s+\w+\s*='
-        for line_num, line in enumerate(self.lines, 1):
-            if re.search(pattern, line):
-               # Simple heuristic: if it matches standard for loop, suggest map/reduce
-               self.violations.append({
-                    'id': 'inefficient_loop',
-                    'line': line_num,
-                    'severity': 'major',
-                    'message': 'C-style for loop detected. Consider using .map(), .filter(), or .reduce() for better optimization.',
-                    'pattern_match': 'c_style_for'
-                })
-
-    def _detect_sync_io(self) -> None:
-        """Detect synchronous I/O."""
-        pattern = r'readFileSync|XMLHttpRequest'
-        for line_num, line in enumerate(self.lines, 1):
-            if re.search(pattern, line):
-                self.violations.append({
-                    'id': 'synchronous_io',
-                    'line': line_num,
-                    'severity': 'major',
-                    'message': 'Synchronous I/O blocks the main thread. Use async APIs.',
-                    'pattern_match': 'sync_io_js'
-                })
-
-    def _detect_string_concatenation(self) -> None:
-        """Detect string concatenation in loops (JS)."""
-        in_loop = False
-        for line_num, line in enumerate(self.lines, 1):
-            if re.search(r'\b(for|while)\b', line):
-                in_loop = True
-            elif re.search(r'^\s*}', line): # Simple brace-based end heuristic
-                in_loop = False
-            
-            if in_loop and re.search(r'\+=\s*["\']', line):
-                self.violations.append({
-                    'id': 'string_concatenation',
-                    'line': line_num,
-                    'severity': 'major',
-                    'message': 'String concatenation in loop creates new objects repeatedly.',
-                    'pattern_match': 'string_concat_js'
-                })
-
-    def _detect_dom_manipulation(self) -> None:
-        """Detect direct DOM manipulation."""
-        pattern = r'document\.(querySelector|getElementById)'
-        for line_num, line in enumerate(self.lines, 1):
-            if re.search(pattern, line):
-                self.violations.append({
-                    'id': 'unnecessary_dom_manipulation',
-                    'line': line_num,
-                    'severity': 'major',
-                    'message': 'Direct DOM query/manipulation. Cache references.',
-                    'pattern_match': 'dom_query'
-                })
 
 
 def detect_violations(content: str, file_path: str, language: str = 'python') -> List[Dict]:
