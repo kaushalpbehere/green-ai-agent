@@ -80,7 +80,11 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **[JULES] JS AST Engine**: Begin migration from regex to parser-based detection.
+1. **[JULES] Server: remove side effects**: Remove global side effects in `src/ui/server.py`.
+2. **[JULES] Server: refactor for bloat**: Clean up `src/ui/server.py`.
+
+## ✅ COMPLETED TASKS (Pending Release)
+- **[JULES] Domain Models**: Implement Pydantic models for Project and Violation (BUG-004). [DONE]
 
 ---
 
