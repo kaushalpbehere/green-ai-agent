@@ -225,19 +225,13 @@ class JavaScriptASTDetector:
 
         try:
              # Find all loops
-             query_loops = """
-             (for_statement) @loop
-             (while_statement) @loop
-             (do_statement) @loop
-             (for_in_statement) @loop
-             (for_of_statement) @loop
-             """
+             query_loops = "[(for_statement) (while_statement) (do_statement) (for_in_statement)] @loop"
              query = Query(self.language, query_loops)
              cursor = QueryCursor(query)
              matches = cursor.matches(self.tree.root_node)
 
              # Include for_of_statement
-             extended_loop_types = loop_types + ['for_of_statement']
+             extended_loop_types = loop_types
 
              for _, captures in matches:
                  for _, nodes in captures.items():
@@ -1093,12 +1087,12 @@ class JavaScriptViolationDetector:
     
     def detect_all(self) -> List[Dict]:
         """Run all JavaScript detectors."""
-        self._detect_unused_variables()
+        self._detect_unused_variables(file_path=self.file_path)
         # Other rules migrated to AST-based detector
         
         return self.violations
 
-    def _detect_unused_variables(self) -> None:
+    def _detect_unused_variables(self, file_path=None) -> None:
         """Detect unused variables (basic heuristic)."""
         # Find declarations: let/const/var name = ...
         # Dictionary to track counts

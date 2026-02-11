@@ -10,3 +10,4 @@ pytest
 pyyaml
 eventlet
 flask-socketio
+pydantic>=2.0.0
