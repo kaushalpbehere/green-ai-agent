@@ -1,8 +1,10 @@
 
+import pytest
 from playwright.sync_api import sync_playwright
 import time
 
-def verify_dashboard():
+@pytest.mark.skip(reason="Manual E2E verification script - requires running server")
+def test_dashboard_e2e_manual():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
@@ -29,4 +31,4 @@ def verify_dashboard():
             browser.close()
 
 if __name__ == "__main__":
-    verify_dashboard()
+    test_dashboard_e2e_manual()

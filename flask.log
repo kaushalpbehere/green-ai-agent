@@ -1,4 +1,0 @@
-Usage: flask run [OPTIONS]
-Try 'flask run --help' for help.
-
-Error: Failed to find Flask application or factory in module 'src.ui.server'. Use 'src.ui.server:name' to specify one.

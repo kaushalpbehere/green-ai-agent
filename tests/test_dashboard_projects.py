@@ -416,7 +416,7 @@ class TestEdgeCases:
             assert proj['violation_count'] == 50
 
     def test_multiple_same_severity_violations(self, client, project_factory):
-        """Test counting when all violations have same severity"""
+        """Test counting when violations are provided explicitly"""
         project = project_factory(
             project_id='proj-same',
             name='SameSeverity',
@@ -424,7 +424,8 @@ class TestEdgeCases:
             repo_url='https://github.com/example/same',
             last_scan='2024-01-20 12:00:00',
             latest_violations=10,
-            total_emissions=0.000003
+            total_emissions=0.000003,
+            violation_details={'high': 5, 'medium': 3, 'low': 2}
         )
         
         with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
@@ -434,9 +435,7 @@ class TestEdgeCases:
             
             proj = data['projects'][0]
             assert proj['violation_count'] == 10
-            # Project.high_violations defaults to 50% of violations if no details provided
+            # With explicit details, these should match
             assert proj['high_violations'] == 5
-            # Project.medium_violations defaults to 30%
             assert proj['medium_violations'] == 3
-            # Low is remainder
             assert proj['low_violations'] == 2

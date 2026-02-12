@@ -101,47 +101,53 @@ class Project(BaseModel):
                 self.violation_details.get('low', 0) +
                 self.violation_details.get('info', 0))
 
-    def update_scan_results(self, violations: List[Dict[str, Any]], emissions: float) -> None:
+    def update_scan_results(self, violations: Any, emissions: float) -> None:
         """
         Update project with new scan results.
 
         Args:
-            violations: List of violation dicts
+            violations: List of violation dicts OR integer count (for legacy/testing)
             emissions: Total emissions in kg
         """
         self.last_scan = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         self.scan_count += 1
 
-        valid_violations = []
-        details = {sev.value: 0 for sev in ViolationSeverity}
+        if isinstance(violations, int):
+            self.latest_violations = violations
+            self.violations = []
+            self.violation_details = {sev.value: 0 for sev in ViolationSeverity}
+        else:
+            valid_violations = []
+            details = {sev.value: 0 for sev in ViolationSeverity}
 
-        for v_data in violations:
-            try:
-                # Create Violation object (validates severity)
-                violation = Violation(**v_data)
-                valid_violations.append(violation)
+            for v_data in violations:
+                try:
+                    # Create Violation object (validates severity)
+                    violation = Violation(**v_data)
+                    valid_violations.append(violation)
 
-                # Update details count
-                details[violation.severity.value] += 1
+                    # Update details count
+                    details[violation.severity.value] += 1
 
-            except (ValueError, TypeError):
-                # Fallback for invalid violations?
-                # For now, skip or log. We'll skip to ensure strict typing in 'violations' list.
-                # Or we could try to coerce severity to 'low'.
-                if isinstance(v_data, dict):
-                     # Try to salvage with default severity
-                     v_data_fixed = v_data.copy()
-                     v_data_fixed['severity'] = ViolationSeverity.LOW
-                     try:
-                        violation = Violation(**v_data_fixed)
-                        valid_violations.append(violation)
-                        details[ViolationSeverity.LOW.value] += 1
-                     except:
-                        pass
+                except (ValueError, TypeError):
+                    # Fallback for invalid violations?
+                    # For now, skip or log. We'll skip to ensure strict typing in 'violations' list.
+                    # Or we could try to coerce severity to 'low'.
+                    if isinstance(v_data, dict):
+                         # Try to salvage with default severity
+                         v_data_fixed = v_data.copy()
+                         v_data_fixed['severity'] = ViolationSeverity.LOW
+                         try:
+                            violation = Violation(**v_data_fixed)
+                            valid_violations.append(violation)
+                            details[ViolationSeverity.LOW.value] += 1
+                         except:
+                            pass
 
-        self.violations = valid_violations
-        self.latest_violations = len(valid_violations)
-        self.violation_details = details
+            self.violations = valid_violations
+            self.latest_violations = len(valid_violations)
+            self.violation_details = details
+
         self.total_emissions = round(emissions, 9)
 
     def to_dict(self) -> Dict[str, Any]:
