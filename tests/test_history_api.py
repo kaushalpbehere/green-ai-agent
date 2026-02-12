@@ -13,7 +13,7 @@ from unittest.mock import patch, MagicMock
 @pytest.fixture
 def client():
     """Flask test client"""
-    from src.ui.server import app
+    from src.ui.dashboard_app import app
     app.config['TESTING'] = True
     with app.test_client() as client:
         yield client

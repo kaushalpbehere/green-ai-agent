@@ -5,9 +5,8 @@ Tests for Multi-Project Dashboard UI endpoints and features
 import pytest
 import json
 from unittest.mock import patch, MagicMock
-from src.ui.server import (
+from src.ui.dashboard_app import (
     app, 
-    project_manager, 
     api_projects_list, 
     api_project_detail,
     api_projects_comparison
@@ -32,7 +31,8 @@ class TestProjectsAPIEndpoint:
 
     def test_api_projects_list_success(self, client, sample_project_objects):
         """Test successful retrieval of projects list"""
-        with patch.object(project_manager, 'list_projects', return_value=sample_project_objects):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = sample_project_objects
             response = client.get('/api/projects')
             
             assert response.status_code == 200
@@ -47,7 +47,8 @@ class TestProjectsAPIEndpoint:
 
     def test_api_projects_list_empty(self, client):
         """Test projects list when no projects exist"""
-        with patch.object(project_manager, 'list_projects', return_value=[]):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = []
             response = client.get('/api/projects')
             
             assert response.status_code == 200
@@ -59,7 +60,8 @@ class TestProjectsAPIEndpoint:
 
     def test_api_projects_metrics_calculation(self, client, sample_project_objects):
         """Test that metrics are calculated correctly"""
-        with patch.object(project_manager, 'list_projects', return_value=sample_project_objects):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = sample_project_objects
             response = client.get('/api/projects')
             data = json.loads(response.data)
             
@@ -83,7 +85,8 @@ class TestProjectsAPIEndpoint:
 
     def test_api_projects_list_violation_counts(self, client, sample_project_objects):
         """Test violation counting by severity"""
-        with patch.object(project_manager, 'list_projects', return_value=sample_project_objects):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = sample_project_objects
             response = client.get('/api/projects')
             data = json.loads(response.data)
             
@@ -109,7 +112,8 @@ class TestProjectDetailEndpoint:
     def test_api_project_detail_success(self, client, sample_project_objects):
         """Test successful retrieval of project details"""
         project = sample_project_objects[0]
-        with patch.object(project_manager, 'get_project', return_value=project):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = project
             response = client.get(f'/api/projects/{project.name}')
             
             assert response.status_code == 200
@@ -121,17 +125,11 @@ class TestProjectDetailEndpoint:
             assert data['project']['health_grade'] == 'B'
             # BUG-005 FIXED - Violations list is now populated
             assert len(data['project']['violations']) == 2
-            # Note: per_file_emissions is not in Project.to_dict() unless added, assume it's not checked here or added by implementation if needed
-            # The test previously checked it, but Project.to_dict doesn't return it.
-            # If server.py doesn't add it, this check would fail if it expected it.
-            # However, sample_project_objects creates Project instances, which don't have per_file_emissions attribute by default unless mocked/added.
-            # I will remove this assertion if it fails, but for now let's see.
-            # Actually, Project.to_dict() does NOT include per_file_emissions.
-            # So I should remove this assertion.
 
     def test_api_project_detail_not_found(self, client):
         """Test project detail when project doesn't exist"""
-        with patch.object(project_manager, 'get_project', return_value=None):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = None
             response = client.get('/api/projects/NonExistent')
             
             assert response.status_code == 404
@@ -141,7 +139,8 @@ class TestProjectDetailEndpoint:
     def test_api_project_detail_complete_data(self, client, sample_project_objects):
         """Test that all project fields are returned"""
         project = sample_project_objects[1]
-        with patch.object(project_manager, 'get_project', return_value=project):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = project
             response = client.get(f'/api/projects/{project.name}')
             data = json.loads(response.data)
             
@@ -153,9 +152,6 @@ class TestProjectDetailEndpoint:
             assert proj_data['repo_url'] == 'https://github.com/example/frontend'
             assert proj_data['branch'] == 'develop'
             assert proj_data['health_grade'] == 'B'
-            # created_date/by are not in Project model explicitly, so likely missing or None
-            # assert proj_data['created_date'] == '2024-01-16' # Removing as likely not present
-            # assert proj_data['created_by'] == 'user@example.com' # Removing as likely not present
             assert proj_data['last_scan'] == '2024-01-19 14:15:00'
             # emissions fields are flat in to_dict
             assert proj_data['total_emissions'] == 0.00001
@@ -166,7 +162,8 @@ class TestComparisonEndpoint:
 
     def test_api_comparison_multiple_projects(self, client, sample_project_objects):
         """Test successful comparison of multiple projects"""
-        with patch.object(project_manager, 'get_project', side_effect=lambda name: next((p for p in sample_project_objects if p.name == name), None)):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.side_effect = lambda name: next((p for p in sample_project_objects if p.name == name), None)
             response = client.get('/api/projects/comparison?projects=MyApp Backend&projects=MyApp Frontend')
             
             assert response.status_code == 200
@@ -190,7 +187,8 @@ class TestComparisonEndpoint:
         """Test comparison endpoint respects maximum projects limit"""
         # Try to compare 6 projects (limit is 5)
         query = '&'.join([f'projects=Project{i}' for i in range(6)])
-        with patch.object(project_manager, 'get_project', return_value=sample_project_objects[0]):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = sample_project_objects[0]
             response = client.get(f'/api/projects/comparison?{query}')
             
             assert response.status_code == 400
@@ -199,7 +197,8 @@ class TestComparisonEndpoint:
 
     def test_api_comparison_invalid_projects(self, client):
         """Test comparison when no valid projects found"""
-        with patch.object(project_manager, 'get_project', return_value=None):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = None
             response = client.get('/api/projects/comparison?projects=Invalid1&projects=Invalid2')
             
             assert response.status_code == 404
@@ -215,7 +214,8 @@ class TestComparisonEndpoint:
                 return valid_project
             return None
         
-        with patch.object(project_manager, 'get_project', side_effect=mock_get_project):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.side_effect = mock_get_project
             response = client.get('/api/projects/comparison?projects=MyApp Backend&projects=Invalid')
             
             assert response.status_code == 200
@@ -225,7 +225,8 @@ class TestComparisonEndpoint:
 
     def test_api_comparison_includes_all_metrics(self, client, sample_project_objects):
         """Test that comparison includes all required metrics"""
-        with patch.object(project_manager, 'get_project', side_effect=lambda name: next((p for p in sample_project_objects if p.name == name), None)):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.side_effect = lambda name: next((p for p in sample_project_objects if p.name == name), None)
             response = client.get('/api/projects/comparison?projects=MyApp Backend&projects=MyApp Frontend')
             data = json.loads(response.data)
             
@@ -319,8 +320,12 @@ class TestDashboardIntegration:
 
     def test_dashboard_route_exists(self, client):
         """Test that dashboard route is accessible"""
-        response = client.get('/')
-        assert response.status_code in [200, 500]  # 200 if results exist, 500 if not configured
+        # We need to mock get_landing_page_html for this route if it uses it
+        with patch('src.ui.dashboard_app.get_landing_page_html', return_value="<html></html>"), \
+             patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+             mock_get_pm.return_value.list_projects.return_value = []
+             response = client.get('/')
+             assert response.status_code in [200, 500]
 
     def test_all_api_endpoints_exist(self, client):
         """Test that all API endpoints are registered"""
@@ -330,13 +335,20 @@ class TestDashboardIntegration:
             '/api/standards',
         ]
         
-        for endpoint in endpoints:
-            response = client.get(endpoint)
-            assert response.status_code != 404, f"{endpoint} not found"
+        # We need to mock for these to work without 500
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm, \
+             patch('src.ui.dashboard_app.get_standards_registry') as mock_get_sr:
+            mock_get_pm.return_value.list_projects.return_value = []
+            mock_get_sr.return_value.list_standards.return_value = {}
+
+            for endpoint in endpoints:
+                response = client.get(endpoint)
+                assert response.status_code != 404, f"{endpoint} not found"
 
     def test_projects_list_returns_valid_json(self, client, sample_project_objects):
         """Test that projects list returns valid JSON"""
-        with patch.object(project_manager, 'list_projects', return_value=sample_project_objects):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = sample_project_objects
             response = client.get('/api/projects')
             
             assert response.status_code == 200
@@ -346,7 +358,8 @@ class TestDashboardIntegration:
 
     def test_comparison_returns_valid_json(self, client, sample_project_objects):
         """Test that comparison returns valid JSON"""
-        with patch.object(project_manager, 'get_project', side_effect=lambda name: next((p for p in sample_project_objects if p.name == name), None)):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.side_effect = lambda name: next((p for p in sample_project_objects if p.name == name), None)
             response = client.get('/api/projects/comparison?projects=MyApp Backend&projects=MyApp Frontend')
             
             assert response.status_code == 200
@@ -360,7 +373,8 @@ class TestEdgeCases:
 
     def test_project_with_no_violations(self, client, clean_project):
         """Test project with zero violations"""
-        with patch.object(project_manager, 'list_projects', return_value=[clean_project]):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = [clean_project]
             response = client.get('/api/projects')
             data = json.loads(response.data)
             
@@ -382,7 +396,8 @@ class TestEdgeCases:
             total_emissions=0.000003
         )
         
-        with patch.object(project_manager, 'get_project', return_value=project):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.get_project.return_value = project
             response = client.get(f'/api/projects/{project_name}')
             
             assert response.status_code == 200
@@ -391,7 +406,8 @@ class TestEdgeCases:
 
     def test_project_with_large_emission_values(self, client, large_project):
         """Test handling of large emission values"""
-        with patch.object(project_manager, 'list_projects', return_value=[large_project]):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = [large_project]
             response = client.get('/api/projects')
             data = json.loads(response.data)
             
@@ -411,7 +427,8 @@ class TestEdgeCases:
             total_emissions=0.000003
         )
         
-        with patch.object(project_manager, 'list_projects', return_value=[project]):
+        with patch('src.ui.dashboard_app.get_project_manager') as mock_get_pm:
+            mock_get_pm.return_value.list_projects.return_value = [project]
             response = client.get('/api/projects')
             data = json.loads(response.data)
             

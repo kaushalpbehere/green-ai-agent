@@ -27,7 +27,7 @@ def test_cli_scan_with_runtime():
 
 def test_cli_dashboard():
     # Test dashboard can be imported and initialized
-    from src.ui.server import app
+    from src.ui.dashboard_app import app
     assert app is not None
     # Dashboard functionality is tested through Flask test client if needed
     with app.test_client() as client:
