@@ -1511,71 +1511,128 @@
         // Display projects in grid
         function displayProjects(projects) {
             const grid = document.getElementById('projects-grid');
+            grid.innerHTML = ''; // Clear previous content
 
             if (projects.length === 0) {
                 grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #6b7280; padding: 40px 20px;">No projects found. Create one using the CLI.</p>';
                 return;
             }
 
-            grid.innerHTML = projects.map(project => {
-                const safeName = escapeHTML(project.name);
-                const safeId = escapeHTML(project.id);
-                const safeLanguage = escapeHTML(project.language);
-                const safeGrade = escapeHTML(project.health_grade);
-                const safeLastScan = escapeHTML(project.last_scan_time || 'Never');
-                const safeUrl = escapeHTML(project.url || 'Local project');
-                const safeCreatedDate = escapeHTML(project.created_date || 'N/A');
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.onclick = () => viewProjectDetail(project.name);
 
-                // Securely pass strings to onclick by using JSON.stringify and escaping for HTML attribute
-                const onclickName = escapeHTML(JSON.stringify(project.name));
+                // Header
+                const header = document.createElement('div');
+                header.className = 'project-card-header';
 
-                return `
-                <div class="project-card" onclick='viewProjectDetail(${onclickName})'>
-                    <div class="project-card-header">
-                        <div>
-                            <div class="project-name">${safeName}</div>
-                            <div style="margin-top: 5px; color: #6b7280; font-size: 12px;">ID: ${safeId}</div>
-                        </div>
-                        <div class="project-language">${safeLanguage}</div>
-                    </div>
-                    
-                    <div class="project-meta">
-                        <div class="meta-item">
-                            <div class="meta-label">Grade</div>
-                            <div class="grade-badge grade-${safeGrade.toLowerCase()}">
-                                ${safeGrade}
-                            </div>
-                        </div>
-                        <div class="meta-item">
-                            <div class="meta-label">Last Scan</div>
-                            <div class="meta-value">${safeLastScan}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="violations-row">
-                        <div class="violation-badge violation-high">
-                            🔴 ${project.high_violations} High
-                        </div>
-                        <div class="violation-badge violation-medium">
-                            🟡 ${project.medium_violations} Medium
-                        </div>
-                        <div class="violation-badge violation-low">
-                            🔵 ${project.low_violations} Low
-                        </div>
-                    </div>
-                    
-                    <div style="margin: 12px 0; padding: 12px; background: var(--border-light); border-radius: 6px; font-size: 12px;">
-                        <div style="margin-bottom: 5px;"><strong>Total Violations:</strong> ${project.violation_count}</div>
-                        <div><strong>Emissions:</strong> ${(project.total_emissions * 1e6).toFixed(2)} µg CO₂</div>
-                    </div>
-                    
-                    <div style="padding-top: 12px; border-top: 1px solid var(--border-light); font-size: 11px; color: #6b7280; margin-top: 12px;">
-                        Created: ${safeCreatedDate}<br>
-                        URL: ${safeUrl}
-                    </div>
-                </div>
-                `;
-            }).join('');
+                const leftDiv = document.createElement('div');
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'project-name';
+                nameDiv.textContent = project.name;
+
+                const idDiv = document.createElement('div');
+                idDiv.style.marginTop = '5px';
+                idDiv.style.color = '#6b7280';
+                idDiv.style.fontSize = '12px';
+                idDiv.textContent = `ID: ${project.id}`;
+
+                leftDiv.appendChild(nameDiv);
+                leftDiv.appendChild(idDiv);
+
+                const langDiv = document.createElement('div');
+                langDiv.className = 'project-language';
+                langDiv.textContent = project.language;
+
+                header.appendChild(leftDiv);
+                header.appendChild(langDiv);
+                card.appendChild(header);
+
+                // Meta
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'project-meta';
+
+                const gradeItem = document.createElement('div');
+                gradeItem.className = 'meta-item';
+                const gradeLabel = document.createElement('div');
+                gradeLabel.className = 'meta-label';
+                gradeLabel.textContent = 'Grade';
+                const gradeBadge = document.createElement('div');
+                gradeBadge.className = `grade-badge grade-${(project.health_grade || '').toLowerCase()}`;
+                gradeBadge.textContent = project.health_grade;
+                gradeItem.appendChild(gradeLabel);
+                gradeItem.appendChild(gradeBadge);
+                metaDiv.appendChild(gradeItem);
+
+                const scanItem = document.createElement('div');
+                scanItem.className = 'meta-item';
+                const scanLabel = document.createElement('div');
+                scanLabel.className = 'meta-label';
+                scanLabel.textContent = 'Last Scan';
+                const scanValue = document.createElement('div');
+                scanValue.className = 'meta-value';
+                scanValue.textContent = project.last_scan_time || 'Never';
+                scanItem.appendChild(scanLabel);
+                scanItem.appendChild(scanValue);
+                metaDiv.appendChild(scanItem);
+
+                card.appendChild(metaDiv);
+
+                // Violations
+                const violationsRow = document.createElement('div');
+                violationsRow.className = 'violations-row';
+
+                const createBadge = (count, type, label) => {
+                    const badge = document.createElement('div');
+                    badge.className = `violation-badge violation-${type}`;
+                    const icon = type === 'high' ? '🔴' : (type === 'medium' ? '🟡' : '🔵');
+                    badge.textContent = `${icon} ${count} ${label}`;
+                    return badge;
+                };
+
+                violationsRow.appendChild(createBadge(project.high_violations, 'high', 'High'));
+                violationsRow.appendChild(createBadge(project.medium_violations, 'medium', 'Medium'));
+                violationsRow.appendChild(createBadge(project.low_violations, 'low', 'Low'));
+
+                card.appendChild(violationsRow);
+
+                // Metrics
+                const metricsDiv = document.createElement('div');
+                metricsDiv.style.margin = '12px 0';
+                metricsDiv.style.padding = '12px';
+                metricsDiv.style.background = 'var(--border-light)';
+                metricsDiv.style.borderRadius = '6px';
+                metricsDiv.style.fontSize = '12px';
+
+                const totalDiv = document.createElement('div');
+                totalDiv.style.marginBottom = '5px';
+                // Using innerHTML with controlled content for <strong> tag
+                totalDiv.innerHTML = `<strong>Total Violations:</strong> ${project.violation_count}`;
+
+                const emissionsDiv = document.createElement('div');
+                emissionsDiv.innerHTML = `<strong>Emissions:</strong> ${(project.total_emissions * 1e6).toFixed(2)} µg CO₂`;
+
+                metricsDiv.appendChild(totalDiv);
+                metricsDiv.appendChild(emissionsDiv);
+                card.appendChild(metricsDiv);
+
+                // Footer
+                const footerDiv = document.createElement('div');
+                footerDiv.style.paddingTop = '12px';
+                footerDiv.style.borderTop = '1px solid var(--border-light)';
+                footerDiv.style.fontSize = '11px';
+                footerDiv.style.color = '#6b7280';
+                footerDiv.style.marginTop = '12px';
+
+                footerDiv.appendChild(document.createTextNode(`Created: ${project.created_date || 'N/A'}`));
+                footerDiv.appendChild(document.createElement('br'));
+                footerDiv.appendChild(document.createTextNode(`URL: ${project.url || 'Local project'}`));
+
+                card.appendChild(footerDiv);
+
+                grid.appendChild(card);
+            });
         }
 
         // Filter and sort projects
