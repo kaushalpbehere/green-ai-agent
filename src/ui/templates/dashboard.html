@@ -1388,7 +1388,7 @@
             <p style="margin: 10px 0;"><strong>🔧 Fix:</strong> {{ issue.get('remediation', 'N/A') }}</p>
             <button class="btn-small"
                 style="margin-top: 10px; background: rgba(16, 185, 129, 0.1); color: #10b981; border-color: #10b981;"
-                onclick="viewFix('{{ results.get('project_name', '') }}', '{{ issue.get('file', '') }}', {{ issue.get('line', 0) }}, '{{ issue.get('id', '') }}')">🛠️
+                onclick='viewFix({{ results.get('project_name', '') | tojson }}, {{ issue.get('file', '') | tojson }}, {{ issue.get('line', 0) | tojson }}, {{ issue.get('id', '') | tojson }})'>🛠️
                 Preview Fix</button>
 
             {% if issue.get('ai_suggestion') %}
