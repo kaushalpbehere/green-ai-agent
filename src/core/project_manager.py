@@ -6,11 +6,12 @@ Stores project registry in .green-ai/projects.json
 """
 
 import json
-import uuid
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timezone
 import logging
+
+from src.core.domain import Project
 
 logger = logging.getLogger(__name__)
 
@@ -18,172 +19,6 @@ logger = logging.getLogger(__name__)
 class ProjectException(Exception):
     """Custom exception for project operations"""
     pass
-
-
-class Project:
-    """Represents a single project"""
-    
-    def __init__(
-        self,
-        name: str,
-        repo_url: str,
-        project_id: Optional[str] = None,
-        branch: str = "main",
-        language: Optional[str] = None,
-        last_scan: Optional[str] = None,
-        scan_count: int = 0,
-        latest_violations: int = 0,
-        total_emissions: float = 0.0,
-        is_system: bool = False,
-        violation_details: Optional[Dict[str, int]] = None,
-        violations: Optional[List[Dict[str, Any]]] = None
-    ):
-        """
-        Initialize a Project.
-        
-        Args:
-            name: Human-readable project name
-            repo_url: Git repository URL (or local path)
-            project_id: Unique project identifier (auto-generated if None)
-            branch: Git branch (default: main)
-            language: Programming language (python, javascript, etc.)
-            last_scan: ISO format timestamp of last scan
-            scan_count: Number of scans performed
-            latest_violations: Violations count from latest scan
-            total_emissions: Total CO₂ emissions in kg
-            is_system: Whether this is a system project (non-deletable)
-            violation_details: Dict with 'high', 'medium', 'low' counts
-            violations: List of detailed violation dictionaries
-        """
-        self.id = project_id or str(uuid.uuid4())
-        self.name = name
-        self.repo_url = repo_url
-        self.branch = branch or "main"
-        self.language = language
-        self.last_scan = last_scan
-        self.scan_count = scan_count
-        self.latest_violations = latest_violations
-        self.total_emissions = total_emissions
-        self.is_system = is_system
-        self._violation_details = violation_details or {}
-        self.violations = violations or []
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert project to dictionary for JSON storage"""
-        data = {
-            "id": self.id,
-            "name": self.name,
-            "repo_url": self.repo_url,
-            "branch": self.branch,
-            "language": self.language,
-            "last_scan": self.last_scan,
-            "scan_count": self.scan_count,
-            "latest_violations": self.latest_violations,
-            "total_emissions": self.total_emissions,
-            "is_system": self.is_system,
-            "violations": self.violations
-        }
-        if self._violation_details:
-            data["violation_details"] = self._violation_details
-        return data
-    
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Project':
-        """Create Project from dictionary"""
-        return cls(
-            name=data.get('name'),
-            repo_url=data.get('repo_url'),
-            project_id=data.get('id'),
-            branch=data.get('branch', 'main'),
-            language=data.get('language'),
-            last_scan=data.get('last_scan'),
-            scan_count=data.get('scan_count', 0),
-            latest_violations=data.get('latest_violations', 0),
-            total_emissions=data.get('total_emissions', 0.0),
-            is_system=data.get('is_system', False),
-            violation_details=data.get('violation_details'),
-            violations=data.get('violations')
-        )
-    
-    def get_grade(self) -> str:
-        """
-        Get project health grade (A-F) based on violations.
-        
-        Returns:
-            Grade letter (A, B, C, D, F)
-        """
-        if self.latest_violations == 0:
-            return "A"
-        elif self.latest_violations <= 5:
-            return "B"
-        elif self.latest_violations <= 10:
-            return "C"
-        elif self.latest_violations <= 20:
-            return "D"
-        else:
-            return "F"
-    
-    def update_scan_results(self, violations: Any, emissions: float) -> None:
-        """
-        Update project with new scan results.
-        
-        Args:
-            violations: Number of violations found OR List of violation dicts
-            emissions: Total emissions in kg
-        """
-        self.last_scan = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        self.scan_count += 1
-
-        if isinstance(violations, list):
-            self.violations = violations
-            self.latest_violations = len(violations)
-
-            # Update violation details
-            details = {'high': 0, 'medium': 0, 'low': 0, 'critical': 0}
-            for v in violations:
-                severity = v.get('severity', 'low')
-                if severity in details:
-                    details[severity] += 1
-                else:
-                    details['low'] += 1
-            self._violation_details = details
-        else:
-            self.latest_violations = violations
-
-        self.total_emissions = round(emissions, 9)
-    
-    @property
-    def high_violations(self) -> int:
-        """
-        Get count of high-severity violations.
-        
-        Returns:
-            Count of high-severity violations
-        """
-        return self._violation_details.get('high', int(self.latest_violations * 0.5))
-    
-    @property
-    def medium_violations(self) -> int:
-        """
-        Get count of medium-severity violations.
-        
-        Returns:
-            Count of medium-severity violations
-        """
-        return self._violation_details.get('medium', int(self.latest_violations * 0.3))
-    
-    @property
-    def low_violations(self) -> int:
-        """
-        Get count of low-severity violations.
-        
-        Returns:
-            Count of low-severity violations
-        """
-        if 'low' in self._violation_details:
-            return self._violation_details['low']
-        # Approximate: remaining violations are low severity
-        return self.latest_violations - self.high_violations - self.medium_violations
 
 
 

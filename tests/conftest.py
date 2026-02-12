@@ -32,20 +32,24 @@ def project_factory():
         violations=None
     ):
         """Create a Project object with specified or default values."""
-        return Project(
-            name=name,
-            repo_url=repo_url,
-            project_id=project_id,
-            branch=branch,
-            language=language,
-            last_scan=last_scan,
-            scan_count=scan_count,
-            latest_violations=latest_violations,
-            total_emissions=total_emissions,
-            is_system=is_system,
-            violation_details=violation_details,
-            violations=violations
-        )
+        # Map project_id to id for Pydantic model
+        kwargs = {
+            "name": name,
+            "repo_url": repo_url,
+            "branch": branch,
+            "language": language,
+            "last_scan": last_scan,
+            "scan_count": scan_count,
+            "latest_violations": latest_violations,
+            "total_emissions": total_emissions,
+            "is_system": is_system,
+            "violation_details": violation_details or {},
+            "violations": violations or []
+        }
+        if project_id:
+            kwargs["id"] = project_id
+
+        return Project(**kwargs)
     
     return _create_project
 
@@ -71,8 +75,8 @@ def sample_project_objects(project_factory):
             scan_count=5,
             violation_details={'high': 1, 'medium': 1, 'low': 0},
             violations=[
-                {'id': 'vio1', 'severity': 'high', 'message': 'High violation'},
-                {'id': 'vio2', 'severity': 'medium', 'message': 'Medium violation'}
+                {'id': 'vio1', 'line': 10, 'severity': 'high', 'message': 'High violation'},
+                {'id': 'vio2', 'line': 25, 'severity': 'medium', 'message': 'Medium violation'}
             ]
         ),
         project_factory(
