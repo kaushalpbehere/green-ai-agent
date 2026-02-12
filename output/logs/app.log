@@ -1,0 +1,6 @@
+2026-02-12 21:13:07,925 - green-ai - INFO - [rules.py:49] - Loading rules from /app/rules
+2026-02-12 21:13:07,956 - green-ai - INFO - [rules.py:58] - Loaded 23 rules for python
+2026-02-12 21:13:07,975 - green-ai - INFO - [rules.py:58] - Loaded 14 rules for javascript
+2026-02-12 21:13:07,975 - green-ai - INFO - [scanner.py:170] - Starting scan on /app...
+2026-02-12 21:13:07,975 - green-ai - INFO - [scanner.py:331] - Discovering files in /app (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+2026-02-12 21:13:08,001 - green-ai - INFO - [scanner.py:352] - Found 107 files to scan.
