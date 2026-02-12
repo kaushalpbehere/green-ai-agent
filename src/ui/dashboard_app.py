@@ -130,11 +130,11 @@ def dashboard():
 @app.route('/api/charts')
 def api_charts() -> Any:
     """Return all chart data as JSON"""
-    return json.dumps(last_charts) if last_charts else json.dumps({})
+    return jsonify(last_charts) if last_charts else jsonify({})
 
 @app.route('/api/results')
 def api_results() -> Any:
-    return json.dumps(last_scan_results) if last_scan_results else json.dumps({})
+    return jsonify(last_scan_results) if last_scan_results else jsonify({})
 
 # Standards API Endpoints
 @app.route('/api/standards')
@@ -611,10 +611,14 @@ def api_remediation_preview() -> Any:
 
 
 
-def load_template(name):
+def load_template(name: str) -> str:
     path = os.path.join(os.path.dirname(__file__), 'templates', name)
-    with open(path, 'r', encoding='utf-8') as f:
-        return f.read()
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        print(f"Error loading template {name}: {e}", file=sys.stderr)
+        return f"<h1>Error: Template {name} could not be loaded</h1><p>{str(e)}</p>"
 
 LANDING_PAGE_HTML = None
 DASHBOARD_HTML = None

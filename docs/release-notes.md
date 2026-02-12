@@ -1,5 +1,12 @@
 # Release Notes
 
+## [Unreleased]
+### Added
+- **Domain Models**: Implemented Pydantic models for `Project` and `Violation` to ensure data consistency (BUG-004).
+
+### Changed
+- **Server Architecture**: Refactored `src/ui/server.py` to remove global side effects and split application logic into `dashboard_app.py`.
+
 ## [v0.6.1] - 2026-02-11
 ### Added
 - **JavaScript AST Engine**: Replaced legacy regex-based detectors with robust Tree-sitter AST analysis for JavaScript, covering loops, DOM manipulation, and deprecated APIs.

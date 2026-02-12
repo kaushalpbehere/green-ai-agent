@@ -80,12 +80,18 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-> No immediate tasks pending.
+1. **[JULES] Fix API JSON responses**
+   - Goal: Ensure `api_charts` and `api_results` return proper JSON responses using `jsonify`.
+   - Priority: High
+2. **[JULES] Add error handling for template loading**
+   - Goal: Prevent 500 errors when template files are missing.
+   - Priority: Medium
+3. **[JULES] Refactor export logic**
+   - Goal: Deduplicate code in `api_export_csv` and `api_export_html`.
+   - Priority: Low
 
 ## ✅ COMPLETED TASKS (Pending Release)
-- **[JULES] Domain Models**: Implement Pydantic models for Project and Violation (BUG-004). [DONE]
-- **[JULES] Server: remove side effects**: Remove global side effects in `src/ui/server.py`. [DONE]
-- **[JULES] Server: refactor for bloat**: Clean up `src/ui/server.py` by splitting into `server.py` and `dashboard_app.py`. [DONE]
+> Moved to release-notes.md
 
 ---
 
