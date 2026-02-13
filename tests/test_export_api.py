@@ -36,7 +36,8 @@ class TestExportAPI:
 
         with patch('src.ui.dashboard_app.last_scan_results', mock_results), \
              patch('src.core.export.CSVExporter') as MockExporter, \
-             patch('src.ui.dashboard_app.open', new_callable=MagicMock) as mock_open_file:
+             patch('src.ui.dashboard_app.open', new_callable=MagicMock) as mock_open_file, \
+             patch('src.ui.dashboard_app.OUTPUT_DIR') as MockOutputDir:
 
             # Mock file reading
             mock_file_handle = MagicMock()
@@ -44,27 +45,24 @@ class TestExportAPI:
             mock_open_file.return_value.__enter__.return_value = mock_file_handle
 
             # Mock Path logic
-            with patch('pathlib.Path') as MockPath:
-                mock_path_instance = MagicMock()
-                mock_path_instance.exists.return_value = True
-                mock_path_instance.name = 'green-ai-report-TestProject.csv'
+            mock_path_instance = MagicMock()
+            mock_path_instance.exists.return_value = True
+            mock_path_instance.name = 'green-ai-report-TestProject.csv'
 
-                # Mock the chain: Path(__file__).parent.parent.parent / 'output' / filename
-                # Output dir
-                mock_output_dir = MagicMock()
-                MockPath.return_value.parent.parent.parent.__truediv__.return_value = mock_output_dir
-                # Output path
-                mock_output_dir.__truediv__.return_value = mock_path_instance
+            # Mock OUTPUT_DIR / filename
+            MockOutputDir.__truediv__.return_value = mock_path_instance
 
-                response = client.get('/api/export/csv?project=TestProject')
+            response = client.get('/api/export/csv?project=TestProject')
 
-                assert response.status_code == 200
-                assert response.content_type == 'text/csv; charset=utf-8'
-                # Check filename in content disposition
-                assert 'filename="green-ai-report-TestProject.csv"' in response.headers['Content-Disposition']
+            assert response.status_code == 200
+            assert response.content_type == 'text/csv; charset=utf-8'
+            # Check filename in content disposition
+            assert 'filename="green-ai-report-TestProject.csv"' in response.headers['Content-Disposition']
 
-                # Verify cleanup
-                mock_path_instance.unlink.assert_called()
+            # Verify mkdir called
+            MockOutputDir.mkdir.assert_called_with(parents=True, exist_ok=True)
+            # Verify cleanup
+            mock_path_instance.unlink.assert_called()
 
     def test_api_export_html_success(self, client):
         """Test successful HTML export"""
@@ -72,7 +70,8 @@ class TestExportAPI:
 
         with patch('src.ui.dashboard_app.last_scan_results', mock_results), \
              patch('src.core.export.HTMLReporter') as MockReporter, \
-             patch('src.ui.dashboard_app.open', new_callable=MagicMock) as mock_open_file:
+             patch('src.ui.dashboard_app.open', new_callable=MagicMock) as mock_open_file, \
+             patch('src.ui.dashboard_app.OUTPUT_DIR') as MockOutputDir:
 
             # Mock file reading
             mock_file_handle = MagicMock()
@@ -80,19 +79,18 @@ class TestExportAPI:
             mock_open_file.return_value.__enter__.return_value = mock_file_handle
 
             # Mock Path logic
-            with patch('pathlib.Path') as MockPath:
-                mock_path_instance = MagicMock()
-                mock_path_instance.exists.return_value = True
+            mock_path_instance = MagicMock()
+            mock_path_instance.exists.return_value = True
 
-                # Mock the chain
-                mock_output_dir = MagicMock()
-                MockPath.return_value.parent.parent.parent.__truediv__.return_value = mock_output_dir
-                mock_output_dir.__truediv__.return_value = mock_path_instance
+            # Mock OUTPUT_DIR / filename
+            MockOutputDir.__truediv__.return_value = mock_path_instance
 
-                response = client.get('/api/export/html?project=TestProject')
+            response = client.get('/api/export/html?project=TestProject')
 
-                assert response.status_code == 200
-                assert response.content_type == 'text/html; charset=utf-8'
+            assert response.status_code == 200
+            assert response.content_type == 'text/html; charset=utf-8'
 
-                # Verify cleanup
-                mock_path_instance.unlink.assert_called()
+            # Verify mkdir called
+            MockOutputDir.mkdir.assert_called_with(parents=True, exist_ok=True)
+            # Verify cleanup
+            mock_path_instance.unlink.assert_called()
