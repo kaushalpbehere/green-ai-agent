@@ -14,6 +14,7 @@ from typing import Any
 from src.standards.registry import StandardsRegistry
 from src.ui.charts import generate_all_charts
 from src.core.project_manager import ProjectManager
+from src.core.domain import ProjectSummaryDTO, ProjectDTO, ProjectComparisonDTO
 from src.core.history import HistoryManager
 from src.core.scanner import Scanner
 from src.core.remediation import RemediationAgent
@@ -198,27 +199,8 @@ def api_projects_list() -> Any:
     """List all projects with their metrics"""
     projects = get_project_manager().list_projects()
 
-    projects_data = []
-    for project in projects:
-        project_info = {
-            'id': project.id,
-            'name': project.name,
-            'language': project.language,
-            'url': project.repo_url,
-            'branch': project.branch,
-            'last_scan_time': project.last_scan,
-            'health_grade': project.get_grade(),
-            'violation_count': project.latest_violations,
-            'high_violations': project.high_violations,
-            'medium_violations': project.medium_violations,
-            'low_violations': project.low_violations,
-            'scanning_emissions': project.total_emissions, # Using total for now
-            'codebase_emissions': 0,
-            'total_emissions': project.total_emissions,
-            'created_date': None,
-            'created_by': 'system',
-        }
-        projects_data.append(project_info)
+    # Use DTO
+    projects_data = [ProjectSummaryDTO.from_project(p).model_dump() for p in projects]
 
     return jsonify({
         'status': 'ok',
@@ -240,9 +222,8 @@ def api_project_detail(project_name) -> Any:
     if not project:
         return jsonify({'error': 'Project not found'}), 404
 
-    project_dict = project.to_dict()
-    project_dict['health_grade'] = project.get_grade()
-    # violations are now part of project_dict via to_dict()
+    # Use DTO
+    project_dict = ProjectDTO.from_project(project).model_dump()
 
     return jsonify({
         'status': 'ok',
@@ -266,19 +247,7 @@ def api_projects_comparison() -> Any:
     for project_name in project_names:
         project = pm.get_project(project_name)
         if project:
-            comparison_data.append({
-                'name': project.name,
-                'language': project.language,
-                'health_grade': project.get_grade(),
-                'violation_count': project.latest_violations,
-                'high_violations': 0,
-                'medium_violations': 0,
-                'low_violations': 0,
-                'scanning_emissions': project.total_emissions,
-                'codebase_emissions': 0,
-                'total_emissions': project.total_emissions,
-                'last_scan_time': project.last_scan,
-            })
+            comparison_data.append(ProjectComparisonDTO.from_project(project).model_dump())
 
     if not comparison_data:
         return jsonify({'error': 'No valid projects found'}), 404

@@ -158,3 +158,114 @@ class Project(BaseModel):
     def from_dict(cls, data: Dict[str, Any]) -> 'Project':
         """Create from dictionary."""
         return cls.model_validate(data)
+
+
+class ProjectSummaryDTO(BaseModel):
+    """DTO for project summary in list view."""
+    id: str
+    name: str
+    language: Optional[str] = None
+    url: str
+    branch: str
+    last_scan_time: Optional[str] = None
+    health_grade: str
+    violation_count: int
+    high_violations: int
+    medium_violations: int
+    low_violations: int
+    scanning_emissions: float
+    codebase_emissions: float
+    total_emissions: float
+    created_date: Optional[str] = None
+    created_by: str = 'system'
+
+    model_config = ConfigDict(extra='ignore')
+
+    @classmethod
+    def from_project(cls, project: 'Project') -> 'ProjectSummaryDTO':
+        return cls(
+            id=project.id,
+            name=project.name,
+            language=project.language,
+            url=project.repo_url,
+            branch=project.branch,
+            last_scan_time=project.last_scan,
+            health_grade=project.get_grade(),
+            violation_count=project.latest_violations,
+            high_violations=project.high_violations,
+            medium_violations=project.medium_violations,
+            low_violations=project.low_violations,
+            scanning_emissions=project.total_emissions, # Mapping total to scanning as per current implementation
+            codebase_emissions=0,
+            total_emissions=project.total_emissions,
+            created_date=None,
+            created_by='system'
+        )
+
+class ProjectDTO(BaseModel):
+    """DTO for detailed project view."""
+    id: str
+    name: str
+    repo_url: str
+    branch: str
+    language: Optional[str] = None
+    last_scan: Optional[str] = None
+    scan_count: int
+    latest_violations: int
+    total_emissions: float
+    is_system: bool
+    violation_details: Dict[str, int]
+    violations: List[Violation]
+    health_grade: str
+
+    model_config = ConfigDict(extra='ignore')
+
+    @classmethod
+    def from_project(cls, project: 'Project') -> 'ProjectDTO':
+        return cls(
+            id=project.id,
+            name=project.name,
+            repo_url=project.repo_url,
+            branch=project.branch,
+            language=project.language,
+            last_scan=project.last_scan,
+            scan_count=project.scan_count,
+            latest_violations=project.latest_violations,
+            total_emissions=project.total_emissions,
+            is_system=project.is_system,
+            violation_details=project.violation_details,
+            violations=project.violations,
+            health_grade=project.get_grade()
+        )
+
+class ProjectComparisonDTO(BaseModel):
+    """DTO for project comparison."""
+    name: str
+    language: Optional[str] = None
+    health_grade: str
+    violation_count: int
+    high_violations: int
+    medium_violations: int
+    low_violations: int
+    scanning_emissions: float
+    codebase_emissions: float
+    total_emissions: float
+    last_scan_time: Optional[str] = None
+
+    model_config = ConfigDict(extra='ignore')
+
+    @classmethod
+    def from_project(cls, project: 'Project') -> 'ProjectComparisonDTO':
+        return cls(
+            name=project.name,
+            language=project.language,
+            health_grade=project.get_grade(),
+            violation_count=project.latest_violations,
+            high_violations=project.high_violations,
+            medium_violations=project.medium_violations,
+            low_violations=project.low_violations,
+            scanning_emissions=project.total_emissions,
+            codebase_emissions=0,
+            total_emissions=project.total_emissions,
+            last_scan_time=project.last_scan
+        )
