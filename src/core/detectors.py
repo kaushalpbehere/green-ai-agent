@@ -632,10 +632,11 @@ class PythonViolationDetector(ast.NodeVisitor):
         func_name = None
         if isinstance(node.func, ast.Name):
             func_name = node.func.id
-            
-            # Track used variables
             self.used_variables.add(func_name)
-            
+        elif isinstance(node.func, ast.Attribute) and isinstance(node.func.value, ast.Name):
+            func_name = f"{node.func.value.id}.{node.func.attr}"
+
+        if func_name:
             # Rule: Blocking I/O
             blocking_io = ['requests.get', 'urlopen', 'time.sleep']
             if func_name in blocking_io or any(func_name.endswith(f'.{b}') for b in blocking_io):
