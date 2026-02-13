@@ -8,7 +8,7 @@ We follow a modular `src` layout. All source code resides in `src/`.
 green-ai-agent/
 ├── src/                      # Source code (all modules)
 ├── tests/                    # Test files (pytest)
-├── rules/                    # YAML rule definitions
+├── rules/                    # YAML rule definitions (per language)
 ├── docs/                     # Documentation (backlog, release-notes, vision, standards)
 ├── output/                   # ALL generated reports (CSV, HTML, emissions, logs)
 ├── data/                     # Data files (CSVs from scanning)
@@ -24,6 +24,26 @@ green-ai-agent/
 - No new markdown or config files may be created in any folder unless approved by the USER.
 - All code, test, and rule files must follow the structure in this README.
 - Any violation of this policy will be reverted.
+
+## 📏 Rule Definitions
+
+Rules are defined in YAML files within the `rules/` directory (e.g., `rules/python.yaml`).
+
+### Rule Structure
+Each rule must contain the following fields:
+
+```yaml
+- id: no_infinite_loops              # Unique snake_case identifier
+  name: No Infinite Loops            # Human-readable name
+  description: Infinite loops...     # Detailed description
+  severity: critical                 # critical, high, medium, low, info
+  languages: [python]                # List of applicable languages
+  pattern: |                         # Regex or AST pattern description
+    while\s*\(\s*[Tt]rue\s*\)
+  remediation: Add termination...    # How to fix the issue
+  source: GSF                        # Source standard (GSF, ecoCode, etc.)
+  tags: [performance, energy]        # Categorization tags
+```
 
 ## 📝 Coding Conventions
 
@@ -84,13 +104,14 @@ green-ai-agent/
 - Prefer `const` over `let`, avoid `var`.
 - Use async/await for asynchronous operations.
 
-## ✅ Testing (Pytest)
+## 🧪 Testing Strategy
 
 - **Framework**: Use `pytest`.
 - **Location**: `tests/` directory.
 - **Coverage**: Maintain >80% code coverage. Target 85%+.
 - **Mocking**: Use `unittest.mock` or `pytest-mock` for external dependencies (network, file I/O).
 - **Fixtures**: Use `conftest.py` for shared fixtures.
+- **Rule Testing**: New rules must be verified in `tests/test_rules.py` or via integration tests.
 
 Run tests:
 ```bash

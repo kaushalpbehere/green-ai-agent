@@ -11,6 +11,9 @@
 - **API JSON Responses**: Refactored `api_charts` and `api_results` endpoints to robustly handle empty results using `jsonify` and ensured correct `application/json` Content-Type (verified by new tests).
 - **Template Error Handling**: Robustly handle missing templates and prevent SSTI/XSS in error messages by escaping content and using raw blocks (TASK-001).
 
+### Documentation
+- **Standards & Vision**: Updated `docs/vision.md` and `docs/development-standards.md` to reflect current capabilities (v0.6.1) and rule definitions.
+
 ## [v0.6.1] - 2026-02-11
 ### Added
 - **JavaScript AST Engine**: Replaced legacy regex-based detectors with robust Tree-sitter AST analysis for JavaScript, covering loops, DOM manipulation, and deprecated APIs.

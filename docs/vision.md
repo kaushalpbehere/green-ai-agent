@@ -29,10 +29,11 @@ We provide quantifiable metrics (e.g., estimated CO2 reduction, energy cost) to 
 ### Phase 2: Action & Expansion (Current) 🟡
 - **Goal**: Expand language support and introduce automated remediation.
 - **Key Features**:
-  - Support for Java, TypeScript, Go, Rust, C#.
-  - Autonomous fixer using LLM integration.
-  - Enhanced rule engine with YAML configuration.
-  - Deep CI/CD integration.
+  - **Advanced Scanning**: JavaScript AST Engine and sophisticated Python detection (e.g., loops, IO).
+  - **Dynamic Rules**: YAML-based configuration for easy customization and updates.
+  - **Support**: Python, JavaScript (expanding to TypeScript, Java, Go).
+  - **Automation**: Autonomous fixer using LLM integration (In Progress).
+  - **Integration**: Deep CI/CD integration and enhanced reporting (HTML/CSV).
 
 ### Phase 3: Ecosystem & Scale (Future) 🔮
 - **Goal**: Enterprise adoption and cloud-native capabilities.
