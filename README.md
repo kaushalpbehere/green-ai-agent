@@ -110,8 +110,8 @@ green-ai-agent/
 │   ├── integration/                # Integration tests
 │   └── performance/                # Benchmarks
 ├── docs/                           # Documentation
-│   ├── PRD.md                      # Product requirements
-│   └── Roadmap.md                  # Development roadmap
+│   ├── vision.md                   # Product vision
+│   └── development-standards.md    # Coding standards
 ├── scripts/                        # Build & deployment
 ├── archive/                        # Historical docs (Phase 1)
 ├── CHANGELOG.md                    # Release notes
@@ -176,12 +176,10 @@ green-ai-agent/
 
 ## 📚 Documentation
 
-- **[PRD.md](docs/PRD.md)** - Product vision and requirements
-- **[Roadmap.md](docs/Roadmap.md)** - Development timeline and milestones
-- **[MASTER_BACKLOG.md](MASTER_BACKLOG.md)** - Detailed Phase 2 specs (5000+ words)
-- **[BACKLOG.md](BACKLOG.md)** - Active sprint tasks
-- **[CHANGELOG.md](CHANGELOG.md)** - Release notes and version history
-- **[QUICK_REFERENCE_CARD.md](QUICK_REFERENCE_CARD.md)** - One-page quick reference
+- **[Vision](docs/vision.md)** - Product vision
+- **[Development Standards](docs/development-standards.md)** - Coding standards
+- **[Backlog](docs/BACKLOG.md)** - Active sprint tasks
+- **[Release Notes](docs/release-notes.md)** - Release notes and version history
 
 ---
 
@@ -213,7 +211,7 @@ green-ai-agent/
 ├── src/                      # Source code (all modules)
 ├── tests/                    # Test files (pytest)
 ├── rules/                    # YAML rule definitions
-├── docs/                     # ONLY: backlog.md, release-notes.md
+├── docs/                     # Documentation (backlog, release-notes, vision, standards)
 ├── output/                   # ALL generated reports (CSV, HTML, emissions, logs)
 ├── data/                     # Data files (CSVs from scanning)
 └── [root files]              # Only: README.md, requirements.txt, config files
@@ -267,7 +265,7 @@ handler = logging.FileHandler('app.log')
 
 #### Standards Summary
 - **Output files**: CSV, HTML, emissions → `output/` folder only
-- **Documentation**: Only backlog.md + release-notes.md in `docs/`
+- **Documentation**: Only backlog.md, release-notes.md, vision.md, development-standards.md in `docs/`
 - **Code style**: PEP 8 + type hints
 - **Test coverage**: Minimum 80%, target 85%+
 - **Imports**: Always `from src.module import` pattern
@@ -288,7 +286,7 @@ When generating code, constrain with:
 > **STRICT RULE:** No new files or folders may be created in this repository by Copilot or any automated tool without explicit USER permission. All documentation, code, and configuration changes must be reviewed and approved by a human user. Any attempt to auto-generate files, markdowns, or logs outside the approved structure will be rejected.
 
 - All outputs must go to the `output/` folder.
-- Only `BACKLOG.md` and `release-notes.md` are allowed in `docs/`.
+- Only `BACKLOG.md`, `release-notes.md`, `vision.md`, and `development-standards.md` are allowed in `docs/`.
 - No new markdown or config files may be created in any folder unless approved by the USER.
 - All code, test, and rule files must follow the structure in this README.
 - Any violation of this policy will be reverted.

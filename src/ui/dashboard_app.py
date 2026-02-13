@@ -18,6 +18,7 @@ from src.core.history import HistoryManager
 from src.core.scanner import Scanner
 from src.core.remediation import RemediationAgent
 from src.utils.metrics import calculate_projects_grade, calculate_average_grade
+from src.core.export import OUTPUT_DIR
 import threading
 
 app = Flask(__name__)
@@ -446,13 +447,10 @@ def _handle_export(exporter_cls, mime_type, file_extension, encoding='utf-8'):
             return jsonify({'error': 'No scan results available. Run a scan first.'}), 400
 
         # Create output directory
-        from pathlib import Path
-        output_dir = Path(__file__).parent.parent.parent / 'output'
-        output_dir.mkdir(parents=True, exist_ok=True)
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-        exporter = exporter_cls()
-        output_path = output_dir / f'green-ai-report-{project_name}.{file_extension}'
-        exporter.output_path = str(output_path)
+        output_path = OUTPUT_DIR / f'green-ai-report-{project_name}.{file_extension}'
+        exporter = exporter_cls(output_path=str(output_path))
         exporter.export(last_scan_results, project_name)
 
         # Read and return file
