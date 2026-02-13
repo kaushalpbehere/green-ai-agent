@@ -425,81 +425,68 @@ def api_clear_project(project_name) -> Any:
         return jsonify({'error': f'Failed to clear project: {str(e)}'}), 500
 
 
-@app.route('/api/export/csv', methods=['GET'])
-def api_export_csv() -> Any:
-    """Export scan results to CSV"""
+def _handle_export(exporter_cls, mime_type, file_extension, encoding='utf-8'):
+    """
+    Generic handler for exporting scan results.
+
+    Args:
+        exporter_cls: Class of the exporter to use (e.g., CSVExporter, HTMLReporter)
+        mime_type: MIME type of the response
+        file_extension: Extension of the exported file (e.g., 'csv', 'html')
+        encoding: File encoding to use for reading
+
+    Returns:
+        Flask response with the exported file content
+    """
     try:
-        from src.core.export import CSVExporter
-        import json
-        from io import StringIO
-
-        # Get project name from query params or use last scan
-        project_name = request.args.get('project', 'Scan')
-
-        if not last_scan_results:
-            return jsonify({'error': 'No scan results available. Run a scan first.'}), 400
-
-        # Create CSV in output directory
-        from pathlib import Path
-        output_dir = Path(__file__).parent.parent.parent / 'output'
-        output_dir.mkdir(parents=True, exist_ok=True)
-
-        csv_exporter = CSVExporter()
-        output_path = output_dir / f'green-ai-report-{project_name}.csv'
-        csv_exporter.output_path = str(output_path)
-        csv_exporter.export(last_scan_results, project_name)
-
-        # Read and return CSV file
-        with open(output_path, 'r', encoding='utf-8-sig') as f:
-            csv_content = f.read()
-
-        # Clean up temp file
-        import os
-        if os.path.exists(output_path):
-            os.remove(output_path)
-
-        return csv_content, 200, {
-            'Content-Type': 'text/csv; charset=utf-8',
-            'Content-Disposition': f'attachment; filename="{output_path}"'
-        }
-    except Exception as e:
-        return jsonify({'error': f'Failed to export CSV: {str(e)}'}), 500
-
-
-@app.route('/api/export/html', methods=['GET'])
-def api_export_html() -> Any:
-    """Export scan results to HTML report"""
-    try:
-        from src.core.export import HTMLReporter
-
         # Get project name from query params
         project_name = request.args.get('project', 'Scan')
 
         if not last_scan_results:
             return jsonify({'error': 'No scan results available. Run a scan first.'}), 400
 
-        # Create HTML report in output directory
+        # Create output directory
         from pathlib import Path
         output_dir = Path(__file__).parent.parent.parent / 'output'
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        html_reporter = HTMLReporter()
-        output_path = output_dir / f'green-ai-report-{project_name}.html'
-        html_reporter.output_path = str(output_path)
-        html_reporter.export(last_scan_results, project_name)
+        exporter = exporter_cls()
+        output_path = output_dir / f'green-ai-report-{project_name}.{file_extension}'
+        exporter.output_path = str(output_path)
+        exporter.export(last_scan_results, project_name)
 
-        # Read and return HTML file
-        with open(output_path, 'r', encoding='utf-8') as f:
-            html_content = f.read()
+        # Read and return file
+        with open(output_path, 'r', encoding=encoding) as f:
+            content = f.read()
 
         # Clean up temp file
-        import os
-        if os.path.exists(output_path):
-            os.remove(output_path)
+        if output_path.exists():
+            output_path.unlink()
 
-        return html_content, 200, {'Content-Type': 'text/html; charset=utf-8'}
+        headers = {
+            'Content-Type': f'{mime_type}; charset=utf-8'
+        }
+
+        if file_extension == 'csv':
+             headers['Content-Disposition'] = f'attachment; filename="{output_path.name}"'
+
+        return content, 200, headers
     except Exception as e:
-        return jsonify({'error': f'Failed to export HTML: {str(e)}'}), 500
+        return jsonify({'error': f'Failed to export {file_extension.upper()}: {str(e)}'}), 500
+
+
+@app.route('/api/export/csv', methods=['GET'])
+def api_export_csv() -> Any:
+    """Export scan results to CSV"""
+    from src.core.export import CSVExporter
+    return _handle_export(CSVExporter, 'text/csv', 'csv', encoding='utf-8-sig')
+
+
+@app.route('/api/export/html', methods=['GET'])
+def api_export_html() -> Any:
+    """Export scan results to HTML report"""
+    from src.core.export import HTMLReporter
+    return _handle_export(HTMLReporter, 'text/html', 'html')
 
 
 @app.route('/api/history', methods=['GET'])
