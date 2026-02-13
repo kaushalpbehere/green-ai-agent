@@ -130,11 +130,11 @@ def dashboard():
 @app.route('/api/charts')
 def api_charts() -> Any:
     """Return all chart data as JSON"""
-    return jsonify(last_charts) if last_charts else jsonify({})
+    return jsonify(last_charts or {})
 
 @app.route('/api/results')
 def api_results() -> Any:
-    return jsonify(last_scan_results) if last_scan_results else jsonify({})
+    return jsonify(last_scan_results or {})
 
 # Standards API Endpoints
 @app.route('/api/standards')

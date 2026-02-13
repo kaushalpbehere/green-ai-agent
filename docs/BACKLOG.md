@@ -80,13 +80,10 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **[JULES] Fix API JSON responses**
-   - Goal: Ensure `api_charts` and `api_results` return proper JSON responses using `jsonify`.
-   - Priority: High
-2. **[JULES] Add error handling for template loading**
+1. **[JULES] Add error handling for template loading**
    - Goal: Prevent 500 errors when template files are missing.
    - Priority: Medium
-3. **[JULES] Refactor export logic**
+2. **[JULES] Refactor export logic**
    - Goal: Deduplicate code in `api_export_csv` and `api_export_html`.
    - Priority: Low
 

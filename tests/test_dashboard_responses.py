@@ -6,6 +6,7 @@ import pytest
 import json
 from unittest.mock import patch, mock_open
 from src.ui.dashboard_app import app, load_template
+import src.ui.dashboard_app as dashboard_app_module
 
 @pytest.fixture
 def client():
@@ -32,6 +33,16 @@ class TestDashboardResponses:
 class TestTemplateLoading:
     """Test template loading error handling"""
 
+    def setup_method(self):
+        # Reset cached templates before test
+        dashboard_app_module.LANDING_PAGE_HTML = None
+        dashboard_app_module.DASHBOARD_HTML = None
+
+    def teardown_method(self):
+        # Reset cached templates after test
+        dashboard_app_module.LANDING_PAGE_HTML = None
+        dashboard_app_module.DASHBOARD_HTML = None
+
     def test_load_template_missing_file(self):
         """Test load_template handles missing files gracefully"""
         with patch('builtins.open', side_effect=FileNotFoundError("Template not found")):
@@ -40,7 +51,10 @@ class TestTemplateLoading:
 
     def test_dashboard_route_missing_template(self, client):
         """Test dashboard route when template is missing"""
+        # Patch open only within this context
         with patch('builtins.open', side_effect=FileNotFoundError("Template not found")):
+             # Ensure we force a reload by clearing cache again just in case
+             dashboard_app_module.LANDING_PAGE_HTML = None
              response = client.get('/')
              assert response.status_code != 500
              assert b"Error" in response.data or b"Template" in response.data

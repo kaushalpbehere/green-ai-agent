@@ -7,6 +7,9 @@
 ### Changed
 - **Server Architecture**: Refactored `src/ui/server.py` to remove global side effects and split application logic into `dashboard_app.py`.
 
+### Fixed
+- **API JSON Responses**: Refactored `api_charts` and `api_results` endpoints to robustly handle empty results using `jsonify` and ensured correct `application/json` Content-Type (verified by new tests).
+
 ## [v0.6.1] - 2026-02-11
 ### Added
 - **JavaScript AST Engine**: Replaced legacy regex-based detectors with robust Tree-sitter AST analysis for JavaScript, covering loops, DOM manipulation, and deprecated APIs.
