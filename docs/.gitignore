@@ -1,12 +1,14 @@
-# Strict folder protection: Only allow backlog.md and release-notes.md
+# Strict folder protection: Only allow canonical documentation files
 # Reject all other files to maintain documentation cleanliness
 
 # Deny all files by default
 *
 
-# Exception: Allow only these canonical files
-!backlog.md
+# Exception: Allow canonical files
+!BACKLOG.md
 !release-notes.md
+!vision.md
+!development-standards.md
 
 # Allow .gitignore itself
 !.gitignore
