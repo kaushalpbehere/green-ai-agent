@@ -77,13 +77,11 @@ This file tracks **PENDING engineering tasks**. Completed work has been moved to
    - Effort: 4h
 
 ---
+---
 
 ## 🥇 PRIORITIZED TASKS (Next Immediate Work)
 
-1. **[JULES] Add error handling for template loading**
-   - Goal: Prevent 500 errors when template files are missing.
-   - Priority: Medium
-2. **[JULES] Refactor export logic**
+1. **[JULES] Refactor export logic**
    - Goal: Deduplicate code in `api_export_csv` and `api_export_html`.
    - Priority: Low
 

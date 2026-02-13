@@ -9,6 +9,7 @@
 
 ### Fixed
 - **API JSON Responses**: Refactored `api_charts` and `api_results` endpoints to robustly handle empty results using `jsonify` and ensured correct `application/json` Content-Type (verified by new tests).
+- **Template Error Handling**: Robustly handle missing templates and prevent SSTI/XSS in error messages by escaping content and using raw blocks (TASK-001).
 
 ## [v0.6.1] - 2026-02-11
 ### Added
