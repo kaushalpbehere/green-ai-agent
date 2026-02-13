@@ -2,45 +2,47 @@
 
 ## 📋 Next 10 Prioritized Microtasks
 
-1. **[JULES] Project Discovery & Doc Generation** (Status: In Progress)
-   - Goal: specific `docs/vision.md` and `docs/development-standards.md`.
-   - Priority: High (Initialization)
-
-2. **[JULES] Refactor export logic**
+1. **[JULES] Refactor export logic**
    - Goal: Deduplicate code in `api_export_csv` and `api_export_html`.
    - Priority: Low
 
-3. **[JULES] Fix BUG-004.1: Define clear interface contracts**
+2. **[JULES] Fix BUG-004.1: Define clear interface contracts**
    - Goal: Address inconsistent project data model.
    - Priority: High
 
-4. **[JULES] Fix BUG-004.2: Add Pydantic models for validation**
+3. **[JULES] Fix BUG-004.2: Add Pydantic models for validation**
    - Goal: Ensure data integrity.
    - Priority: High
 
-5. **[JULES] Fix BUG-004.3: Create `ProjectDTO` for API responses**
+4. **[JULES] Fix BUG-004.3: Create `ProjectDTO` for API responses**
    - Goal: Standardize API outputs.
    - Priority: High
 
-6. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
+5. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
    - Goal: Prepare for eventlet deprecation.
    - Priority: Medium
 
-7. **[UI] Real-time Progress Bar (Sprint 3.1)**
+6. **[UI] Real-time Progress Bar (Sprint 3.1)**
    - Goal: Integration of WebSockets for live status during scans.
    - Priority: High
 
-8. **[CORE] Calibration Scan (Sprint 3.2)**
+7. **[CORE] Calibration Scan (Sprint 3.2)**
    - Goal: System micro-benchmarks to normalize carbon impact modeling.
    - Priority: High
 
-9. **[UI] Remediation Preview (Sprint 3.3)**
+8. **[UI] Remediation Preview (Sprint 3.3)**
    - Goal: Show suggested code diffs directly in the dashboard.
    - Priority: Medium
 
-10. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
+9. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
     - Goal: Auto-scan on commit via local hooks.
     - Priority: Medium
+
+## ✅ Completed Tasks
+
+- **[JULES] Project Discovery & Doc Generation** (Status: Done)
+   - Goal: specific `docs/vision.md` and `docs/development-standards.md`.
+   - Priority: High (Initialization)
 
 ---
 
