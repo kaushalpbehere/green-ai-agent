@@ -8,6 +8,7 @@ from flask_socketio import SocketIO, emit
 import json
 import sys
 import os
+import html
 from typing import Any
 
 from src.standards.registry import StandardsRegistry
@@ -618,7 +619,12 @@ def load_template(name: str) -> str:
             return f.read()
     except Exception as e:
         print(f"Error loading template {name}: {e}", file=sys.stderr)
-        return f"<h1>Error: Template {name} could not be loaded</h1><p>{str(e)}</p>"
+        # Escape the error message to prevent XSS and ensure safe rendering
+        error_msg = html.escape(str(e))
+        # Prevent breaking out of the raw block by escaping the start tag sequence
+        # We use the HTML entity for brace so it renders correctly in the browser
+        error_msg = error_msg.replace('{%', '&#123;%')
+        return f"<h1>Error: Template {name} could not be loaded</h1><pre>{{% raw %}}{error_msg}{{% endraw %}}</pre>"
 
 LANDING_PAGE_HTML = None
 DASHBOARD_HTML = None
