@@ -564,12 +564,17 @@ def api_remediation_preview() -> Any:
         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/api/calibrate', methods=['POST'])
+@app.route('/api/calibrate', methods=['GET', 'POST'])
 def api_calibrate() -> Any:
-    """Run system calibration and return metrics"""
+    """Run system calibration or return current profile"""
     try:
         agent = CalibrationAgent()
-        profile = agent.run_calibration()
+
+        if request.method == 'POST':
+            profile = agent.run_calibration()
+        else:
+            profile = agent.profile
+
         return jsonify({
             'status': 'ok',
             'profile': profile

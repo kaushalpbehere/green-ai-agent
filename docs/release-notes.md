@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- **Calibration UI**: Added system calibration button to the landing page and exposed `GET /api/calibrate` endpoint to support UI integration.
 - **Domain Models**: Implemented Pydantic models for `Project` and `Violation` to ensure data consistency (BUG-004).
 
 ### Changed

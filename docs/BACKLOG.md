@@ -2,10 +2,6 @@
 
 ## 📋 Next 10 Prioritized Microtasks
 
-1. **[UI] Calibration UI Integration (Sprint 3.2)**
-   - Goal: Expose system calibration via Dashboard UI and API.
-   - Priority: High
-
 3. **[QA] Fix Pre-commit Hook**
    - Goal: Update `.git_hooks_pre-commit.sh` to allow required documentation files.
    - Priority: Medium
@@ -19,6 +15,10 @@
     - Priority: Medium
 
 ## ✅ Completed Tasks
+
+- **[UI] Calibration UI Integration (Sprint 3.2)** (Status: Done)
+   - Goal: Expose system calibration via Dashboard UI and API.
+   - Priority: High
 
 - **[CORE] Refactor Project Model (BUG-004.1)** (Status: Done)
    - Goal: Replace weak `Dict` types with strict Pydantic `ViolationDetails` model in `Project`.
