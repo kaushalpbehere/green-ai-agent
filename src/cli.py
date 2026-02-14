@@ -612,7 +612,7 @@ def dashboard():
     from pathlib import Path
     
     # Configure Flask logging to output/logs
-    logs_dir = Path(__file__).parent.parent.parent / 'output' / 'logs'
+    logs_dir = Path(__file__).parent.parent / 'output' / 'logs'
     logs_dir.mkdir(parents=True, exist_ok=True)
     
     # Set up logging

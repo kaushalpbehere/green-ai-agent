@@ -30,11 +30,13 @@ class TestDomainModels:
 
     def test_project_defaults(self):
         """Test project default values."""
+        from src.core.domain import ViolationDetails
         p = Project(name="Test Project", repo_url="http://example.com")
         assert p.id is not None
         assert p.branch == "main"
         assert p.violations == []
-        assert p.violation_details == {}
+        assert isinstance(p.violation_details, ViolationDetails)
+        assert p.violation_details.critical == 0
         assert p.scan_count == 0
 
     def test_project_get_grade(self):
