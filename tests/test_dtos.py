@@ -25,7 +25,7 @@ def test_project_dto():
     assert dto.name == "Test Project"
     assert dto.latest_violations == 15
     assert dto.health_grade == "D" # 15 violations = D
-    assert dto.violation_details["medium"] == 15
+    assert dto.violation_details.medium == 15
 
 def test_project_comparison_dto():
     from src.core.domain import ViolationDetails

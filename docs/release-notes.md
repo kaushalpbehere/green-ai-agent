@@ -6,6 +6,7 @@
 
 ### Changed
 - **Server Architecture**: Refactored `src/ui/server.py` to remove global side effects and split application logic into `dashboard_app.py`.
+- **ProjectDTO Refactor**: Updated `ProjectDTO` to use strict Pydantic `ViolationDetails` model instead of `Dict` for better type safety and consistency.
 
 ### Fixed
 - **API JSON Responses**: Refactored `api_charts` and `api_results` endpoints to robustly handle empty results using `jsonify` and ensured correct `application/json` Content-Type (verified by new tests).
