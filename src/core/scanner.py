@@ -16,6 +16,7 @@ from src.core.detectors import detect_violations
 from src.core.config import ConfigLoader
 from src.core.tracking import create_tracker
 from src.core.calibration import CalibrationAgent
+from src.core.domain import ScanResult, Violation, ScanMetadata, RuntimeMetrics
 from src.utils.logger import logger
 import concurrent.futures
 import multiprocessing
@@ -152,7 +153,7 @@ class Scanner:
         # For now, use Python ast for both
         return None
     
-    def scan(self, path, progress_callback=None):
+    def scan(self, path, progress_callback=None) -> ScanResult:
         """
         Scan a directory or file.
         
@@ -161,7 +162,7 @@ class Scanner:
             progress_callback: Optional function(message, percentage) for progress reporting.
             
         Returns:
-            Dictionary with scan results.
+            ScanResult object with scan results.
         """
         # Create appropriate tracker (NoOpTracker by default, ProfilingTracker if --profile)
         tracker = create_tracker(enable_profiling=self.profile)
@@ -174,13 +175,17 @@ class Scanner:
         
         if total_files == 0:
             tracker.stop()
-            return {
-                'issues': [],
-                'scanning_emissions': 0,
-                'codebase_emissions': 0,
-                'per_file_emissions': {},
-                'metadata': {'total_files': 0}
-            }
+            return ScanResult(
+                issues=[],
+                scanning_emissions=0.0,
+                codebase_emissions=0.0,
+                per_file_emissions={},
+                metadata=ScanMetadata(
+                    total_files=0,
+                    language=self.language,
+                    path=str(path)
+                )
+            )
         
         issues = []
         per_file_emissions = {}
@@ -233,27 +238,50 @@ class Scanner:
         issues = self.emission_analyzer.get_per_line_emissions(issues, total_codebase_emissions)
         
         # Runtime monitoring if enabled
-        runtime_metrics = {}
+        runtime_metrics_dict = {}
         if self.runtime and self.language == 'python':
-            runtime_metrics = self._run_with_monitoring(path)
+            runtime_metrics_dict = self._run_with_monitoring(path)
         
         tracking_result = tracker.stop()
         # Extract emissions value for backward compatibility
         scanning_emissions = tracking_result.get('emissions', 0.0) if isinstance(tracking_result, dict) else tracking_result
         
-        results = {
-            'issues': issues,
-            'scanning_emissions': scanning_emissions,
-            'scanning_emissions_detailed': tracking_result,
-            'codebase_emissions': total_codebase_emissions,
-            'per_file_emissions': per_file_emissions,
-            'runtime_metrics': runtime_metrics,
-            'metadata': {
-                'total_files': total_files,
-                'language': self.language,
-                'path': path
-            }
-        }
+        # Convert issues to Violation objects
+        violation_objects = []
+        for issue_data in issues:
+            try:
+                # Ensure compatibility with Violation model
+                if 'energy_factor' in issue_data:
+                    # Fix energy_factor if it's "100x" string instead of float, though model allows Union[float, str]
+                    pass
+
+                v = Violation(**issue_data)
+                violation_objects.append(v)
+            except Exception as e:
+                logger.error(f"Failed to create Violation object for issue {issue_data.get('id', 'unknown')}: {e}")
+
+        # Create RuntimeMetrics object
+        runtime_metrics = None
+        if runtime_metrics_dict:
+            try:
+                runtime_metrics = RuntimeMetrics(**runtime_metrics_dict)
+            except Exception as e:
+                logger.warning(f"Failed to create RuntimeMetrics: {e}")
+
+        # Construct ScanResult
+        results = ScanResult(
+            issues=violation_objects,
+            scanning_emissions=scanning_emissions,
+            scanning_emissions_detailed=tracking_result if isinstance(tracking_result, dict) else {},
+            codebase_emissions=total_codebase_emissions,
+            per_file_emissions=per_file_emissions,
+            runtime_metrics=runtime_metrics,
+            metadata=ScanMetadata(
+                total_files=total_files,
+                language=self.language,
+                path=str(path)
+            )
+        )
         
         if progress_callback:
             progress_callback("Scan complete", 100)
@@ -286,12 +314,15 @@ class Scanner:
             execution_time = time.time() - start_time
             runtime_emissions = runtime_tracker.stop()
             
+            # Handle dictionary return from tracker
+            emissions_val = runtime_emissions.get('emissions', 0.0) if isinstance(runtime_emissions, dict) else runtime_emissions
+
             return {
                 'output': result.stdout.strip(),
                 'error': result.stderr.strip(),
                 'return_code': result.returncode,
                 'execution_time': f"{execution_time:.2f}s",
-                'emissions': runtime_emissions
+                'emissions': emissions_val
             }
                 
         except subprocess.TimeoutExpired:

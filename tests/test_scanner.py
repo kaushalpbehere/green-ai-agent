@@ -21,33 +21,29 @@ def test_scan_simple_file():
     scanner = Scanner()
     results = scanner.scan('tests/simple_test.py')
     
-    assert 'issues' in results
-    assert 'scanning_emissions' in results or 'codebase_emissions' in results
-    assert isinstance(results['scanning_emissions'], (float, int))
-    assert len(results['issues']) >= 0  # May have issues
+    assert results.issues is not None
+    assert results.scanning_emissions >= 0 or results.codebase_emissions >= 0
+    assert isinstance(results.scanning_emissions, (float, int))
+    assert len(results.issues) >= 0  # May have issues
 
 def test_scan_directory():
     scanner = Scanner()
     results = scanner.scan('tests/')
     
-    assert 'issues' in results
-    assert 'scanning_emissions' in results or 'codebase_emissions' in results
-    assert isinstance(results['scanning_emissions'], (float, int))
+    assert results.issues is not None
+    assert results.scanning_emissions >= 0 or results.codebase_emissions >= 0
+    assert isinstance(results.scanning_emissions, (float, int))
 
 def test_runtime_monitoring():
     scanner = Scanner(runtime=True)
     results = scanner.scan('tests/simple_test.py')
     
-    assert 'runtime_metrics' in results
-    metrics = results['runtime_metrics']
+    assert results.runtime_metrics is not None
+    metrics = results.runtime_metrics
     # Runtime metrics may be empty if file has errors, check if present
-    if metrics and 'execution_time' in metrics:
-        assert 'emissions' in metrics
-        if isinstance(metrics['emissions'], dict):
-            assert 'emissions' in metrics['emissions']
-            assert isinstance(metrics['emissions']['emissions'], (float, int))
-        else:
-            assert isinstance(metrics['emissions'], (float, int))
+    if metrics and metrics.execution_time:
+        assert metrics.emissions >= 0
+        assert isinstance(metrics.emissions, (float, int))
 
 def test_get_run_command():
     scanner = Scanner(language='python')

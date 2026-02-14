@@ -7,11 +7,11 @@ Stores project registry in .green-ai/projects.json
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from datetime import datetime, timezone
 import logging
 
-from src.core.domain import Project
+from src.core.domain import Project, ScanResult
 
 logger = logging.getLogger(__name__)
 
@@ -119,7 +119,7 @@ class ProjectManager:
         project = Project(
             name=name,
             repo_url=repo_url,
-            branch=branch,
+            branch=branch or "main",
             language=language,
             is_system=is_system
         )
@@ -200,16 +200,16 @@ class ProjectManager:
     def update_project_scan(
         self,
         project_id_or_name: str,
-        violations: Any,
-        emissions: float
+        violations: Union[ScanResult, Any],
+        emissions: float = 0.0
     ) -> None:
         """
         Update project with scan results.
         
         Args:
             project_id_or_name: Project ID or name
-            violations: Number of violations OR List of violation dicts
-            emissions: Total emissions in kg
+            violations: ScanResult object, Number of violations, OR List of violation dicts
+            emissions: Total emissions in kg (optional if ScanResult provided)
             
         Raises:
             ProjectException: If project not found
@@ -221,9 +221,20 @@ class ProjectManager:
         project.update_scan_results(violations, emissions)
         self._save_projects()
         
+        # Determine values for logging
+        count = 0
+        co2 = emissions
+        if isinstance(violations, ScanResult):
+            count = len(violations.issues)
+            co2 = violations.codebase_emissions
+        elif isinstance(violations, list):
+            count = len(violations)
+        elif isinstance(violations, int):
+            count = violations
+
         logger.info(
             f"Updated project '{project.name}': "
-            f"{violations} violations, {emissions:.9f} kg CO₂"
+            f"{count} violations, {co2:.9f} kg CO₂"
         )
     
     def get_summary_metrics(self) -> Dict[str, Any]:

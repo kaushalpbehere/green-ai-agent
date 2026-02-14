@@ -10,7 +10,8 @@ import json
 import html
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
+from src.core.domain import ScanResult
 
 
 # Default output directory for all exports
@@ -35,17 +36,20 @@ class JSONExporter:
         else:
             self.output_path = str(OUTPUT_DIR / 'green-ai-report.json')
 
-    def export(self, results: Dict[str, Any], project_name: str = 'Scan') -> str:
+    def export(self, results: Union[Dict[str, Any], ScanResult], project_name: str = 'Scan') -> str:
         """
         Export scan results to JSON file.
 
         Args:
-            results: Scan results dictionary from Scanner.scan()
+            results: Scan results dictionary or object from Scanner.scan()
             project_name: Name of the project being scanned
 
         Returns:
             Path to generated JSON file
         """
+        if isinstance(results, ScanResult):
+            results = results.model_dump()
+
         # Add timestamp and project info if not present
         if 'metadata' not in results:
             results['metadata'] = {}
@@ -128,17 +132,20 @@ class CSVExporter:
         }
         return effort_map.get(severity, 'medium')
     
-    def export(self, results: Dict[str, Any], project_name: str = 'Scan') -> str:
+    def export(self, results: Union[Dict[str, Any], ScanResult], project_name: str = 'Scan') -> str:
         """
         Export scan results to CSV file.
         
         Args:
-            results: Scan results dictionary from Scanner.scan()
+            results: Scan results dictionary or object from Scanner.scan()
             project_name: Name of the project being scanned
             
         Returns:
             Path to generated CSV file
         """
+        if isinstance(results, ScanResult):
+            results = results.model_dump()
+
         issues = results.get('issues', [])
         
         # Sort by severity (critical first) then by file
@@ -206,16 +213,19 @@ class CSVExporter:
         
         return self.output_path
     
-    def get_statistics(self, results: Dict[str, Any]) -> Dict[str, Any]:
+    def get_statistics(self, results: Union[Dict[str, Any], ScanResult]) -> Dict[str, Any]:
         """
         Calculate statistics from scan results.
         
         Args:
-            results: Scan results dictionary
+            results: Scan results dictionary or object
             
         Returns:
             Dictionary with statistics
         """
+        if isinstance(results, ScanResult):
+            results = results.model_dump()
+
         issues = results.get('issues', [])
         
         severity_counts = {
@@ -291,17 +301,20 @@ class HTMLReporter:
         icon = icons.get(severity.lower(), '⚪')
         return f'<span style="color: {color}; font-weight: bold;">{icon} {severity.upper()}</span>'
     
-    def export(self, results: Dict[str, Any], project_name: str = 'Scan') -> str:
+    def export(self, results: Union[Dict[str, Any], ScanResult], project_name: str = 'Scan') -> str:
         """
         Export scan results to HTML report.
         
         Args:
-            results: Scan results dictionary from Scanner.scan()
+            results: Scan results dictionary or object from Scanner.scan()
             project_name: Name of the project being scanned
             
         Returns:
             Path to generated HTML file
         """
+        if isinstance(results, ScanResult):
+            results = results.model_dump()
+
         issues = results.get('issues', [])
         
         # Security: Escape project name for HTML

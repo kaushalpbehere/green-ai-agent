@@ -1,0 +1,70 @@
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:scanner.py:171 Starting scan on tests/simple_test.py...
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:scanner.py:171 Starting scan on tests/...
+INFO     green-ai:scanner.py:362 Discovering files in tests/ (Ignoring: *.pyc, __pycache__, .git, .venv, node_modules, output, tests/test_carbon_patterns.py, tests/conftest.py)
+INFO     green-ai:scanner.py:383 Found 47 files to scan.
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:scanner.py:171 Starting scan on tests/simple_test.py...
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     green-ai:rules.py:49 Loading rules from /app/rules
+INFO     green-ai:rules.py:58 Loaded 23 rules for python
+INFO     green-ai:rules.py:58 Loaded 14 rules for javascript
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: b048fe1c-bfa7-4097-a78b-15c5d8f2cd6c)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: a330fdb4-4034-47d8-8121-64a08039449e)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: e184aa6c-2714-4d9b-8645-a4eea907e4a9)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: 4a650e66-ffd0-4f1d-b3fc-0940bb2ff5e5)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'Zebra' (ID: 5986cfdf-47c9-4d83-8c62-5b690cb12741)
+INFO     src.core.project_manager:project_manager.py:60 Saved 2 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'Apple' (ID: 62171f78-23c8-408f-8823-5ac7c7a584a8)
+INFO     src.core.project_manager:project_manager.py:60 Saved 3 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'Mango' (ID: 04023238-fa28-42ef-a8f3-90f1b52647c5)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App1' (ID: e43d26aa-59ab-44c5-8346-fccb6ddac4f8)
+INFO     src.core.project_manager:project_manager.py:60 Saved 2 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App2' (ID: db4fe34b-0dd3-4d0d-929a-c41db94659cd)
+INFO     src.core.project_manager:project_manager.py:60 Saved 3 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App3' (ID: c3e41824-220b-4853-81e0-9c2da5bae43a)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: eca94670-9df9-48d1-9ce6-3094a2b7575d)
+INFO     src.core.project_manager:project_manager.py:60 Saved 0 projects to registry
+INFO     src.core.project_manager:project_manager.py:173 Removed project 'MyApp'
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'MyApp' (ID: dd810bb7-2058-4bae-ad10-417e6de9e7fb)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:235 Updated project 'MyApp': 5 violations, 0.000010000 kg CO₂
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App1' (ID: e6631e55-d945-4afb-9888-c70a8d8ad355)
+INFO     src.core.project_manager:project_manager.py:60 Saved 2 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App2' (ID: 3863d3f3-59df-48d7-ab1a-0e972f999045)
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App1' (ID: a7b0cd24-c82f-48a0-a6c4-9ce103617a6e)
+INFO     src.core.project_manager:project_manager.py:60 Saved 2 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App2' (ID: 04c4bafc-66ae-4f42-8bda-8492ffb189f1)
+INFO     src.core.project_manager:project_manager.py:48 Loaded 2 projects from registry
+INFO     src.core.project_manager:project_manager.py:60 Saved 1 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App1' (ID: f7fea8b1-ed34-4bbf-8209-6036cffda746)
+INFO     src.core.project_manager:project_manager.py:60 Saved 2 projects to registry
+INFO     src.core.project_manager:project_manager.py:129 Added project 'App2' (ID: 95c84fe9-370c-4093-9a74-d85fceec06ed)

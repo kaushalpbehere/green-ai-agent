@@ -3,7 +3,7 @@ Domain models for Green AI Agent.
 Implements strictly typed Pydantic models for core entities.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from enum import Enum
 from datetime import datetime, timezone
 import uuid
@@ -22,14 +22,83 @@ class ViolationSeverity(str, Enum):
 class Violation(BaseModel):
     """
     Represents a single green software violation.
+    Matches the schema produced by Scanner.
     """
     id: str
+    file: str = "unknown"
     line: int
     severity: ViolationSeverity
     message: str
     pattern_match: Optional[str] = None
+    type: str = "green_violation"
+    remediation: Optional[str] = None
+    ai_suggestion: Optional[str] = None
+    effort: Optional[str] = "Medium"
+    tags: List[str] = Field(default_factory=list)
+    carbon_impact: float = 0.0
+    energy_factor: Union[float, str] = 1.0  # Can be float or "100x" string in some contexts? Scanner sets it to value or default 1.
+    name: Optional[str] = None
 
     model_config = ConfigDict(extra='ignore')
+
+    @field_validator('severity', mode='before')
+    @classmethod
+    def normalize_severity(cls, v: Any) -> ViolationSeverity:
+        if isinstance(v, str):
+            try:
+                return ViolationSeverity(v.lower())
+            except ValueError:
+                return ViolationSeverity.INFO
+        return v
+
+class ScanMetadata(BaseModel):
+    """Metadata about the scan."""
+    total_files: int
+    language: str
+    path: str
+    exported_at: Optional[str] = None
+    project_name: Optional[str] = None
+
+    model_config = ConfigDict(extra='ignore')
+
+class RuntimeMetrics(BaseModel):
+    """Metrics from runtime execution (if enabled)."""
+    execution_time: Optional[str] = None
+    emissions: float = 0.0
+    output: Optional[str] = None
+    error: Optional[str] = None
+    return_code: Optional[int] = None
+
+    model_config = ConfigDict(extra='ignore')
+
+class ScanResult(BaseModel):
+    """
+    Result of a codebase scan.
+    Strictly typed Pydantic model replacing the legacy dictionary.
+    """
+    issues: List[Violation] = Field(default_factory=list)
+    scanning_emissions: float = 0.0
+    scanning_emissions_detailed: Dict[str, Any] = Field(default_factory=dict)
+    codebase_emissions: float = 0.0
+    per_file_emissions: Dict[str, float] = Field(default_factory=dict)
+    runtime_metrics: Optional[RuntimeMetrics] = None
+    metadata: ScanMetadata
+
+    model_config = ConfigDict(extra='ignore')
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Helper for backward compatibility with dict-like access."""
+        if hasattr(self, key):
+            val = getattr(self, key)
+            if val is not None:
+                return val
+        return default
+
+    def __getitem__(self, key: str) -> Any:
+        """Helper for backward compatibility with dict-like access."""
+        if hasattr(self, key):
+            return getattr(self, key)
+        raise KeyError(key)
 
 class Project(BaseModel):
     """
@@ -101,54 +170,75 @@ class Project(BaseModel):
                 self.violation_details.get('low', 0) +
                 self.violation_details.get('info', 0))
 
-    def update_scan_results(self, violations: Any, emissions: float) -> None:
+    def update_scan_results(self, result: Union[ScanResult, Dict, int], emissions: float = 0.0) -> None:
         """
         Update project with new scan results.
 
         Args:
-            violations: List of violation dicts OR integer count (for legacy/testing)
-            emissions: Total emissions in kg
+            result: ScanResult object, or legacy violations list/dict/int
+            emissions: Total emissions in kg (if not provided in ScanResult)
         """
         self.last_scan = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         self.scan_count += 1
 
-        if isinstance(violations, int):
-            self.latest_violations = violations
+        valid_violations = []
+        details = {sev.value: 0 for sev in ViolationSeverity}
+
+        # Handle ScanResult object
+        if isinstance(result, ScanResult):
+            self.total_emissions = round(result.codebase_emissions, 9)
+            valid_violations = result.issues
+            for v in valid_violations:
+                details[v.severity.value] += 1
+
+        # Handle legacy int (count only)
+        elif isinstance(result, int):
+            self.latest_violations = result
             self.violations = []
             self.violation_details = {sev.value: 0 for sev in ViolationSeverity}
+            self.total_emissions = round(emissions, 9)
+            return
+
+        # Handle legacy dict/list
         else:
-            valid_violations = []
-            details = {sev.value: 0 for sev in ViolationSeverity}
+            violations_data = result
+            if isinstance(result, dict):
+                 violations_data = result.get('issues', [])
+                 self.total_emissions = result.get('codebase_emissions', emissions)
+            else:
+                 self.total_emissions = round(emissions, 9)
 
-            for v_data in violations:
-                try:
-                    # Create Violation object (validates severity)
-                    violation = Violation(**v_data)
-                    valid_violations.append(violation)
+            if isinstance(violations_data, list):
+                for v_data in violations_data:
+                    try:
+                        # Create Violation object (validates severity)
+                        if isinstance(v_data, dict):
+                            violation = Violation(**v_data)
+                        elif isinstance(v_data, Violation):
+                            violation = v_data
+                        else:
+                            continue
 
-                    # Update details count
-                    details[violation.severity.value] += 1
+                        valid_violations.append(violation)
+                        # Update details count
+                        details[violation.severity.value] += 1
 
-                except (ValueError, TypeError):
-                    # Fallback for invalid violations?
-                    # For now, skip or log. We'll skip to ensure strict typing in 'violations' list.
-                    # Or we could try to coerce severity to 'low'.
-                    if isinstance(v_data, dict):
-                         # Try to salvage with default severity
-                         v_data_fixed = v_data.copy()
-                         v_data_fixed['severity'] = ViolationSeverity.LOW
-                         try:
-                            violation = Violation(**v_data_fixed)
-                            valid_violations.append(violation)
-                            details[ViolationSeverity.LOW.value] += 1
-                         except:
-                            pass
+                    except (ValueError, TypeError):
+                        if isinstance(v_data, dict):
+                             # Try to salvage with default severity
+                             v_data_fixed = v_data.copy()
+                             if 'severity' not in v_data_fixed:
+                                v_data_fixed['severity'] = ViolationSeverity.LOW
+                             try:
+                                violation = Violation(**v_data_fixed)
+                                valid_violations.append(violation)
+                                details[ViolationSeverity.LOW.value] += 1
+                             except:
+                                pass
 
-            self.violations = valid_violations
-            self.latest_violations = len(valid_violations)
-            self.violation_details = details
-
-        self.total_emissions = round(emissions, 9)
+        self.violations = valid_violations
+        self.latest_violations = len(valid_violations)
+        self.violation_details = details
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for JSON serialization."""

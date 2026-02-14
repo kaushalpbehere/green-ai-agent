@@ -6,7 +6,8 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
+from src.core.domain import ScanResult
 
 
 class ScanHistory:
@@ -87,27 +88,38 @@ class HistoryManager:
         safe_name = ''.join(c if c.isalnum() or c in '_-' else '_' for c in project_name)
         return os.path.join(self.history_dir, f'{safe_name}_history.json')
     
-    def add_scan(self, project_name: str, scan_results: Dict) -> ScanHistory:
+    def add_scan(self, project_name: str, scan_results: Union[Dict, ScanResult]) -> ScanHistory:
         """
         Add a scan result to history.
         
         Args:
             project_name: Name of the project
-            scan_results: Dictionary from Scanner.scan()
+            scan_results: ScanResult object or Dictionary
             
         Returns:
             ScanHistory object
         """
         timestamp = datetime.now().isoformat()
         
+        if isinstance(scan_results, ScanResult):
+            violations_count = len(scan_results.issues)
+            codebase_emissions = scan_results.codebase_emissions
+            scanning_emissions = scan_results.scanning_emissions
+            issues_list = [i.model_dump() for i in scan_results.issues]
+        else:
+            violations_count = len(scan_results.get('issues', []))
+            codebase_emissions = scan_results.get('codebase_emissions', 0)
+            scanning_emissions = scan_results.get('scanning_emissions', 0)
+            issues_list = scan_results.get('issues', [])
+
         history = ScanHistory(
             project_name=project_name,
             timestamp=timestamp,
-            violations=len(scan_results.get('issues', [])),
-            codebase_emissions=scan_results.get('codebase_emissions', 0),
-            scanning_emissions=scan_results.get('scanning_emissions', 0),
-            issues=scan_results.get('issues', []),
-            grade=self._calculate_grade(scan_results.get('issues', []))
+            violations=violations_count,
+            codebase_emissions=codebase_emissions,
+            scanning_emissions=scanning_emissions,
+            issues=issues_list,
+            grade=self._calculate_grade(issues_list)
         )
         
         # Load existing history

@@ -14,7 +14,7 @@ from typing import Any
 from src.standards.registry import StandardsRegistry
 from src.ui.charts import generate_all_charts
 from src.core.project_manager import ProjectManager
-from src.core.domain import ProjectSummaryDTO, ProjectDTO, ProjectComparisonDTO
+from src.core.domain import ProjectSummaryDTO, ProjectDTO, ProjectComparisonDTO, ScanResult
 from src.core.history import HistoryManager
 from src.core.scanner import Scanner
 from src.core.remediation import RemediationAgent
@@ -106,15 +106,19 @@ def initialize_app():
     except Exception as e:
         print(f"Warning: Could not initialize default project: {e}", file=sys.stderr)
 
-def set_last_scan_results(results):
+def set_last_scan_results(results: ScanResult):
     global last_scan_results, last_charts
     last_scan_results = results
-    last_charts = generate_all_charts(results)
+    # Charts expect dict representation
+    last_charts = generate_all_charts(results.model_dump())
 
 @app.route('/')
 def dashboard():
     if last_scan_results:
         insights = generate_insights(last_scan_results)
+        # Template expects object access or dict access depending on how it's written.
+        # Since we use render_template_string, we should pass the object if template supports it, or dict.
+        # Most Jinja2 templates work fine with objects.
         return render_template_string(get_dashboard_html(), results=last_scan_results, insights=insights, charts=last_charts)
     else:
         # Show enhanced landing page with stats
@@ -137,7 +141,7 @@ def api_charts() -> Any:
 
 @app.route('/api/results')
 def api_results() -> Any:
-    return jsonify(last_scan_results or {})
+    return jsonify(last_scan_results.model_dump() if last_scan_results else {})
 
 # Standards API Endpoints
 @app.route('/api/standards')
@@ -304,6 +308,10 @@ def api_scan() -> Any:
             set_last_scan_results(results)
 
             # Record in history
+            # History manager expects dict, or we update it to accept ScanResult.
+            # Assuming step 6 updates HistoryManager, but for now we can pass object if it handles it,
+            # or dict if it doesn't.
+            # HistoryManager.add_scan type hint says Dict.
             get_history_manager().add_scan(project_name, results)
 
             broadcast_progress("Scan complete!", 100)
@@ -420,7 +428,9 @@ def _handle_export(exporter_cls, mime_type, file_extension, encoding='utf-8'):
 
         output_path = OUTPUT_DIR / f'green-ai-report-{project_name}.{file_extension}'
         exporter = exporter_cls(output_path=str(output_path))
-        exporter.export(last_scan_results, project_name)
+        # Exporter expects dict for now (until step 5 update)
+        # Passing model_dump() to be safe and compatible with current Exporter implementation
+        exporter.export(last_scan_results.model_dump(), project_name)
 
         # Read and return file
         with open(output_path, 'r', encoding=encoding) as f:
@@ -595,26 +605,46 @@ def get_dashboard_html():
         DASHBOARD_HTML = load_template('dashboard.html')
     return DASHBOARD_HTML
 
-def generate_insights(results):
+def generate_insights(results: ScanResult):
     insights = []
-    issue_count = len(results['issues'])
+    # Handle both object and dict for compatibility
+    if isinstance(results, dict):
+        issue_count = len(results.get('issues', []))
+        issues = results.get('issues', [])
+        scanning_emissions = results.get('scanning_emissions', 0)
+        codebase_emissions = results.get('codebase_emissions', 0)
+    else:
+        issue_count = len(results.issues)
+        issues = results.issues
+        scanning_emissions = results.scanning_emissions
+        codebase_emissions = results.codebase_emissions
 
     if issue_count > 5:
         insights.append("High number of issues detected. Consider refactoring the codebase for better green practices.")
 
-    if any(i.get('severity') == 'high' for i in results['issues']):
+    # Check for high severity
+    has_high = False
+    for i in issues:
+        severity = getattr(i, 'severity', i.get('severity') if isinstance(i, dict) else 'low')
+        # Handle Enum
+        if hasattr(severity, 'value'):
+            severity = severity.value
+
+        if str(severity).lower() == 'high':
+            has_high = True
+            break
+
+    if has_high:
         insights.append("Critical high-severity issues found. Prioritize fixing these for maximum energy savings.")
 
-    scanning_emissions = results.get('scanning_emissions', 0)
     if scanning_emissions > 0.00001:
         insights.append("Scan process emissions are notable. Consider optimizing scanning frequency or hardware.")
 
-    codebase_emissions = results.get('codebase_emissions', 0)
     if codebase_emissions > 0.000001:
         insights.append(f"Estimated codebase emissions are {codebase_emissions:.9f} kg CO₂. Fixing the high-severity issues will reduce this impact.")
 
     total_emissions = scanning_emissions + codebase_emissions
-    if codebase_emissions > scanning_emissions * 10:
+    if scanning_emissions > 0 and codebase_emissions > scanning_emissions * 10:
         insights.append("Codebase emissions significantly exceed scanning emissions. Focus on optimizing the analyzed code.")
 
     return insights

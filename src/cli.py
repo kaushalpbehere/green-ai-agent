@@ -131,11 +131,11 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                 click.echo(f"[OK] Project registered: {project_name}", err=True)
             
             # Update with scan results
-            violations_count = len(results['issues'])
-            emissions = results.get('codebase_emissions', 0)
+            violations_count = len(results.issues)
+            emissions = results.codebase_emissions
             manager.update_project_scan(
                 project_name,
-                violations=results['issues'],
+                violations=results.issues,
                 emissions=emissions
             )
             click.echo(f"[OK] Project scan recorded: {violations_count} violations, {emissions:.9f} kg CO2", err=True)
@@ -144,11 +144,11 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
         # set_last_scan_results(results)
         
         click.echo("Scan complete.", err=True)
-        click.echo(f"Found {len(results['issues'])} issues.", err=True)
+        click.echo(f"Found {len(results.issues)} issues.", err=True)
         
         # Display dual emission metrics
-        scanning_emissions = results.get('scanning_emissions', 0)
-        codebase_emissions = results.get('codebase_emissions', 0)
+        scanning_emissions = results.scanning_emissions
+        codebase_emissions = results.codebase_emissions
         
         click.echo(f"\n=== Carbon Emissions Report ===", err=True)
         click.echo(f"Scanning Process Emissions: {scanning_emissions:.9f} kg CO2 (energy used by GASA)", err=True)
@@ -160,21 +160,21 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
             click.echo(f"Code Emissions Ratio: {ratio:.1f}% of total", err=True)
         
         # Per-file emissions
-        if results.get('per_file_emissions'):
+        if results.per_file_emissions:
             click.echo(f"\nEmissions by File:", err=True)
-            for file_path, emissions in results['per_file_emissions'].items():
+            for file_path, emissions in results.per_file_emissions.items():
                 click.echo(f"  {file_path}: {emissions:.9f} kg CO2", err=True)
         
         # Runtime metrics output
-        if 'runtime_metrics' in results and results['runtime_metrics']:
+        if results.runtime_metrics:
             click.echo(f"\n=== Runtime Metrics ===", err=True)
-            click.echo(f"Execution Time: {results['runtime_metrics'].get('execution_time', 'N/A')}", err=True)
-            click.echo(f"Runtime Emissions: {results['runtime_metrics'].get('emissions', 0):.6f} kg CO2", err=True)
-            if results['runtime_metrics'].get('output'):
-                click.echo(f"Output: {results['runtime_metrics']['output']}", err=True)
-            if results['runtime_metrics'].get('error'):
-                click.echo(f"Error: {results['runtime_metrics']['error']}", err=True)
-            click.echo(f"Return Code: {results['runtime_metrics'].get('return_code', 'N/A')}", err=True)
+            click.echo(f"Execution Time: {results.runtime_metrics.execution_time}", err=True)
+            click.echo(f"Runtime Emissions: {results.runtime_metrics.emissions:.6f} kg CO2", err=True)
+            if results.runtime_metrics.output:
+                click.echo(f"Output: {results.runtime_metrics.output}", err=True)
+            if results.runtime_metrics.error:
+                click.echo(f"Error: {results.runtime_metrics.error}", err=True)
+            click.echo(f"Return Code: {results.runtime_metrics.return_code}", err=True)
         
         # Handle export options
         if export:
@@ -247,7 +247,7 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                          # So it EXPECTS stdout content.
 
                          # Let's print the JSON to stdout!
-                         print(json.dumps(results, indent=2))
+                         print(json.dumps(results.model_dump(), indent=2))
             
             except Exception as e:
                 click.echo(f"Error during export: {str(e)}", err=True)
@@ -259,15 +259,15 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
         
         if not export or export_format != 'json':
             click.echo(f"\n{'='*80}", err=True)
-            click.echo(f"DETAILED VIOLATIONS ({len(results['issues'])} found)", err=True)
+            click.echo(f"DETAILED VIOLATIONS ({len(results.issues)} found)", err=True)
             click.echo(f"{'='*80}", err=True)
             
             # Sort by severity
             severity_order = {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}
-            sorted_issues = sorted(results['issues'], key=lambda x: severity_order.get(x.get('severity', 'low'), 99))
+            sorted_issues = sorted(results.issues, key=lambda x: severity_order.get(x.severity.value if hasattr(x.severity, 'value') else str(x.severity), 99))
             
             for i, issue in enumerate(sorted_issues, 1):
-                severity = issue.get('severity', 'unknown')
+                severity = issue.severity.value if hasattr(issue.severity, 'value') else str(issue.severity)
 
                 # Simple symbols for better terminal compatibility
                 if severity == 'critical':
@@ -279,17 +279,17 @@ def scan(path, git_url, branch, project_name, language, config, disable_rule, en
                 else:
                     severity_display = '[   ] LOW'
 
-                click.echo(f"\n[{i}] {issue.get('name', issue.get('id', 'unknown'))}", err=True)
+                click.echo(f"\n[{i}] {issue.name or issue.id}", err=True)
                 click.echo(f"    Status: {severity_display}", err=True)
-                click.echo(f"    Location: {issue.get('file', 'N/A')}:{issue.get('line', '0')}", err=True)
-                click.echo(f"    Message: {issue.get('message', 'N/A')}", err=True)
-                click.echo(f"    Energy Factor: {issue.get('energy_factor', 'N/A')}x", err=True)
-                click.echo(f"    CO2 Impact: {issue.get('codebase_emissions', 0):.9f} kg", err=True)
-                click.echo(f"    Effort to Fix: {issue.get('effort', 'Medium')}", err=True)
-                click.echo(f"    Remediation: {issue.get('remediation', 'N/A')}", err=True)
-                if issue.get('ai_suggestion'):
-                    click.echo(f"    AI Suggestion: {issue.get('ai_suggestion')}", err=True)
-                click.echo(f"    Tags: {', '.join(issue.get('tags', []))}", err=True)
+                click.echo(f"    Location: {issue.file}:{issue.line}", err=True)
+                click.echo(f"    Message: {issue.message}", err=True)
+                click.echo(f"    Energy Factor: {issue.energy_factor}x", err=True)
+                click.echo(f"    CO2 Impact: {issue.carbon_impact:.9f} kg", err=True)
+                click.echo(f"    Effort to Fix: {issue.effort}", err=True)
+                click.echo(f"    Remediation: {issue.remediation}", err=True)
+                if issue.ai_suggestion:
+                    click.echo(f"    AI Suggestion: {issue.ai_suggestion}", err=True)
+                click.echo(f"    Tags: {', '.join(issue.tags)}", err=True)
     
         # Handle fixing options
         if fix_all:
@@ -490,9 +490,9 @@ def project_scan(project_name, branch):
             results = scanner.scan(scan_path)
             
             # Update project with scan results
-            violations_count = len(results['issues'])
-            emissions = results.get('codebase_emissions', 0)
-            manager.update_project_scan(project_name, violations=results['issues'], emissions=emissions)
+            violations_count = len(results.issues)
+            emissions = results.codebase_emissions
+            manager.update_project_scan(project_name, violations=results.issues, emissions=emissions)
             
             click.echo(f"[OK] Scan complete")
             click.echo(f"  Found {violations_count} violations")
@@ -547,9 +547,9 @@ def project_scan_all():
                 results = scanner.scan(scan_path)
                 
                 # Update project
-                violations_count = len(results['issues'])
-                emissions = results.get('codebase_emissions', 0)
-                manager.update_project_scan(project.name, violations=results['issues'], emissions=emissions)
+                violations_count = len(results.issues)
+                emissions = results.codebase_emissions
+                manager.update_project_scan(project.name, violations=results.issues, emissions=emissions)
                 
                 updated_project = manager.get_project(project.name)
                 grade = updated_project.get_grade()

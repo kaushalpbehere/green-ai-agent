@@ -19,14 +19,14 @@ class TestDomainModels:
         assert v.id == "test_rule"
 
     def test_violation_invalid_severity(self):
-        """Test validation error for invalid severity."""
-        with pytest.raises(ValueError):
-            Violation(
-                id="test_rule",
-                line=10,
-                severity="INVALID_SEVERITY",
-                message="Test message"
-            )
+        """Test normalization for invalid severity."""
+        v = Violation(
+            id="test_rule",
+            line=10,
+            severity="INVALID_SEVERITY",
+            message="Test message"
+        )
+        assert v.severity == ViolationSeverity.INFO
 
     def test_project_defaults(self):
         """Test project default values."""
