@@ -228,7 +228,7 @@ class ProjectDTO(BaseModel):
     latest_violations: int
     total_emissions: float
     is_system: bool
-    violation_details: Dict[str, int]
+    violation_details: ViolationDetails
     violations: List[Violation]
     health_grade: str
 
@@ -247,7 +247,7 @@ class ProjectDTO(BaseModel):
             latest_violations=project.latest_violations,
             total_emissions=project.total_emissions,
             is_system=project.is_system,
-            violation_details=project.violation_details.model_dump(),
+            violation_details=project.violation_details,
             violations=project.violations,
             health_grade=project.get_grade()
         )
