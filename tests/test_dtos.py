@@ -15,9 +15,10 @@ def test_project_summary_dto():
     assert dto.health_grade == "B" # 5 violations = B
 
 def test_project_dto():
+    from src.core.domain import ViolationDetails
     project = Project(name="Test Project", repo_url="http://example.com")
     project.latest_violations = 15
-    project.violation_details = {"medium": 15}
+    project.violation_details = ViolationDetails(medium=15)
 
     dto = ProjectDTO.from_project(project)
 
@@ -27,9 +28,10 @@ def test_project_dto():
     assert dto.violation_details["medium"] == 15
 
 def test_project_comparison_dto():
+    from src.core.domain import ViolationDetails
     project = Project(name="Test Project", repo_url="http://example.com")
     project.latest_violations = 2
-    project.violation_details = {"low": 2}
+    project.violation_details = ViolationDetails(low=2)
     project.total_emissions = 0.5
 
     dto = ProjectComparisonDTO.from_project(project)

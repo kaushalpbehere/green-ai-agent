@@ -31,6 +31,18 @@ class Violation(BaseModel):
 
     model_config = ConfigDict(extra='ignore')
 
+class ViolationDetails(BaseModel):
+    """Counts of violations by severity."""
+    critical: int = 0
+    high: int = 0
+    major: int = 0
+    medium: int = 0
+    minor: int = 0
+    low: int = 0
+    info: int = 0
+
+    model_config = ConfigDict(extra='ignore')
+
 class Project(BaseModel):
     """
     Represents a project being analyzed.
@@ -47,15 +59,17 @@ class Project(BaseModel):
     total_emissions: float = 0.0
     is_system: bool = False
     # violation_details stores counts per severity level
-    violation_details: Dict[str, int] = Field(default_factory=dict)
+    violation_details: ViolationDetails = Field(default_factory=ViolationDetails)
     violations: List[Violation] = Field(default_factory=list)
 
     model_config = ConfigDict(extra='ignore')
 
     @field_validator('violation_details', mode='before')
     @classmethod
-    def set_violation_details_default(cls, v: Any) -> Dict[str, int]:
-        return v or {}
+    def set_violation_details_default(cls, v: Any) -> ViolationDetails:
+        if isinstance(v, dict):
+            return ViolationDetails(**v)
+        return v or ViolationDetails()
 
     @field_validator('violations', mode='before')
     @classmethod
@@ -84,22 +98,22 @@ class Project(BaseModel):
     def high_violations(self) -> int:
         """Get count of high-severity violations (Critical + High + Major)."""
         # Aggregating critical, high, and major as 'high' impact for dashboard simplicity
-        return (self.violation_details.get('critical', 0) +
-                self.violation_details.get('high', 0) +
-                self.violation_details.get('major', 0))
+        return (self.violation_details.critical +
+                self.violation_details.high +
+                self.violation_details.major)
 
     @property
     def medium_violations(self) -> int:
         """Get count of medium-severity violations."""
-        return self.violation_details.get('medium', 0)
+        return self.violation_details.medium
 
     @property
     def low_violations(self) -> int:
         """Get count of low-severity violations (Minor + Low + Info)."""
         # Aggregating minor, low, info as 'low' impact
-        return (self.violation_details.get('minor', 0) +
-                self.violation_details.get('low', 0) +
-                self.violation_details.get('info', 0))
+        return (self.violation_details.minor +
+                self.violation_details.low +
+                self.violation_details.info)
 
     def update_scan_results(self, violations: Any, emissions: float) -> None:
         """
@@ -115,7 +129,7 @@ class Project(BaseModel):
         if isinstance(violations, int):
             self.latest_violations = violations
             self.violations = []
-            self.violation_details = {sev.value: 0 for sev in ViolationSeverity}
+            self.violation_details = ViolationDetails()
         else:
             valid_violations = []
             details = {sev.value: 0 for sev in ViolationSeverity}
@@ -146,7 +160,7 @@ class Project(BaseModel):
 
             self.violations = valid_violations
             self.latest_violations = len(valid_violations)
-            self.violation_details = details
+            self.violation_details = ViolationDetails(**details)
 
         self.total_emissions = round(emissions, 9)
 
@@ -233,7 +247,7 @@ class ProjectDTO(BaseModel):
             latest_violations=project.latest_violations,
             total_emissions=project.total_emissions,
             is_system=project.is_system,
-            violation_details=project.violation_details,
+            violation_details=project.violation_details.model_dump(),
             violations=project.violations,
             health_grade=project.get_grade()
         )

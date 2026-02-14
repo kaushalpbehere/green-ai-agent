@@ -18,6 +18,7 @@ from src.core.domain import ProjectSummaryDTO, ProjectDTO, ProjectComparisonDTO
 from src.core.history import HistoryManager
 from src.core.scanner import Scanner
 from src.core.remediation import RemediationAgent
+from src.core.calibration import CalibrationAgent
 from src.utils.metrics import calculate_projects_grade, calculate_average_grade
 from src.core.export import OUTPUT_DIR
 import threading
@@ -558,6 +559,20 @@ def api_remediation_preview() -> Any:
             'status': 'ok',
             'diff': diff,
             'description': description
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/calibrate', methods=['POST'])
+def api_calibrate() -> Any:
+    """Run system calibration and return metrics"""
+    try:
+        agent = CalibrationAgent()
+        profile = agent.run_calibration()
+        return jsonify({
+            'status': 'ok',
+            'profile': profile
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
