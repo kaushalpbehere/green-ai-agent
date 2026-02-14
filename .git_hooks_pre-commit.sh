@@ -15,8 +15,8 @@ fi
 # Check 2: No unauthorized files in docs/
 DOCS_FILES=$(git diff --cached --name-only | grep '^docs/')
 for file in $DOCS_FILES; do
-    if [[ ! "$file" =~ (backlog\.md|release-notes\.md|\.gitignore)$ ]]; then
-        echo "❌ Error: Only backlog.md and release-notes.md allowed in docs/"
+    if [[ ! "$file" =~ (backlog\.md|release-notes\.md|vision\.md|development-standards\.md|\.gitignore)$ ]]; then
+        echo "❌ Error: Only standard doc files allowed in docs/"
         echo "   Attempted to add: $file"
         exit 1
     fi

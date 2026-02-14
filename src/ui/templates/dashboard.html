@@ -1073,6 +1073,9 @@
             <button class="btn btn-secondary" onclick="refreshCurrentProject()" title="Refresh data">
                 🔄 Refresh
             </button>
+            <button class="btn btn-secondary" onclick="calibrateSystem()" title="Calibrate system for accurate emissions">
+                ⚖️ Calibrate
+            </button>
         </div>
     </div>
 
@@ -1939,6 +1942,40 @@
         function refreshCurrentProject() {
             alert('Refreshing project data...\\n\\nThis will reload the current project\\'s scan results and metrics.');
             location.reload();
+        }
+
+        async function calibrateSystem() {
+            if (!confirm('Run system calibration benchmarks?\\n\\nThis will take a few seconds and measure your CPU/Memory performance to normalize carbon emission estimates.')) {
+                return;
+            }
+
+            try {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Running...';
+                btn.disabled = true;
+
+                const response = await fetch('/api/calibrate', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+
+                if (data.status === 'ok') {
+                    const profile = data.profile;
+                    const msg = `✓ Calibration Complete!\\n\\n` +
+                                `Platform: ${profile.platform}\\n` +
+                                `CPU Multiplier: ${profile.coefficients.cpu_multiplier}x\\n` +
+                                `Efficiency Tier: ${profile.coefficients.efficiency_tier}\\n\\n` +
+                                `Carbon emission estimates will now be adjusted based on this profile.`;
+                    alert(msg);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to calibrate: ' + error.message);
+            } finally {
+                location.reload();
+            }
         }
 
         function toggleDarkMode() {
