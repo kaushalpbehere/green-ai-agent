@@ -2,19 +2,19 @@
 
 ## 📋 Next 10 Prioritized Microtasks
 
-3. **[QA] Fix Pre-commit Hook**
-   - Goal: Update `.git_hooks_pre-commit.sh` to allow required documentation files.
-   - Priority: Medium
-
-4. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
+1. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
    - Goal: Prepare for eventlet deprecation.
    - Priority: Medium
 
-5. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
+2. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
     - Goal: Auto-scan on commit via local hooks (improve DX/install script).
     - Priority: Medium
 
 ## ✅ Completed Tasks
+
+- **[QA] Fix Pre-commit Hook** (Status: Done)
+   - Goal: Update `.git_hooks_pre-commit.sh` to allow required documentation files.
+   - Priority: Medium
 
 - **[UI] Calibration UI Integration (Sprint 3.2)** (Status: Done)
    - Goal: Expose system calibration via Dashboard UI and API.
