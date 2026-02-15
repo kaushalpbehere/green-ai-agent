@@ -12,6 +12,7 @@
 ### Fixed
 - **API JSON Responses**: Refactored `api_charts` and `api_results` endpoints to robustly handle empty results using `jsonify` and ensured correct `application/json` Content-Type (verified by new tests).
 - **Template Error Handling**: Robustly handle missing templates and prevent SSTI/XSS in error messages by escaping content and using raw blocks (TASK-001).
+- **Pre-commit Hook**: Fixed `.git_hooks_pre-commit.sh` to correctly handle `BACKLOG.md` casing and allow standard documentation files, improving developer experience.
 
 ### Documentation
 - **Standards & Vision**: Updated `docs/vision.md` and `docs/development-standards.md` to reflect current capabilities (v0.6.1) and rule definitions.

@@ -2,11 +2,11 @@
 
 ## 📋 Next 10 Prioritized Microtasks
 
-4. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
+1. **[JULES] Fix BUG-003.1: Research Eventlet migration path**
    - Goal: Prepare for eventlet deprecation.
    - Priority: Medium
 
-5. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
+2. **[QA] Pre-commit Hooks Integration (Sprint 4.1)**
     - Goal: Auto-scan on commit via local hooks (improve DX/install script).
     - Priority: Medium
 
