@@ -13,9 +13,9 @@ if git diff --cached --name-only | grep -E '\.(csv|html)$' | grep -v '^output/';
 fi
 
 # Check 2: No unauthorized files in docs/
-DOCS_FILES=$(git diff --cached --name-only | grep '^docs/')
+DOCS_FILES=$(git diff --cached --name-only | grep '^docs/' || true)
 for file in $DOCS_FILES; do
-    if [[ ! "$file" =~ (backlog\.md|release-notes\.md|vision\.md|development-standards\.md|\.gitignore)$ ]]; then
+    if [[ ! "$file" =~ (backlog\.md|BACKLOG\.md|release-notes\.md|vision\.md|development-standards\.md|README\.md|\.gitignore)$ ]]; then
         echo "❌ Error: Only standard doc files allowed in docs/"
         echo "   Attempted to add: $file"
         exit 1
@@ -23,7 +23,7 @@ for file in $DOCS_FILES; do
 done
 
 # Check 3: Python files have proper imports
-PYTHON_FILES=$(git diff --cached --name-only | grep '\.py$')
+PYTHON_FILES=$(git diff --cached --name-only | grep '\.py$' || true)
 for file in $PYTHON_FILES; do
     # Basic check - can be enhanced
     if grep -q "^from [a-z]" "$file" 2>/dev/null; then
