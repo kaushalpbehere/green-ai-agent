@@ -55,9 +55,9 @@
 | DASH-001 | UI | Dashboard: Redesign UI to SonarQube-style (Projects grid, Issues drill-down, Debt trends). | TODO |
 | DASH-002 | UI | Git: Integrate `git blame` data to show authors in violation details. | TODO |
 | DASH-003 | UI | Profiles: Implement "Scanning Profiles" (e.g., 'fast', 'thorough', 'security-only'). | TODO |
-| DASH-004 | UI | Interactive: Allow disabling rules directly from the dashboard UI (writing back to config). | TODO |
-| SCA-001 | Security | SCA: Implement dependency graph parser for Python, Node, and Go. | TODO |
-| SCA-002 | Security | SCA: Integrate OSV.dev API for automated CVE lookups of dependencies. | TODO |
+| DASH-004 | UI | Interactive: Allow disabling rules directly from the dashboard UI (writing back to config). | FIXED |
+| SCA-001 | Security | SCA: Implement dependency graph parser for Python, Node, and Go. | FIXED |
+| SCA-002 | Security | SCA: Integrate OSV.dev API for automated CVE lookups of dependencies. | FIXED |
 | QUAL-001 | Quality | Metrics: Implement AST-based cyclomatic and cognitive complexity scoring. | FIXED |
 | QUAL-002 | Quality | Metrics: Implement Type-1 and Type-2 code duplication detector. | TODO |
 | QUAL-003 | Quality | Metrics: Integrate `Vulture` as a library for dead-code identification. | TODO |
