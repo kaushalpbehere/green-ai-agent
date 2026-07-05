@@ -6,6 +6,7 @@ Unit tests for runtime monitoring module.
 import unittest
 from src.agents.runtime_monitor.pattern_analyzer import PatternAnalyzer
 
+
 class TestPatternAnalyzer(unittest.TestCase):
     def setUp(self):
         self.analyzer = PatternAnalyzer()
@@ -19,6 +20,7 @@ class TestPatternAnalyzer(unittest.TestCase):
         reports = [{"avg_cpu_percent": 50, "avg_memory_percent": 60, "emissions_kg": 0.05}]
         patterns = self.analyzer.analyze(reports)
         self.assertEqual(len(patterns), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

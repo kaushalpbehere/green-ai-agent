@@ -2,15 +2,16 @@
 Unit tests for Rules module
 """
 
-import pytest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.core.rules import RuleRepository
 
+
 def test_rule_repository_init():
     repo = RuleRepository()
     assert hasattr(repo, 'rules')
+
 
 def test_get_rules_python():
     repo = RuleRepository()
@@ -23,11 +24,13 @@ def test_get_rules_python():
         assert 'description' in rule
         assert 'severity' in rule
 
+
 def test_get_rules_javascript():
     repo = RuleRepository()
     rules = repo.get_rules('javascript')
     assert isinstance(rules, list)
     # May be empty or have rules
+
 
 def test_get_rules_unknown():
     repo = RuleRepository()

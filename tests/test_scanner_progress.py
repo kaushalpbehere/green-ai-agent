@@ -1,7 +1,7 @@
-import pytest
 from src.core.scanner.main import Scanner
 import os
 import tempfile
+
 
 def test_scanner_progress_updates():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -11,6 +11,7 @@ def test_scanner_progress_updates():
                 f.write('print("hello")')
 
         progress_calls = []
+
         def progress_callback(message, percentage):
             progress_calls.append((message, percentage))
 

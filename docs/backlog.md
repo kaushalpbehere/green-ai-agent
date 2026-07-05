@@ -74,6 +74,8 @@
 | ENG-019 | Security: Audit and standardize `Query(...)` validation across all 20+ FastAPI endpoints. | FIXED |
 | ENG-020 | Documentation: Implement auto-sync check between `vision.md` and `architecture.md` (CI gate). | FIXED |
 
+| ENG-021 | Code Cleanup: Removed JSONExporter and fixed flake8 errors | FIXED |
+
 ## 5. Completed Tasks (v1.0.4 Batch)
 
 | ID | Task | Status |
