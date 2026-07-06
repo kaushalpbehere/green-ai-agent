@@ -59,7 +59,7 @@
 | SCA-001 | Security | SCA: Implement dependency graph parser for Python, Node, and Go. | FIXED |
 | SCA-002 | Security | SCA: Integrate OSV.dev API for automated CVE lookups of dependencies. | FIXED |
 | QUAL-001 | Quality | Metrics: Implement AST-based cyclomatic and cognitive complexity scoring. | FIXED |
-| QUAL-002 | Quality | Metrics: Implement Type-1 and Type-2 code duplication detector. | TODO |
+| QUAL-002 | Quality | Metrics: Implement Type-1 and Type-2 code duplication detector. | FIXED |
 | QUAL-003 | Quality | Metrics: Integrate `Vulture` as a library for dead-code identification. | TODO |
 | DEBT-001 | Governance | Debt: Define remediation effort (minutes) for every existing rule. | FIXED |
 | DEBT-002 | Governance | Debt: Compute aggregate "cleanliness" and "remediation time" scores. | FIXED |
