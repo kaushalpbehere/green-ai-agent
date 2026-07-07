@@ -5,7 +5,7 @@ Supports CSV and HTML export with comprehensive violation and metrics data.
 """
 
 from src.core.remediation.engine import RemediationEngine
-from .schemas import ScanResultSchema
+
 from src.utils.security import sanitize_path
 import csv
 import json

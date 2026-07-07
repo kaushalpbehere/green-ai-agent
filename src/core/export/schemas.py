@@ -38,11 +38,3 @@ class Issue(BaseModel):
     model_config = ConfigDict(extra='ignore')
 
 
-class ScanResultSchema(BaseModel):
-    issues: List[Issue]
-    scanning_emissions: float
-    codebase_emissions: float
-    per_file_emissions: Dict[str, float] = Field(default_factory=dict)
-    metadata: ExportMetadata
-
-    model_config = ConfigDict(extra='ignore')

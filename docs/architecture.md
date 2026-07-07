@@ -304,3 +304,7 @@ helm install green-ai ./deploy/helm/green-ai -f custom-values.yaml
 **Decision:** Use in-process `pygit2` to perform file-level batch blame lookups at the end of AST scans, attaching `author`, `author_email`, and `commit_date` to `Violation` models.
 **Reason:** Shelling out to `git blame` per violation is too slow. `pygit2` enables fast in-memory execution, allowing the SonarQube-style dashboard to filter by Git metadata efficiently.
 **Status:** Feasibility verified. Pending implementation.
+
+### Recent Enhancements (v1.0.5)
+- **CI Subsystem Stability**: Comprehensive test coverage introduced for the `CIReporter` and `GitHubClient`, solidifying the automated pipeline guardrails (TEST-002).
+- **Codebase Sanitization**: Deprecated artifacts like `PDFExporter` and unused configuration schemas were purged, shrinking the codebase surface and technical debt (QUAL-004).
