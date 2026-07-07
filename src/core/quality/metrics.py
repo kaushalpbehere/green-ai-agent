@@ -75,7 +75,7 @@ class DuplicationDetector:
     def _hash_ast(self, node, visitor_cls):
         visitor = visitor_cls()
         visitor.visit(node)
-        return hashlib.md5("".join(visitor.nodes).encode()).hexdigest()
+        return hashlib.md5("".join(visitor.nodes).encode(), usedforsecurity=False).hexdigest()
 
     def _extract_blocks(self, tree):
         blocks = []

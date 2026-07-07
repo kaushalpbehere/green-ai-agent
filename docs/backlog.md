@@ -101,5 +101,6 @@
 | QUAL-004 | Quality | Deep Cleaning: Perform a comprehensive codebase audit to remove deprecated/unused legacy code. | FIXED |
 | QUAL-005 | Quality | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | TODO |
 | QUAL-006 | Quality | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | TODO |
+| QUAL-007 | Quality | Security: Fix Bandit B324 in metrics.py | FIXED |
 | TEST-001 | Test | E2E Testing: Implement comprehensive end-to-end browser tests using Playwright. | TODO |
 | TEST-002 | Test | Coverage: Increase overall unit test coverage strictly to >= 90%. | FIXED |

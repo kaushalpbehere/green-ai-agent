@@ -9,3 +9,4 @@
 ## v1.0.5 - CI Integration & Cleanup
 - Completed TEST-002: Reached >95% overall unit test coverage by adding missing CI component tests (`CIReporter`, `GitHubClient`, CLI `ci` commands).
 - Completed QUAL-004: Cleaned up unused variables and deprecated code (e.g., `PDFExporter`, unused `ScanResultSchema`).
+- Completed QUAL-007: Fixed Bandit B324 (MD5 hash) in src/core/quality/metrics.py by adding `usedforsecurity=False`.
