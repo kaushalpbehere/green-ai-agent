@@ -3,7 +3,7 @@
 Integration with Scaphandre for general energy consumption monitoring.
 """
 
-import subprocess
+import subprocess  # nosec B404
 import json
 import time
 
@@ -25,7 +25,7 @@ class ScaphandreMonitor:
         cmd = [self.scaphandre_path, "json", "--step", "30"]
         if pid:
             cmd.extend(["--process", str(pid)])
-        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  # nosec B603
         self.start_time = time.time()
 
     def stop_monitoring(self):

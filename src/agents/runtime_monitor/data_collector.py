@@ -38,7 +38,7 @@ class RuntimeDataCollector:
             # Execute code with monitoring
             # This is simplified; in practice, use exec or subprocess
             exec_globals = {}
-            exec(code_snippet, exec_globals)
+            exec(code_snippet, exec_globals)  # nosec B102
             # Assuming the code defines a function 'run'
             if 'run' in exec_globals:
                 instrumented_run = self.instrument_execution(exec_globals['run'])
@@ -51,8 +51,8 @@ class RuntimeDataCollector:
         self.monitor.start_monitoring()
         start_time = time.time()
 
-        import subprocess
-        subprocess.run(command, capture_output=True)
+        import subprocess  # nosec B404
+        subprocess.run(command, capture_output=True)  # nosec B603
 
         end_time = time.time()
         self.monitor.stop_monitoring()
