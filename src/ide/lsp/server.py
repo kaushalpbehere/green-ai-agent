@@ -77,8 +77,8 @@ def _validate(ls: GreenAILanguageServer, params):
                     source="Green-AI",
                 )
                 diagnostics.append(d)
-        except SyntaxError:
-            pass  # Ignore syntax errors for now
+        except SyntaxError as e:
+            logger.debug(f"SyntaxError in Python parsing: {e}")  # Ignore syntax errors for now
     elif uri.endswith('.js') or uri.endswith('.jsx'):
         try:
             detector = JavaScriptASTDetector()
@@ -99,8 +99,8 @@ def _validate(ls: GreenAILanguageServer, params):
                     source="Green-AI",
                 )
                 diagnostics.append(d)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Exception in JS parsing: {e}")
 
     ls.publish_diagnostics(text_doc.uri, diagnostics)
 

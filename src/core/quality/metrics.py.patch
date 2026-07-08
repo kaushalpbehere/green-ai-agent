@@ -1,9 +1,0 @@
-<<<<<<< SEARCH
-        visitor.visit(node)
-        return hashlib.md5("".join(visitor.nodes).encode()).hexdigest()
-
-=======
-        visitor.visit(node)
-        return hashlib.md5("".join(visitor.nodes).encode(), usedforsecurity=False).hexdigest()
-
->>>>>>> REPLACE

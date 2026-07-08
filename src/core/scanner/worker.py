@@ -1,3 +1,4 @@
+from src.utils.logger import logger
 from typing import Dict, Any, List, Optional
 import ast
 from datetime import datetime, timezone
@@ -58,9 +59,9 @@ def _get_git_blame_info(file_path: str, lines: List[int]) -> Dict[int, Dict[str,
                     'author_email': author_email,
                     'commit_date': commit_time
                 }
-    except Exception:
+    except Exception as e:
         # Silently fail if file is untracked or pygit2 errors out
-        pass
+        logger.debug(f"Failed to get git blame info for {file_path}: {e}")
 
     return blame_info
 
