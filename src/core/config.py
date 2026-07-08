@@ -6,6 +6,7 @@ Loads and validates .green-ai.yaml configuration files with support for:
 - Standard selection
 - Language configuration
 """
+from src.utils.logger import logger
 
 import os
 from pathlib import Path
@@ -237,9 +238,9 @@ class ConfigLoader:
                 with open(global_path, 'r') as f:
                     global_conf = yaml.safe_load(f) or {}
                 config = self._merge_config(config, global_conf)
-            except Exception:
+            except Exception as e:
                 # Silently ignore global config errors to avoid breaking execution
-                pass
+                logger.warning(f"Failed to load global config: {e}")
 
         # 5. Load Local Config (merged into defaults+DB+global)
         local_config_path = self.config_path

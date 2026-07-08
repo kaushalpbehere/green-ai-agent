@@ -5,7 +5,8 @@ Supports CSV and HTML export with comprehensive violation and metrics data.
 """
 
 from src.core.remediation.engine import RemediationEngine
-from .schemas import ScanResultSchema
+
+from src.utils.logger import logger
 from src.utils.security import sanitize_path
 import csv
 import json
@@ -25,8 +26,8 @@ def safe_read_snippet(file_path: str, line_number: int) -> str:
             lines = f.readlines()
             if 0 <= line_number - 1 < len(lines):
                 return lines[line_number - 1].strip()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to read snippet for file {file_path} at line {line_number}: {e}")
     return ""
 
 

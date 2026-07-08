@@ -8,6 +8,7 @@ from enum import Enum
 from datetime import datetime, timezone
 import uuid
 from pydantic import BaseModel, Field, field_validator, ConfigDict
+from src.utils.logger import logger
 
 
 class ViolationSeverity(str, Enum):
@@ -186,8 +187,8 @@ class Project(BaseModel):
                     if isinstance(effort, str):
                         try:
                             total_effort += int(effort)
-                        except ValueError:
-                            pass
+                        except ValueError as e:
+                            logger.debug(f"Failed to parse effort: {e}")
                     elif isinstance(effort, (int, float)):
                         total_effort += int(effort)
 
@@ -211,8 +212,8 @@ class Project(BaseModel):
                             violation = Violation(**v_data_fixed)
                             valid_violations.append(violation)
                             details[ViolationSeverity.LOW.value] += 1
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            logger.debug(f"Failed to coerce violation: {e}")
 
             self.violations = valid_violations
             self.latest_violations = len(valid_violations)

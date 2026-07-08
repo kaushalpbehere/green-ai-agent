@@ -1,4 +1,5 @@
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as standard_ET
+import defusedxml.ElementTree as ET
 from pathlib import Path
 from typing import Dict, Any, Optional
 from datetime import datetime, timezone
@@ -47,10 +48,10 @@ class JUnitXMLExporter:
         failures = total_tests  # Every issue is considered a failure
 
         # Root element
-        testsuites = ET.Element('testsuites')
+        testsuites = standard_ET.Element('testsuites')
 
         # Testsuite element
-        testsuite = ET.SubElement(testsuites, 'testsuite')
+        testsuite = standard_ET.SubElement(testsuites, 'testsuite')
         testsuite.set('name', project_name)
         testsuite.set('tests', str(total_tests))
         testsuite.set('failures', str(failures))
@@ -67,13 +68,13 @@ class JUnitXMLExporter:
             message = issue.get('message', 'No message')
             severity = issue.get('severity', 'medium')
 
-            testcase = ET.SubElement(testsuite, 'testcase')
+            testcase = standard_ET.SubElement(testsuite, 'testcase')
             testcase.set('classname', file_path)
             testcase.set('name', f"{rule_id} (Line {line})")
             testcase.set('time', '0')
 
             # Add failure details
-            failure = ET.SubElement(testcase, 'failure')
+            failure = standard_ET.SubElement(testcase, 'failure')
             failure.set('message', message)
             failure.set('type', severity)
             failure.text = (
@@ -82,7 +83,7 @@ class JUnitXMLExporter:
             )
 
         # Create XML tree
-        tree = ET.ElementTree(testsuites)
+        tree = standard_ET.ElementTree(testsuites)
 
         # Write to file
         with open(self.output_path, 'wb') as f:
