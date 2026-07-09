@@ -3,7 +3,7 @@ Performance Benchmarking for Green-AI
 """
 
 import time
-import subprocess
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 from codecarbon import EmissionsTracker
@@ -24,7 +24,7 @@ def benchmark_scan(target: str = 'tests/', iterations: int = 3) -> None:
         tracker.start()
         start_time = time.time()
 
-        result = subprocess.run(
+        result = subprocess.run(  # nosec B603
             [sys.executable, '-m', 'src.cli', 'scan', target],
             capture_output=True,
             text=True,

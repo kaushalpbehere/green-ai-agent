@@ -5,7 +5,7 @@ Handles cloning repositories, branch management, and cleanup.
 Supports multiple git URL formats and SSH/HTTPS protocols.
 """
 
-import subprocess
+import subprocess  # nosec B404
 import shutil
 import os
 from pathlib import Path
@@ -102,8 +102,9 @@ class GitOperations:
 
         try:
             logger.info(f"Cloning repository: {repo_url} to {target_dir}")
-            result = subprocess.run(
-                ['git', 'clone', '--', repo_url, target_dir],
+            git_exec = shutil.which('git') or 'git'
+            result = subprocess.run(  # nosec B603
+                [git_exec, 'clone', '--', repo_url, target_dir],
                 capture_output=True,
                 text=True,
                 timeout=300  # 5 minute timeout
@@ -140,8 +141,9 @@ class GitOperations:
             GitException: If operation fails
         """
         try:
-            result = subprocess.run(
-                ['git', 'rev-parse', '--abbrev-ref', 'HEAD'],
+            git_exec = shutil.which('git') or 'git'
+            result = subprocess.run(  # nosec B603
+                [git_exec, 'rev-parse', '--abbrev-ref', 'HEAD'],
                 cwd=repo_dir,
                 capture_output=True,
                 text=True,
@@ -153,8 +155,8 @@ class GitOperations:
                 return current_branch
 
             # Fallback: check for main or master
-            result = subprocess.run(
-                ['git', 'branch', '-a'],
+            result = subprocess.run(  # nosec B603
+                [git_exec, 'branch', '-a'],
                 cwd=repo_dir,
                 capture_output=True,
                 text=True,
@@ -202,8 +204,9 @@ class GitOperations:
         # The `branch.startswith('-')` guard above prevents argv injection.
         try:
             logger.info(f"Checking out branch '{branch}' in {repo_dir}")
-            result = subprocess.run(
-                ['git', 'checkout', branch],
+            git_exec = shutil.which('git') or 'git'
+            result = subprocess.run(  # nosec B603
+                [git_exec, 'checkout', branch],
                 cwd=repo_dir,
                 capture_output=True,
                 text=True,

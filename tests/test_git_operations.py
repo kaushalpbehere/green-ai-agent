@@ -222,7 +222,9 @@ class TestArgvInjectionGuard:
         mock_run.return_value = MagicMock(returncode=0, stderr="")
         GitOperations.clone_repository("https://github.com/user/repo.git", target_dir)
         argv = mock_run.call_args[0][0]
-        assert argv[:3] == ['git', 'clone', '--']
+        import shutil
+        git_exec = shutil.which('git') or 'git'
+        assert argv[:3] == [git_exec, 'clone', '--']
         assert argv[3] == "https://github.com/user/repo.git"
         assert argv[4] == target_dir
 
