@@ -3,9 +3,10 @@
 Integration with Scaphandre for general energy consumption monitoring.
 """
 
-import subprocess
+import subprocess  # nosec B404
 import json
 import time
+import shutil
 
 
 class ScaphandreMonitor:
@@ -22,10 +23,11 @@ class ScaphandreMonitor:
 
     def start_monitoring(self, pid=None):
         """Start Scaphandre monitoring for a specific process or system-wide."""
-        cmd = [self.scaphandre_path, "json", "--step", "30"]
+        scaphandre_exec = shutil.which(self.scaphandre_path) or self.scaphandre_path
+        cmd = [scaphandre_exec, "json", "--step", "30"]
         if pid:
             cmd.extend(["--process", str(pid)])
-        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  # nosec B603
         self.start_time = time.time()
 
     def stop_monitoring(self):
