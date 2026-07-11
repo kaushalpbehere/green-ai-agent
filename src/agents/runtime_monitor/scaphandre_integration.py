@@ -25,8 +25,8 @@ class ScaphandreMonitor:
         """Start Scaphandre monitoring for a specific process or system-wide."""
         scaphandre_exec = shutil.which(self.scaphandre_path) or self.scaphandre_path
         cmd = [scaphandre_exec, "json", "--step", "30"]
-        if pid:
-            cmd.extend(["--process", str(pid)])
+        if pid is not None:
+            cmd.extend(["--process", str(int(pid))])
         self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  # nosec B603
         self.start_time = time.time()
 

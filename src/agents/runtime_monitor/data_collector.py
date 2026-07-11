@@ -34,17 +34,31 @@ class RuntimeDataCollector:
     def collect_data(self, code_snippet, iterations=1):
         """Execute code snippet multiple times and collect data."""
         reports = []
-        for _ in range(iterations):
-            # Execute code with monitoring
-            # This is simplified; in practice, use exec or subprocess
-            exec_globals = {}
-            # Executing code snippet is by design for runtime monitoring evaluation
-            exec(code_snippet, exec_globals)  # nosec B102
-            # Assuming the code defines a function 'run'
-            if 'run' in exec_globals:
-                instrumented_run = self.instrument_execution(exec_globals['run'])
-                _, report = instrumented_run()
-                reports.append(report)
+        import tempfile
+        import importlib.util
+        import os
+
+        # Write snippet to temporary file to avoid exec()
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            f.write(code_snippet)
+            temp_path = f.name
+
+        try:
+            for _ in range(iterations):
+                # Load module dynamically
+                spec = importlib.util.spec_from_file_location("dynamic_module", temp_path)
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+
+                # Assuming the code defines a function 'run'
+                if hasattr(module, 'run'):
+                    instrumented_run = self.instrument_execution(module.run)
+                    _, report = instrumented_run()
+                    reports.append(report)
+        finally:
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+
         return reports
 
     def collect_from_command(self, command):
@@ -53,7 +67,15 @@ class RuntimeDataCollector:
         start_time = time.time()
 
         import subprocess  # nosec B404
-        subprocess.run(command, capture_output=True)  # nosec B603
+        import shlex
+
+        # Ensure command is a list for safer execution
+        if isinstance(command, str):
+            cmd = shlex.split(command)
+        else:
+            cmd = command
+
+        subprocess.run(cmd, capture_output=True)  # nosec B603
 
         end_time = time.time()
         self.monitor.stop_monitoring()

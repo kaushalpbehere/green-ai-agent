@@ -5,7 +5,7 @@ Handles cloning repositories, branch management, and cleanup.
 Supports multiple git URL formats and SSH/HTTPS protocols.
 """
 
-import subprocess  # nosec B404
+import pygit2
 import shutil
 import os
 from pathlib import Path
@@ -102,29 +102,12 @@ class GitOperations:
 
         try:
             logger.info(f"Cloning repository: {repo_url} to {target_dir}")
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
-                [git_exec, 'clone', '--', repo_url, target_dir],
-                capture_output=True,
-                text=True,
-                timeout=300  # 5 minute timeout
-            )
-
-            if result.returncode != 0:
-                raise GitException(f"Failed to clone repository: {result.stderr}")
+            pygit2.clone_repository(repo_url, target_dir)
 
             logger.info(f"Successfully cloned repository to {target_dir}")
             return target_dir
-
-        except subprocess.TimeoutExpired:
-            raise GitException("Git clone operation timed out (5 minutes)")
-        except FileNotFoundError:
-            raise GitException(
-                "Git is not installed or not in PATH. "
-                "Please install Git: https://git-scm.com/downloads"
-            )
         except Exception as e:
-            raise GitException(f"Unexpected error during clone: {str(e)}")
+            raise GitException(f"Failed to clone repository: {str(e)}")
 
     @classmethod
     def get_default_branch(cls, repo_dir: str) -> str:
@@ -141,40 +124,21 @@ class GitOperations:
             GitException: If operation fails
         """
         try:
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
-                [git_exec, 'rev-parse', '--abbrev-ref', 'HEAD'],
-                cwd=repo_dir,
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            if result.returncode == 0:
-                current_branch = result.stdout.strip()
-                return current_branch
+            repo = pygit2.Repository(repo_dir)
+            if not repo.head_is_unborn:
+                return repo.head.shorthand
 
             # Fallback: check for main or master
-            result = subprocess.run(  # nosec B603
-                [git_exec, 'branch', '-a'],
-                cwd=repo_dir,
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            branches = result.stdout.strip().split('\n')
+            branches = list(repo.branches)
             for branch in ['main', 'master']:
-                if any(branch in b for b in branches):
+                if branch in branches:
                     return branch
 
             # Default to first branch
             if branches:
-                first_branch = branches[0].strip().replace('*', '').strip()
-                return first_branch
+                return branches[0]
 
             return 'main'
-
         except Exception as e:
             logger.warning(f"Could not determine default branch: {e}")
             return 'main'
@@ -204,25 +168,30 @@ class GitOperations:
         # The `branch.startswith('-')` guard above prevents argv injection.
         try:
             logger.info(f"Checking out branch '{branch}' in {repo_dir}")
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
-                [git_exec, 'checkout', branch],
-                cwd=repo_dir,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
+            repo = pygit2.Repository(repo_dir)
 
-            if result.returncode != 0:
-                raise GitException(
-                    f"Failed to checkout branch '{branch}': {result.stderr}"
-                )
+            # Find the branch
+            b = repo.lookup_branch(branch)
+            if not b:
+                # Try remote branch
+                b = repo.lookup_branch(f"origin/{branch}", pygit2.GIT_BRANCH_REMOTE)
+                if not b:
+                    raise GitException(f"Branch '{branch}' not found")
+
+                # Create a local tracking branch if it's remote
+                commit = repo.get(b.target)
+                b = repo.branches.local.create(branch, commit)
+                b.upstream = repo.lookup_branch(f"origin/{branch}", pygit2.GIT_BRANCH_REMOTE)
+
+            # Checkout
+            ref = repo.lookup_reference(b.name)
+            repo.checkout(ref)
+            repo.set_head(ref.name)
 
             logger.info(f"Successfully checked out branch '{branch}'")
-
-        except subprocess.TimeoutExpired:
-            raise GitException(f"Checkout operation for branch '{branch}' timed out")
         except Exception as e:
+            if isinstance(e, GitException):
+                raise
             raise GitException(f"Error checking out branch '{branch}': {str(e)}")
 
     @classmethod
