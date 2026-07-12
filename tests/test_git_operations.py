@@ -137,60 +137,52 @@ class TestLocalPathDetection:
 class TestGitCloneOperation:
     """Test Git clone operations (mocked)"""
     
-    @patch('subprocess.run')
-    def test_clone_repository_success(self, mock_run, tmp_path):
+    @patch('pygit2.clone_repository')
+    def test_clone_repository_success(self, mock_clone, tmp_path):
         """Successful clone should return directory path"""
         target_dir = str(tmp_path / "repo")
-        mock_run.return_value = MagicMock(returncode=0, stderr="")
         
         result = GitOperations.clone_repository("https://github.com/user/repo.git", target_dir)
         
         assert result == target_dir
-        mock_run.assert_called_once()
+        mock_clone.assert_called_once()
     
-    @patch('subprocess.run')
-    def test_clone_repository_failure(self, mock_run):
+    @patch('pygit2.clone_repository')
+    def test_clone_repository_failure(self, mock_clone):
         """Failed clone should raise GitException"""
-        mock_run.return_value = MagicMock(returncode=1, stderr="Failed to clone")
+        mock_clone.side_effect = Exception("Failed to clone")
         
         with pytest.raises(GitException, match="Failed to clone repository"):
             GitOperations.clone_repository("https://github.com/user/repo.git")
-    
-    @patch('subprocess.run')
-    def test_clone_repository_timeout(self, mock_run):
-        """Timeout during clone should raise GitException"""
-        mock_run.side_effect = subprocess.TimeoutExpired('git', 300)
-        
-        with pytest.raises(GitException, match="timed out"):
-            GitOperations.clone_repository("https://github.com/user/repo.git")
-    
-    @patch('subprocess.run')
-    def test_clone_repository_no_git_installed(self, mock_run):
-        """Missing Git should raise helpful GitException"""
-        mock_run.side_effect = FileNotFoundError()
-        
-        with pytest.raises(GitException, match="Git is not installed"):
-            GitOperations.clone_repository("https://github.com/user/repo.git")
-
 
 class TestCheckoutBranch:
     """Test branch checkout operations (mocked)"""
     
-    @patch('subprocess.run')
-    def test_checkout_branch_success(self, mock_run):
+    @patch('pygit2.Repository')
+    def test_checkout_branch_success(self, mock_repo_class):
         """Successful checkout should not raise"""
-        mock_run.return_value = MagicMock(returncode=0, stderr="")
+        mock_repo = MagicMock()
+        mock_repo_class.return_value = mock_repo
+
+        mock_branch = MagicMock()
+        mock_branch.name = "refs/heads/feature/new"
+        mock_repo.lookup_branch.return_value = mock_branch
+
+        mock_ref = MagicMock()
+        mock_repo.lookup_reference.return_value = mock_ref
         
         # Should not raise
         GitOperations.checkout_branch("/path/to/repo", "feature/new")
-        mock_run.assert_called_once()
+        mock_repo.checkout.assert_called_once_with(mock_ref)
     
-    @patch('subprocess.run')
-    def test_checkout_branch_failure(self, mock_run):
+    @patch('pygit2.Repository')
+    def test_checkout_branch_failure(self, mock_repo_class):
         """Failed checkout should raise GitException"""
-        mock_run.return_value = MagicMock(returncode=1, stderr="Branch not found")
+        mock_repo = MagicMock()
+        mock_repo_class.return_value = mock_repo
+        mock_repo.lookup_branch.return_value = None
         
-        with pytest.raises(GitException, match="Failed to checkout branch"):
+        with pytest.raises(GitException, match="Branch 'nonexistent' not found"):
             GitOperations.checkout_branch("/path/to/repo", "nonexistent")
     
     def test_checkout_empty_branch_is_noop(self):
@@ -214,20 +206,6 @@ class TestArgvInjectionGuard:
     def test_checkout_rejects_option_like_branch(self):
         with pytest.raises(GitException, match="argument-like"):
             GitOperations.checkout_branch("/path/to/repo", "--orphan")
-
-    @patch('subprocess.run')
-    def test_clone_uses_double_dash_separator(self, mock_run, tmp_path):
-        """clone command must include `--` end-of-options separator."""
-        target_dir = str(tmp_path / "repo")
-        mock_run.return_value = MagicMock(returncode=0, stderr="")
-        GitOperations.clone_repository("https://github.com/user/repo.git", target_dir)
-        argv = mock_run.call_args[0][0]
-        import shutil
-        git_exec = shutil.which('git') or 'git'
-        assert argv[:3] == [git_exec, 'clone', '--']
-        assert argv[3] == "https://github.com/user/repo.git"
-        assert argv[4] == target_dir
-
 
 class TestCleanup:
     """Test repository cleanup"""

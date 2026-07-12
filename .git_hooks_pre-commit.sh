@@ -64,5 +64,28 @@ if [ ${#STAGED_PY_FILES[@]} -gt 0 ]; then
     fi
 fi
 
+
+# Check 6: Enforce 500 LOC change minimum
+echo "🔍 Checking lines of code (LOC) changed..."
+DIFF_STAT=$(git diff --cached --shortstat || true)
+
+if [ -z "$DIFF_STAT" ]; then
+    echo "❌ Error: No changes staged."
+    exit 1
+fi
+
+INSERTIONS=$(echo "$DIFF_STAT" | grep -o '[0-9]\+ insertion' | awk '{print $1}')
+DELETIONS=$(echo "$DIFF_STAT" | grep -o '[0-9]\+ deletion' | awk '{print $1}')
+
+INSERTIONS=${INSERTIONS:-0}
+DELETIONS=${DELETIONS:-0}
+TOTAL_LOC=$((INSERTIONS + DELETIONS))
+
+if [ "$TOTAL_LOC" -lt 500 ]; then
+    echo "❌ Error: Commit must contain at least 500 lines of code change. Current: $TOTAL_LOC"
+    exit 1
+fi
+echo "✓ LOC check passed ($TOTAL_LOC changes)"
+
 echo "✅ Pre-commit checks passed!"
 exit 0
