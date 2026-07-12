@@ -5,7 +5,7 @@ Handles cloning repositories, branch management, and cleanup.
 Supports multiple git URL formats and SSH/HTTPS protocols.
 """
 
-import subprocess  # nosec B404
+import subprocess
 import shutil
 import os
 from pathlib import Path
@@ -102,8 +102,10 @@ class GitOperations:
 
         try:
             logger.info(f"Cloning repository: {repo_url} to {target_dir}")
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
+            git_exec = shutil.which('git')
+            if not git_exec:
+                raise GitException("Git is not installed or not in PATH.")
+            result = subprocess.run(
                 [git_exec, 'clone', '--', repo_url, target_dir],
                 capture_output=True,
                 text=True,
@@ -141,8 +143,10 @@ class GitOperations:
             GitException: If operation fails
         """
         try:
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
+            git_exec = shutil.which('git')
+            if not git_exec:
+                raise GitException("Git is not installed or not in PATH.")
+            result = subprocess.run(
                 [git_exec, 'rev-parse', '--abbrev-ref', 'HEAD'],
                 cwd=repo_dir,
                 capture_output=True,
@@ -155,7 +159,7 @@ class GitOperations:
                 return current_branch
 
             # Fallback: check for main or master
-            result = subprocess.run(  # nosec B603
+            result = subprocess.run(
                 [git_exec, 'branch', '-a'],
                 cwd=repo_dir,
                 capture_output=True,
@@ -204,8 +208,10 @@ class GitOperations:
         # The `branch.startswith('-')` guard above prevents argv injection.
         try:
             logger.info(f"Checking out branch '{branch}' in {repo_dir}")
-            git_exec = shutil.which('git') or 'git'
-            result = subprocess.run(  # nosec B603
+            git_exec = shutil.which('git')
+            if not git_exec:
+                raise GitException("Git is not installed or not in PATH.")
+            result = subprocess.run(
                 [git_exec, 'checkout', branch],
                 cwd=repo_dir,
                 capture_output=True,
