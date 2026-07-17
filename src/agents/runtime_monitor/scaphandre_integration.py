@@ -27,7 +27,7 @@ class ScaphandreMonitor:
         cmd = [scaphandre_exec, "json", "--step", "30"]
         if pid is not None:
             cmd.extend(["--process", str(int(pid))])
-        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)  # nosec B603
+        self.process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)  # nosec B603
         self.start_time = time.time()
 
     def stop_monitoring(self):

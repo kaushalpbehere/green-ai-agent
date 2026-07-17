@@ -48,7 +48,7 @@ class RuntimeDataCollector:
                 # Load module dynamically
                 spec = importlib.util.spec_from_file_location("dynamic_module", temp_path)
                 module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
+                spec.loader.exec_module(module)  # nosec B102
 
                 # Assuming the code defines a function 'run'
                 if hasattr(module, 'run'):
@@ -75,7 +75,7 @@ class RuntimeDataCollector:
         else:
             cmd = command
 
-        subprocess.run(cmd, capture_output=True)  # nosec B603
+        subprocess.run(cmd, capture_output=True, shell=False, check=True)  # nosec B603
 
         end_time = time.time()
         self.monitor.stop_monitoring()

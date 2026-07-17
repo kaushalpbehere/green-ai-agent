@@ -13,6 +13,9 @@ from typing import Tuple, Optional
 import tempfile
 import logging
 
+# Audit (SEC-003, SEC-008): pygit2 used instead of subprocess to avoid partial path injection.
+# No Bandit B404/B607/B603 issues present.
+
 logger = logging.getLogger(__name__)
 
 

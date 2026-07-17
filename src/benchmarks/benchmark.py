@@ -9,6 +9,8 @@ from codecarbon import EmissionsTracker
 from click.testing import CliRunner
 from src.cli.main import cli
 
+# Audit (SEC-002, SEC-007): Subprocess calls removed in favor of direct API usage.
+# No Bandit B404/B603 issues present.
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
