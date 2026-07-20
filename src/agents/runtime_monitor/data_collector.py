@@ -75,7 +75,7 @@ class RuntimeDataCollector:
         else:
             cmd = command
 
-        subprocess.run(cmd, capture_output=True)  # nosec B603
+        subprocess.run(cmd, capture_output=True, shell=False, check=True)  # nosec B603
 
         end_time = time.time()
         self.monitor.stop_monitoring()

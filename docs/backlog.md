@@ -11,13 +11,6 @@
 ## 2. Security (S)
 | ID | Priority | Task | Status |
 |---|---|---|---|
-| SEC-002 | P0 | Audit: Address Bandit B404/B603 (subprocess execution risk) in `data_collector.py`, `scaphandre_integration.py`, and `benchmark.py`. | TODO |
-| SEC-003 | P0 | Audit: Address Bandit B607/B603 (partial path subprocess execution risk) in `git_operations.py`. | TODO |
-| SEC-005 | P0 | Audit: Address Bandit B404/B603 in `src/agents/runtime_monitor/data_collector.py`. | TODO |
-| SEC-006 | P0 | Audit: Address Bandit B404/B603 in `src/agents/runtime_monitor/scaphandre_integration.py`. | TODO |
-| SEC-007 | P0 | Audit: Address Bandit B404/B603 in `src/benchmarks/benchmark.py`. | TODO |
-| SEC-008 | P0 | Audit: Address Bandit B404/B607/B603 in `src/core/git_operations.py`. | TODO |
-| SEC-009 | P0 | Audit: Address Bandit B102 in `src/agents/runtime_monitor/data_collector.py`. | TODO |
 
 ## 3. Governance (G)
 | ID | Priority | Task | Status |
@@ -95,3 +88,11 @@
 | TEST-002 | Test | Coverage: Increase overall unit test coverage strictly to >= 90%. | FIXED |
 | SEC-004 | Security | Audit: Address Bandit B405 (defusedxml substitution) in `xml_exporter.py`. | FIXED |
 | QUAL-008 | Quality | Code Quality: Remove silent `try...except...pass` (B110) blocks in `config.py`, `domain.py`, `export/__init__.py`, `worker.py`, and `lsp/server.py`. | FIXED |
+
+| SEC-002 | Security | Audit: Address Bandit B404/B603 (subprocess execution risk) in `data_collector.py`, `scaphandre_integration.py`, and `benchmark.py`. | FIXED |
+| SEC-003 | Security | Audit: Address Bandit B607/B603 (partial path subprocess execution risk) in `git_operations.py`. | FIXED |
+| SEC-005 | Security | Audit: Address Bandit B404/B603 in `src/agents/runtime_monitor/data_collector.py`. | FIXED |
+| SEC-006 | Security | Audit: Address Bandit B404/B603 in `src/agents/runtime_monitor/scaphandre_integration.py`. | FIXED |
+| SEC-007 | Security | Audit: Address Bandit B404/B603 in `src/benchmarks/benchmark.py`. | FIXED |
+| SEC-008 | Security | Audit: Address Bandit B404/B607/B603 in `src/core/git_operations.py`. | FIXED |
+| SEC-009 | Security | Audit: Address Bandit B102 in `src/agents/runtime_monitor/data_collector.py`. | FIXED |
