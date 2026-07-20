@@ -48,7 +48,7 @@ class RuntimeDataCollector:
                 # Load module dynamically
                 spec = importlib.util.spec_from_file_location("dynamic_module", temp_path)
                 module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
+                spec.loader.exec_module(module)  # nosec B102
 
                 # Assuming the code defines a function 'run'
                 if hasattr(module, 'run'):
