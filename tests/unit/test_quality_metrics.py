@@ -63,3 +63,32 @@ def func2():
     duplications = detector.detect()
     assert len(duplications["type_1"]) == 0
     assert len(duplications["type_2"]) == 0
+
+from src.core.quality.metrics import DeadCodeDetector
+
+def test_dead_code_detector_with_unused():
+    detector = DeadCodeDetector()
+    content = """
+def used_function():
+    print("used")
+
+def unused_function():
+    print("unused")
+
+used_function()
+"""
+    results = detector.analyze_content("test.py", content)
+    # vulture might find 'unused_function'
+    unused_names = [res["name"] for res in results]
+    assert "unused_function" in unused_names
+
+def test_dead_code_detector_without_unused():
+    detector = DeadCodeDetector()
+    content = """
+def used_function():
+    print("used")
+
+used_function()
+"""
+    results = detector.analyze_content("test.py", content)
+    assert len(results) == 0
