@@ -15,7 +15,7 @@
 ## 3. Governance (G)
 | ID | Priority | Task | Status |
 |---|---|---|---|
-| QUAL-003 | P2 | Metrics: Integrate `Vulture` as a library for dead-code identification. | TODO |
+| QUAL-003 | P2 | Metrics: Integrate `Vulture` as a library for dead-code identification. | FIXED |
 | QUAL-005 | P2 | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | TODO |
 | QUAL-006 | P2 | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | TODO |
 | DASH-002 | P2 | Git: Integrate `git blame` data to show authors in violation details. | TODO |

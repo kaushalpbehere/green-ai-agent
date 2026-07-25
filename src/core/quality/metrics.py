@@ -1,6 +1,56 @@
 import ast
 import hashlib
+import tempfile
+import os
 from typing import List, Dict, Tuple, Any
+from vulture.core import Vulture
+
+class DeadCodeDetector:
+    """
+    Detects dead (unused) code using the Vulture library.
+    """
+    def __init__(self):
+        self.vulture = Vulture()
+
+    def analyze_paths(self, paths: List[str]) -> List[Dict[str, Any]]:
+        """
+        Analyzes the given paths (files or directories) for dead code.
+        """
+        self.vulture.scavenge(paths)
+        results = []
+        for item in self.vulture.get_unused_code():
+            results.append({
+                "file": item.filename,
+                "line": item.first_lineno,
+                "type": item.typ,
+                "name": item.name,
+                "message": item.message
+            })
+        return results
+
+    def analyze_content(self, filename: str, content: str) -> List[Dict[str, Any]]:
+        """
+        Analyzes a single file's content for dead code by writing to a temp file.
+        """
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+            f.write(content)
+            temp_path = f.name
+
+        try:
+            self.vulture = Vulture() # Reset state
+            self.vulture.scavenge([temp_path])
+            results = []
+            for item in self.vulture.get_unused_code():
+                results.append({
+                    "file": filename,  # Use original filename
+                    "line": item.first_lineno,
+                    "type": item.typ,
+                    "name": item.name,
+                    "message": item.message
+                })
+            return results
+        finally:
+            os.remove(temp_path)
 
 class Type1Visitor(ast.NodeVisitor):
     """
