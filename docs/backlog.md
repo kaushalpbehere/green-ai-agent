@@ -18,7 +18,6 @@
 | QUAL-003 | P2 | Metrics: Integrate `Vulture` as a library for dead-code identification. | FIXED |
 | QUAL-005 | P2 | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | TODO |
 | QUAL-006 | P2 | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | TODO |
-| DASH-002 | P2 | Git: Integrate `git blame` data to show authors in violation details. | TODO |
 | RUST-001 | P2 | Lang: Integrate `tree-sitter-rust` and implement `RustASTDetector`. | TODO |
 | TEST-001 | P2 | E2E Testing: Implement comprehensive end-to-end browser tests using Playwright. | TODO |
 
@@ -54,6 +53,7 @@
 | IDE-001b | IDE | VS Code extension: Implement settings provider for `.green-ai.yaml` editing. | FIXED |
 | IDE-002a | IDE | LSP: Implement base server handshake and workspace synchronization. | FIXED |
 | IDE-002b | IDE | LSP: Port Python/JS AST detectors to run in-process for LSP diagnostics. | FIXED |
+| DASH-002 | UI | Git: Integrate `git blame` data to show authors in violation details. | FIXED |
 | AUDIT-003 | Audit | Security: Create automated XSS payload tests for all dashboard fields. | FIXED |
 | AUDIT-005 | Audit | Security: Implement unit tests for path traversal in `/api/remediation/preview`. | FIXED |
 | TEAM-001a | Team | Database: Setup SQLAlchemy Core and migration environment (Alembic). | FIXED |
