@@ -12,6 +12,7 @@ from .typescript_detector import TypeScriptASTDetector
 from .java_detector import JavaASTDetector
 from .go_detector import GoASTDetector
 from .csharp_detector import CSharpASTDetector
+from .rust_detector import RustASTDetector
 from .pattern_detector import PatternBasedDetector
 from src.core.detectors.cache import detection_cache
 
@@ -71,6 +72,12 @@ def detect_violations(content: str, file_path: str, language: str = 'python') ->
         csharp_ast_detector = CSharpASTDetector(content, file_path)
         violations.extend(csharp_ast_detector.detect_all())
         csharp_ast_detector.dispose()
+
+    elif language == 'rust':
+        # AST-based detection
+        rust_ast_detector = RustASTDetector(content, file_path)
+        violations.extend(rust_ast_detector.detect_all())
+        rust_ast_detector.dispose()
 
     # Update cache
     detection_cache.set(content, language, violations)

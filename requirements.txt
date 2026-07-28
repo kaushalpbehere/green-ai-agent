@@ -52,3 +52,4 @@ psutil>=5.9,<7.0
 pygit2>=1.14
 defusedxml>=0.7.1
 vulture>=2.16
+tree-sitter-rust==0.24.2

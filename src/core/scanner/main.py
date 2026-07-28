@@ -188,7 +188,8 @@ class Scanner:
             'typescript': ['.ts', '.tsx'],
             'java': ['.java'],
             'go': ['.go'],
-            'c-sharp': ['.cs']
+            'c-sharp': ['.cs'],
+            'rust': ['.rs']
         }
         ext = os.path.splitext(file_path)[1].lower()
         return ext in ext_map.get(self.language, [])

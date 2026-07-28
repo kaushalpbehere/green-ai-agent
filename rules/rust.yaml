@@ -1,0 +1,52 @@
+rules:
+- id: rust_formatted_print
+  name: Excessive Logging (println!)
+  severity: minor
+  message: println! detected. Use a logger or remove in production.
+  remediation: Replace println! with a proper logging library (e.g., log, tracing) or remove in production builds to reduce I/O overhead.
+  effort: 15
+  tags:
+  - performance
+  - io
+  - logging
+  energy_factor: 2
+  carbon_impact: 5.0e-08
+  pattern_match: rust_println
+- id: rust_empty_block
+  name: Empty Block
+  severity: minor
+  message: Empty block detected.
+  remediation: Remove empty blocks or add comments explaining why they are empty. Empty blocks can indicate missing logic or dead code.
+  effort: 15
+  tags:
+  - maintenance
+  - code-quality
+  energy_factor: 1
+  carbon_impact: 1.0e-08
+  pattern_match: empty_block
+- id: rust_infinite_loop
+  name: Infinite Loop (loop {})
+  severity: critical
+  message: Infinite loop detected (loop {}). Ensure break condition exists.
+  remediation: Ensure the loop has a termination condition or a break statement to prevent CPU spinning.
+  effort: 60
+  tags:
+  - performance
+  - cpu
+  - critical
+  energy_factor: 100
+  carbon_impact: 0.0001
+  pattern_match: rust_infinite_loop
+- id: rust_string_concatenation_in_loop
+  name: String Concatenation in Loop
+  severity: high
+  message: String concatenation in loop detected.
+  remediation: Use String::with_capacity and push_str inside loops. Repeated concatenation creates new string objects every iteration (O(n^2)).
+  effort: 60
+  tags:
+  - performance
+  - memory
+  - algorithmic
+  energy_factor: 10
+  carbon_impact: 5.0e-06
+  pattern_match: rust_str_concat
