@@ -18,7 +18,7 @@
 | QUAL-003 | P2 | Metrics: Integrate `Vulture` as a library for dead-code identification. | FIXED |
 | QUAL-005 | P2 | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | TODO |
 | QUAL-006 | P2 | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | TODO |
-| RUST-001 | P2 | Lang: Integrate `tree-sitter-rust` and implement `RustASTDetector`. | TODO |
+| RUST-001 | P2 | Lang: Integrate `tree-sitter-rust` and implement `RustASTDetector`. | FIXED |
 | TEST-001 | P2 | E2E Testing: Implement comprehensive end-to-end browser tests using Playwright. | TODO |
 
 ## 4. Completed / Release Log
