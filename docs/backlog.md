@@ -83,7 +83,7 @@
 | SBOM-004 | SBOM | Implement GSF Software Carbon Intensity (SCI) logic. | FIXED |
 | SBOM-006 | Quality | Achieve 95%+ coverage on new SBOM/Baseline features. | FIXED |
 | VER-001 | Core | Version bump to v1.0.4 and doc consolidation. | FIXED |
-| QUAL-004 | Quality | Deep Cleaning: Perform a comprehensive codebase audit to remove deprecated/unused legacy code. | FIXED |
+| QUAL-004 | Quality | Deep Cleaning: Perform a comprehensive codebase audit to remove deprecated/unused legacy code (JUnitXMLExporter). | FIXED |
 | QUAL-007 | Security | Fix Bandit B324 in metrics.py | FIXED |
 | TEST-002 | Test | Coverage: Increase overall unit test coverage strictly to >= 90%. | FIXED |
 | SEC-004 | Security | Audit: Address Bandit B405 (defusedxml substitution) in `xml_exporter.py`. | FIXED |

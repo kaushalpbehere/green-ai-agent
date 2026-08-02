@@ -12,3 +12,7 @@
 - Completed QUAL-007: Fixed Bandit B324 (MD5 hash) in src/core/quality/metrics.py by adding `usedforsecurity=False`.
 - Completed SEC-004: Resolved Bandit B405 by adding nosec comment and importing defusedxml where applicable for xml_exporter.
 - Completed QUAL-008: Removed silent try...except...pass blocks across the codebase and replaced with explicit logging.
+
+### Fixed
+
+- **QUAL-004:** Deep Cleaning: Perform a comprehensive codebase audit to remove deprecated/unused legacy code (JUnitXMLExporter).
