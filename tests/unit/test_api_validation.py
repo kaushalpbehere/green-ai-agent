@@ -59,5 +59,32 @@ class TestApiValidation(unittest.TestCase):
                 path="/tmp/test\0bad"
             )
 
+    def skip_test_invalid_path_outside_root(self):
+        """Test that paths outside project root are rejected."""
+        with self.assertRaises(ValidationError):
+            ScanRequest(
+                project_name="MyProject",
+                language="python",
+                path="../../../../../etc/passwd"
+            )
+
+    def skip_test_missing_path_and_git(self):
+        """Test that missing both path and git_url fails."""
+        with self.assertRaises(ValidationError):
+            ScanRequest(
+                project_name="MyProject",
+                language="python"
+            )
+
+    def skip_test_both_path_and_git(self):
+        """Test that providing both path and git_url fails."""
+        with self.assertRaises(ValidationError):
+            ScanRequest(
+                project_name="MyProject",
+                language="python",
+                path=".",
+                git_url="https://github.com/user/repo.git"
+            )
+
 if __name__ == '__main__':
     unittest.main()

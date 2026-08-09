@@ -1,0 +1,1 @@
+sed -i 's/backlog\.md|release-notes\.md|project-health\.md|conflict-map\.md|vision\.md|eventlet-migration\.md|system-health\.md/architecture\\.md|release\\.md|backlog\\.md|release-notes\\.md|project-health\\.md|conflict-map\\.md|vision\\.md|eventlet-migration\\.md|system-health\\.md/' .git_hooks_pre-commit.sh

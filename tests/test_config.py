@@ -252,5 +252,22 @@ rules:
             os.unlink(temp_path)
 
 
+    def test_malformed_config_file_typeerror_bug029(self):
+        """Test BUG-029: fix TypeError when configuration is a string, not a dict."""
+        yaml_content = "This is a malformed string config, not a dict."
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            f.write(yaml_content)
+            config_path = f.name
+
+        try:
+            loader = ConfigLoader(config_path)
+            with pytest.raises(ConfigError) as exc_info:
+                loader.load()
+
+            # Message should mention invalid YAML format or config type
+            assert "Invalid configuration format" in str(exc_info.value)
+        finally:
+            os.unlink(config_path)
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

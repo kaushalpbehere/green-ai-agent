@@ -256,6 +256,8 @@ class ConfigLoader:
             try:
                 with open(local_config_path, 'r') as f:
                     file_config = yaml.safe_load(f) or {}
+                    if not isinstance(file_config, dict):
+                        raise ConfigError(f"Invalid configuration format in {local_config_path}: expected dictionary")
                 config = self._merge_config(config, file_config)
             except yaml.YAMLError as e:
                 raise ConfigError(f"Invalid YAML in {local_config_path}: {e}")

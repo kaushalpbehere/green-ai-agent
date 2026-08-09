@@ -1452,7 +1452,7 @@
         <div class="issue severity-{{ issue.get('severity', 'low') }}">
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                 <div>
-                    <h5 style="margin: 0; font-size: 16px; font-weight: 600;">{{ issue.get('id', 'Unknown') }}</h5>
+                    <h5 style="margin: 0; font-size: 16px; font-weight: 600;"><a href="/rules/{{ issue.get('id', 'Unknown') }}" target="_blank" style="color: inherit; text-decoration: underline;">{{ issue.get('id', 'Unknown') }}</a></h5>
                     <p style="margin: 5px 0 0 0; font-size: 13px; color: #6b7280;">
                         {{ issue.get('file', 'N/A') }}:{{ issue.get('line', '0') }}
                     </p>
