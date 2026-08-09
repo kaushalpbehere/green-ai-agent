@@ -16,3 +16,11 @@
 ### Fixed
 
 - **QUAL-004:** Deep Cleaning: Perform a comprehensive codebase audit to remove deprecated/unused legacy code (JUnitXMLExporter).
+- **QUAL-006**: Establish strict PR templates and automated code review workflows (Bug Hunter).
+- **DASH-001**: Redesigned Dashboard UI to SonarQube-style with Projects grid, Issues drill-down, and Debt trends.
+- **DASH-003**: Scanning Profiles (fast, thorough, etc) added via `perf-profile` and other options.
+- **QUAL-005**: Conducted accessibility and visual consistency audits across all dashboard views.
+- **TEST-001**: E2E Testing: Implement comprehensive end-to-end browser tests using Playwright.
+- **BUG-029**: Fixed TypeError when `.green-ai.yaml` is a valid YAML but not a dictionary.
+- **BUG-027**: Fixed inaccurate rule ID links in Dashboard
+- **BUG-028**: Validated all `file_path` parameters strictly against project root to prevent path traversal.

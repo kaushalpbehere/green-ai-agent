@@ -308,3 +308,8 @@ helm install green-ai ./deploy/helm/green-ai -f custom-values.yaml
 ### Recent Enhancements (v1.0.5)
 - **CI Subsystem Stability**: Comprehensive test coverage introduced for the `CIReporter` and `GitHubClient`, solidifying the automated pipeline guardrails (TEST-002).
 - **Codebase Sanitization**: Deprecated artifacts like `PDFExporter`, `JUnitXMLExporter` and unused configuration schemas were purged, shrinking the codebase surface and technical debt (QUAL-004).
+
+### Future Extensions
+1. **EXT-001**: Implement real-time energy usage visualization via Scaphandre on the dashboard.
+2. **EXT-002**: Add support for automated dependency updates and PR creation.
+3. **EXT-003**: Develop a VS Code extension for inline Green-AI linting.

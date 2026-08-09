@@ -5,8 +5,8 @@
 ## 1. Environmental (E)
 | ID | Priority | Task | Status |
 |---|---|---|---|
-| DASH-001 | P2 | Dashboard: Redesign UI to SonarQube-style (Projects grid, Issues drill-down, Debt trends). | TODO |
-| DASH-003 | P2 | Profiles: Implement "Scanning Profiles" (e.g., 'fast', 'thorough', 'security-only'). | TODO |
+| DASH-001 | P2 | Dashboard: Redesign UI to SonarQube-style (Projects grid, Issues drill-down, Debt trends). | FIXED |
+| DASH-003 | P2 | Profiles: Implement "Scanning Profiles" (e.g., 'fast', 'thorough', 'security-only'). | FIXED |
 
 ## 2. Security (S)
 | ID | Priority | Task | Status |
@@ -16,10 +16,10 @@
 | ID | Priority | Task | Status |
 |---|---|---|---|
 | QUAL-003 | P2 | Metrics: Integrate `Vulture` as a library for dead-code identification. | FIXED |
-| QUAL-005 | P2 | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | TODO |
-| QUAL-006 | P2 | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | TODO |
+| QUAL-005 | P2 | UI Auditing: Conduct thorough accessibility and visual consistency audits across all dashboard views. | FIXED |
+| QUAL-006 | P2 | Code Review: Establish strict PR templates and automated code review workflows (Bug Hunter). | FIXED |
 | RUST-001 | P2 | Lang: Integrate `tree-sitter-rust` and implement `RustASTDetector`. | FIXED |
-| TEST-001 | P2 | E2E Testing: Implement comprehensive end-to-end browser tests using Playwright. | TODO |
+| TEST-001 | P2 | E2E Testing: Implement comprehensive end-to-end browser tests using Playwright. | FIXED |
 
 ## 4. Completed / Release Log
 | ID | Component | Task | Status |
@@ -96,3 +96,13 @@
 | SEC-007 | Security | Audit: Address Bandit B404/B603 in `src/benchmarks/benchmark.py`. | FIXED |
 | SEC-008 | Security | Audit: Address Bandit B404/B607/B603 in `src/core/git_operations.py`. | FIXED |
 | SEC-009 | Security | Audit: Address Bandit B102 in `src/agents/runtime_monitor/data_collector.py`. | FIXED |
+
+## 5. Future Extensions
+| ID | Priority | Task | Status |
+|---|---|---|---|
+| EXT-001 | P3 | Implement real-time energy usage visualization via Scaphandre on the dashboard. | TODO |
+| EXT-002 | P3 | Add support for automated dependency updates and PR creation. | TODO |
+| EXT-003 | P3 | Develop a VS Code extension for inline Green-AI linting. | TODO |
+| BUG-027 | UI | Fix inaccurate rule ID links in Dashboard | FIXED |
+| BUG-028 | Security | Validate all `file_path` parameters strictly against project root to prevent path traversal in `api_remediation_preview`. | FIXED |
+| BUG-029 | Core | Fix `TypeError` when configuration file is malformed. | FIXED |
